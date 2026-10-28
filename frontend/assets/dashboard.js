@@ -79,6 +79,9 @@
   function estimatesFor(id) { return profile().paths.open_source.intake.estimates[id] || []; }
   function bandOf(s) { return (parseFloat(String(s.confidence).replace(/[^\d.]/g, "")) || 0) / 100; }
   function gradeFor(bands, tons) {
+    var heads = profile().id === "individual" ? 1 : path().employees;
+    if (!heads) return "N/A";
+    tons = tons / heads;
     for (var i = 0; i < bands.length; i++) {
       var b = bands[i];
       if (tons >= b.from && (b.to === null || tons < b.to)) return b.grade;
@@ -407,7 +410,7 @@
         '</div><div class="sub">tCO₂e a year · ' + t(eff.total.low) + ' to ' + t(eff.total.high) + '</div>' +
         '<div class="range"><div class="band" style="left:' + (eff.total.low / hi * 100).toFixed(1) + '%;width:' + ((eff.total.high - eff.total.low) / hi * 100).toFixed(1) +
         '%"></div><div class="mid" style="left:' + (total / hi * 100).toFixed(1) + '%"></div></div></div>' +
-      '<div class="card"><div class="label">Grade</div><div class="value">' + esc(eff.grade) + '</div><div class="sub">Illustrative benchmark bands</div></div>' +
+      '<div class="card"><div class="label">Grade</div><div class="value">' + esc(eff.grade) + '</div><div class="sub">' + (eff.grade === "N/A" ? "Headcount not disclosed" : "t CO₂e per " + (profile().id === "individual" ? "person" : "employee")) + '</div></div>' +
       '<div class="card"><div class="label">Confidence</div><div class="value">±' + half.toFixed(0) + '%</div><div class="sub">Sum of each scope\'s range</div></div>' +
       '<div class="card"><div class="label">Trend</div><div class="value">' + (drop ? '↓ ' + drop.toFixed(1) + '%' : '–') + '</div><div class="sub">' +
         (drop ? 'With your plan, from FY 26-27' : 'One year of data. <a href="#" data-goto="reduction">Build a plan</a>') + '</div></div>';

@@ -21,12 +21,20 @@ SCOPE_NAMES = {
 }
 SCOPE_KEYS = ("scope_1", "scope_2", "scope_3")
 TIER_ORG_TYPE = {"tier_1": "individual", "tier_2": "school", "tier_3": "enterprise"}
+INDIA_PER_CAPITA_T = 2.0
 GRADE_BENCHMARKS = {
-    "individual": ((0.8, "A"), (1.5, "B"), (2.5, "C"), (4.0, "D"), (math.inf, "F")),
+    # Individuals: multiples of India per-capita (0.5x, 1x, 1.5x, 2x).
+    "individual": ((1.0, "A"), (2.0, "B"), (3.0, "C"), (4.0, "D"), (math.inf, "F")),
     "school": ((0.8, "A"), (1.5, "B"), (2.5, "C"), (4.0, "D"), (math.inf, "F")),
     "enterprise": ((0.8, "A"), (1.5, "B"), (2.5, "C"), (4.0, "D"), (math.inf, "F")),
 }
-GRADE_BASIS = "Intensity-based benchmarks (t CO2e/employee/year): India per-capita ~2.0-2.1 t/person/year. Grade bands: A < 0.8, B < 1.5, C < 2.5, D < 4.0, F ≥ 4.0. Sources: CEA combined margin 0.757 kg/kWh (FY23-24), IPCC 2006 fuel factors, TCS BRSR FY26 (Scope 1+2+3 intensity 1.58 t/employee), Infosys BRSR FY26."
+GRADE_BASIS = (
+    "Graded on intensity, not size. Organisations: t CO2e per employee per year, "
+    "A < 0.8, B < 1.5, C < 2.5, D < 4.0, F >= 4.0. Individuals: t per person against "
+    "India's per-capita figure (~2.0 t, approximate), A < 0.5x, B < 1x, C < 1.5x, D < 2x. "
+    "Reference point: TCS FY26 disclosed Scope 1+2+3 = 914,687 t over 580,000 employees = 1.58 t/employee. "
+    "Organisations without a headcount are not graded."
+)
 TIER_CONFIDENCE = {
     "tier_1": "±40% (default for tier)",
     "tier_2": "±15-30% (default for tier)",
@@ -504,8 +512,10 @@ def calculate_grade(co2e_tons: Any, org_type: str = "school", employee_count: An
     normalized_org, _ = _normalize_org_type(org_type)
     employees = _number(employee_count) if employee_count is not None else None
 
-    if normalized_org == "individual" or employees is None or employees < 1:
+    if normalized_org == "individual":
         intensity = tons
+    elif employees is None or employees < 1:
+        return "N/A"
     else:
         intensity = tons / employees
 

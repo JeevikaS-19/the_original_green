@@ -207,31 +207,32 @@
           "low": 336226.35,
           "high": 415366.87
         },
-        "grade": "F",
+        "grade": "A",
+        "employees": 580000,
         "grade_bands": [
           {
             "grade": "A",
             "from": 0,
-            "to": 500
+            "to": 0.8
           },
           {
             "grade": "B",
-            "from": 500,
-            "to": 1500
+            "from": 0.8,
+            "to": 1.5
           },
           {
             "grade": "C",
-            "from": 1500,
-            "to": 3000
+            "from": 1.5,
+            "to": 2.5
           },
           {
             "grade": "D",
-            "from": 3000,
-            "to": 5000
+            "from": 2.5,
+            "to": 4.0
           },
           {
             "grade": "F",
-            "from": 5000,
+            "from": 4.0,
             "to": null
           }
         ],
@@ -349,31 +350,32 @@
           "low": 222492.06,
           "high": 519148.15
         },
-        "grade": "F",
+        "grade": "A",
+        "employees": 580000,
         "grade_bands": [
           {
             "grade": "A",
             "from": 0,
-            "to": 500
+            "to": 0.8
           },
           {
             "grade": "B",
-            "from": 500,
-            "to": 1500
+            "from": 0.8,
+            "to": 1.5
           },
           {
             "grade": "C",
-            "from": 1500,
-            "to": 3000
+            "from": 1.5,
+            "to": 2.5
           },
           {
             "grade": "D",
-            "from": 3000,
-            "to": 5000
+            "from": 2.5,
+            "to": 4.0
           },
           {
             "grade": "F",
-            "from": 5000,
+            "from": 4.0,
             "to": null
           }
         ],
@@ -617,31 +619,32 @@
           "low": 161661.34,
           "high": 204739.26
         },
-        "grade": "F",
+        "grade": "N/A",
+        "employees": null,
         "grade_bands": [
           {
             "grade": "A",
             "from": 0,
-            "to": 500
+            "to": 0.8
           },
           {
             "grade": "B",
-            "from": 500,
-            "to": 1500
+            "from": 0.8,
+            "to": 1.5
           },
           {
             "grade": "C",
-            "from": 1500,
-            "to": 3000
+            "from": 1.5,
+            "to": 2.5
           },
           {
             "grade": "D",
-            "from": 3000,
-            "to": 5000
+            "from": 2.5,
+            "to": 4.0
           },
           {
             "grade": "F",
-            "from": 5000,
+            "from": 4.0,
             "to": null
           }
         ],
@@ -759,31 +762,32 @@
           "low": 105091.79,
           "high": 245214.17
         },
-        "grade": "F",
+        "grade": "N/A",
+        "employees": null,
         "grade_bands": [
           {
             "grade": "A",
             "from": 0,
-            "to": 500
+            "to": 0.8
           },
           {
             "grade": "B",
-            "from": 500,
-            "to": 1500
+            "from": 0.8,
+            "to": 1.5
           },
           {
             "grade": "C",
-            "from": 1500,
-            "to": 3000
+            "from": 1.5,
+            "to": 2.5
           },
           {
             "grade": "D",
-            "from": 3000,
-            "to": 5000
+            "from": 2.5,
+            "to": 4.0
           },
           {
             "grade": "F",
-            "from": 5000,
+            "from": 4.0,
             "to": null
           }
         ],

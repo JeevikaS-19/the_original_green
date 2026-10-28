@@ -220,25 +220,26 @@ window.DEMO_FIXTURES = [
           "high": 7.35
         },
         "grade": "F",
+        "employees": 1,
         "grade_bands": [
           {
             "grade": "A",
             "from": 0,
-            "to": 0.8
+            "to": 1.0
           },
           {
             "grade": "B",
-            "from": 0.8,
-            "to": 1.5
+            "from": 1.0,
+            "to": 2.0
           },
           {
             "grade": "C",
-            "from": 1.5,
-            "to": 2.5
+            "from": 2.0,
+            "to": 3.0
           },
           {
             "grade": "D",
-            "from": 2.5,
+            "from": 3.0,
             "to": 4.0
           },
           {
@@ -358,25 +359,26 @@ window.DEMO_FIXTURES = [
           "high": 6.49
         },
         "grade": "F",
+        "employees": 1,
         "grade_bands": [
           {
             "grade": "A",
             "from": 0,
-            "to": 0.8
+            "to": 1.0
           },
           {
             "grade": "B",
-            "from": 0.8,
-            "to": 1.5
+            "from": 1.0,
+            "to": 2.0
           },
           {
             "grade": "C",
-            "from": 1.5,
-            "to": 2.5
+            "from": 2.0,
+            "to": 3.0
           },
           {
             "grade": "D",
-            "from": 2.5,
+            "from": 3.0,
             "to": 4.0
           },
           {
@@ -679,6 +681,7 @@ window.DEMO_FIXTURES = [
           "high": 321.23
         },
         "grade": "B",
+        "employees": 200,
         "grade_bands": [
           {
             "grade": "A",
@@ -870,7 +873,8 @@ window.DEMO_FIXTURES = [
           "low": 112.18,
           "high": 261.74
         },
-        "grade": "F",
+        "grade": "B",
+        "employees": 200,
         "grade_bands": [
           {
             "grade": "A",
@@ -1319,6 +1323,7 @@ window.DEMO_FIXTURES = [
           "high": 1228.67
         },
         "grade": "C",
+        "employees": 500,
         "grade_bands": [
           {
             "grade": "A",
@@ -1515,7 +1520,8 @@ window.DEMO_FIXTURES = [
           "low": 404.94,
           "high": 944.86
         },
-        "grade": "F",
+        "grade": "B",
+        "employees": 500,
         "grade_bands": [
           {
             "grade": "A",
@@ -1790,6 +1796,7 @@ window.DEMO_FIXTURES = [
           "high": 1289.47
         },
         "grade": "C",
+        "employees": 500,
         "grade_bands": [
           {
             "grade": "A",
@@ -2105,6 +2112,7 @@ window.DEMO_FIXTURES = [
           "high": 415366.87
         },
         "grade": "A",
+        "employees": 580000,
         "grade_bands": [
           {
             "grade": "A",
@@ -2247,6 +2255,7 @@ window.DEMO_FIXTURES = [
           "high": 519148.15
         },
         "grade": "A",
+        "employees": 580000,
         "grade_bands": [
           {
             "grade": "A",
@@ -2514,7 +2523,8 @@ window.DEMO_FIXTURES = [
           "low": 161661.34,
           "high": 204739.26
         },
-        "grade": "A",
+        "grade": "N/A",
+        "employees": null,
         "grade_bands": [
           {
             "grade": "A",
@@ -2656,7 +2666,8 @@ window.DEMO_FIXTURES = [
           "low": 105091.79,
           "high": 245214.17
         },
-        "grade": "A",
+        "grade": "N/A",
+        "employees": null,
         "grade_bands": [
           {
             "grade": "A",
