@@ -1,7 +1,7 @@
 {
   "company": "Infosys Limited",
   "reporting_year": "FY 2025-26",
-  "source": "Global Entity Directory.pdf (NotebookLLM summary). Verify against the original BRSR.",
+  "source": "Infosys Integrated Annual Report 2025-26 (BRSR), pp. 173-183; ESG Report 2025-26 for Scope 1 and 3",
   "location": "Bengaluru, Karnataka",
   "tier": "tier_3",
   "disclosed": {
@@ -25,5 +25,6 @@
   "notes": [
     "Scope 1 is not calculated: the fuel split is not disclosed, so no litre-based calculation is possible.",
     "Scope 2 is compared on a location basis: the calculator applies one grid factor to all electricity."
-  ]
+  ],
+  "verification": "Verified against the primary report in NotebookLLM. Scope 2 location p.179, electricity p.173, waste p.183, Scope 1 p.39, Scope 3 p.40."
 }

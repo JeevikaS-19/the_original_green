@@ -129,7 +129,7 @@ CASE_STUDIES = [
         ],
         "disclosed": {"scope_1": 22631.0, "scope_2_location": 318184.0, "scope_2_market": 53971.0, "scope_3": 573872.0},
         "scope1_note": "Disclosed Scope 1 is mostly HFC refrigerant leaks (14,769 t). The fuel split is not disclosed, and the calculator has no refrigerant factor.",
-        "source": "Global Entity Directory.pdf (NotebookLLM summary). Verify against the original BRSR before publishing.",
+        "source": "Verified against the company's FY 2025-26 integrated report (BRSR), in the NotebookLLM notebook.",
     },
     {
         "id": "case_infosys",
@@ -149,7 +149,7 @@ CASE_STUDIES = [
         ],
         "disclosed": {"scope_1": 11483.0, "scope_2_location": 145604.0, "scope_2_market": 34351.0, "scope_3": 207374.0},
         "scope1_note": "Scope 1 is not calculated: the fuel split is not disclosed, so no litre-based figure is possible.",
-        "source": "Global Entity Directory.pdf (NotebookLLM summary). Verify against the original BRSR before publishing.",
+        "source": "Verified against the company's FY 2025-26 integrated report (BRSR), in the NotebookLLM notebook.",
     },
 ]
 

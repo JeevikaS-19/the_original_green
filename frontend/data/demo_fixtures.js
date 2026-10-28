@@ -1456,7 +1456,7 @@ window.DEMO_FIXTURES = [
     "label": "Case: TCS FY 2025-26",
     "sublabel": "Public disclosure, summary-based",
     "description": "Tata Consultancy Services, from its FY 2025-26 sustainability disclosures. Our calculated figures are set against the disclosed ones.",
-    "source": "Global Entity Directory.pdf (NotebookLLM summary). Verify against the original BRSR before publishing.",
+    "source": "Verified against the company's FY 2025-26 integrated report (BRSR), in the NotebookLLM notebook.",
     "disclosed": {
       "scope_1": 22631.0,
       "scope_2_location": 318184.0,
@@ -1792,7 +1792,7 @@ window.DEMO_FIXTURES = [
     "label": "Case: Infosys FY 2025-26",
     "sublabel": "Public disclosure, summary-based",
     "description": "Infosys, from its FY 2025-26 sustainability disclosures. Our calculated figures are set against the disclosed ones.",
-    "source": "Global Entity Directory.pdf (NotebookLLM summary). Verify against the original BRSR before publishing.",
+    "source": "Verified against the company's FY 2025-26 integrated report (BRSR), in the NotebookLLM notebook.",
     "disclosed": {
       "scope_1": 11483.0,
       "scope_2_location": 145604.0,

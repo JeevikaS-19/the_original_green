@@ -1,7 +1,7 @@
 {
   "company": "Tata Consultancy Services Limited (TCS)",
   "reporting_year": "FY 2025-26",
-  "source": "Global Entity Directory.pdf (NotebookLLM summary). Verify against the original BRSR.",
+  "source": "TCS Integrated Annual Report 2025-26 (BRSR), pp. 163-173",
   "location": "Mumbai, Maharashtra",
   "tier": "tier_3",
   "disclosed": {
@@ -25,5 +25,6 @@
   "notes": [
     "Scope 1 includes 14,769 t of HFC refrigerant emissions, which the calculator has no factor for.",
     "Scope 2 is compared on a location basis: the calculator applies one grid factor to all electricity."
-  ]
+  ],
+  "verification": "Verified against the primary report in NotebookLLM. Scope 1 p.165, Scope 2 p.165, Scope 3 p.173, electricity p.163, waste p.167."
 }
