@@ -1,0 +1,34 @@
+{
+  "tier": "tier2",
+  "org_type": "campus",
+  "organization": "Example Campus",
+  "period": "2026",
+  "scopes": {
+    "scope_1": {
+      "total": {"co2e_tons": 80},
+      "confidence": "±15%",
+      "breakdown_by_vehicle": [
+        {"name": "CNG buses", "co2e_tons": 8},
+        {"name": "DG generator", "co2e_tons": 2}
+      ]
+    },
+    "scope_2": {
+      "total": {"co2e_tons": 33},
+      "confidence": "±20%",
+      "breakdown": [{"name": "Grid electricity", "co2e_tons": 33}]
+    },
+    "scope_3": {
+      "total": {"co2e_tons": 8},
+      "confidence": "±30%",
+      "cloud": {"name": "Cloud", "co2e_tons": 1},
+      "office": {"name": "Office", "co2e_tons": 1},
+      "breakdown_by_device": [{"name": "Hardware", "co2e_tons": 4}],
+      "categories": {
+        "commute": {"co2e_tons": 1},
+        "waste": {"co2e_tons": 1}
+      }
+    },
+    "water_total_liters": 180000
+  },
+  "total": {"co2e_tons": 121}
+}

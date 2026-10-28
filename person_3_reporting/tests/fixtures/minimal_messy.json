@@ -1,0 +1,10 @@
+{
+  "tier": "mystery-tier",
+  "org_type": "unknown-kind",
+  "scopes": {
+    "scope_1": {"total_co2e_tons": 0},
+    "scope_2": {"breakdown": [{"name": "Grid electricity", "co2e_kg": 2000}]},
+    "scope_3": null
+  },
+  "total": {"co2e_tons": 99}
+}

@@ -1,0 +1,32 @@
+{
+  "timestamp": "2026-10-28T13:00:00",
+  "tier": "tier_2",
+  "scopes": {
+    "scope_1": {
+      "total_co2e_kg": 80000,
+      "total_co2e_tons": 80,
+      "breakdown": [
+        {"vehicle_id": "BUS_001", "fuel_type": "cng", "annual_co2e_kg": 40000},
+        {"source": "DG Set (diesel)", "annual_co2e_kg": 40000}
+      ]
+    },
+    "scope_2": {
+      "total_co2e_kg": 33000,
+      "total_co2e_tons": 33,
+      "breakdown": {
+        "electricity": {"annual_co2e_kg": 33000}
+      }
+    },
+    "scope_3": {
+      "total_co2e_kg": 8000,
+      "total_co2e_tons": 8,
+      "categories": {
+        "3.1_cloud": null,
+        "3.2_hardware": {"total_co2e_kg": 6000},
+        "3.3_commute": {"total_co2e_kg": 1000},
+        "3.4_waste": {"total_co2e_kg": 1000}
+      }
+    }
+  },
+  "total": {"co2e_kg": 121000, "co2e_tons": 121}
+}
