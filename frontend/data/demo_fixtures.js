@@ -111,7 +111,7 @@ window.DEMO_FIXTURES = [
                 "tons": 0.1
               }
             ],
-            "formula": "Devices, commute and waste × factor. Factors are placeholders, so these show zero."
+            "formula": "Devices, commute and waste × factor. Factors are illustrative assumptions, not verified sources."
           }
         ],
         "total": {
@@ -249,7 +249,7 @@ window.DEMO_FIXTURES = [
                 "tons": 0.0
               }
             ],
-            "formula": "Devices, commute and waste × factor. Factors are placeholders, so these show zero."
+            "formula": "Devices, commute and waste × factor. Factors are illustrative assumptions, not verified sources."
           }
         ],
         "total": {
@@ -431,7 +431,7 @@ window.DEMO_FIXTURES = [
                 "tons": 4.2
               }
             ],
-            "formula": "Devices, commute and waste × factor. Factors are placeholders, so these show zero."
+            "formula": "Devices, commute and waste × factor. Factors are illustrative assumptions, not verified sources."
           }
         ],
         "total": {
@@ -623,7 +623,7 @@ window.DEMO_FIXTURES = [
                 "tons": 0.0
               }
             ],
-            "formula": "Devices, commute and waste × factor. Factors are placeholders, so these show zero."
+            "formula": "Devices, commute and waste × factor. Factors are illustrative assumptions, not verified sources."
           }
         ],
         "total": {
@@ -864,7 +864,7 @@ window.DEMO_FIXTURES = [
                 "tons": 30.0
               }
             ],
-            "formula": "Devices, commute and waste × factor. Factors are placeholders, so these show zero."
+            "formula": "Devices, commute and waste × factor. Factors are illustrative assumptions, not verified sources."
           }
         ],
         "total": {
@@ -1061,7 +1061,7 @@ window.DEMO_FIXTURES = [
                 "tons": 0.0
               }
             ],
-            "formula": "Devices, commute and waste × factor. Factors are placeholders, so these show zero."
+            "formula": "Devices, commute and waste × factor. Factors are illustrative assumptions, not verified sources."
           }
         ],
         "total": {
@@ -1335,7 +1335,7 @@ window.DEMO_FIXTURES = [
                 "tons": 18.4
               }
             ],
-            "formula": "Devices, commute and waste × factor. Factors are placeholders, so these show zero."
+            "formula": "Devices, commute and waste × factor. Factors are illustrative assumptions, not verified sources."
           }
         ],
         "total": {
@@ -1576,7 +1576,7 @@ window.DEMO_FIXTURES = [
                 "tons": 4976.5
               }
             ],
-            "formula": "Devices, commute and waste × factor. Factors are placeholders, so these show zero."
+            "formula": "Devices, commute and waste × factor. Factors are illustrative assumptions, not verified sources."
           }
         ],
         "total": {
@@ -1718,7 +1718,7 @@ window.DEMO_FIXTURES = [
                 "tons": 0.0
               }
             ],
-            "formula": "Devices, commute and waste × factor. Factors are placeholders, so these show zero."
+            "formula": "Devices, commute and waste × factor. Factors are illustrative assumptions, not verified sources."
           }
         ],
         "total": {
@@ -1912,7 +1912,7 @@ window.DEMO_FIXTURES = [
                 "tons": 8047.3
               }
             ],
-            "formula": "Devices, commute and waste × factor. Factors are placeholders, so these show zero."
+            "formula": "Devices, commute and waste × factor. Factors are illustrative assumptions, not verified sources."
           }
         ],
         "total": {
@@ -2054,7 +2054,7 @@ window.DEMO_FIXTURES = [
                 "tons": 0.0
               }
             ],
-            "formula": "Devices, commute and waste × factor. Factors are placeholders, so these show zero."
+            "formula": "Devices, commute and waste × factor. Factors are illustrative assumptions, not verified sources."
           }
         ],
         "total": {

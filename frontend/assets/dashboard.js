@@ -4,11 +4,31 @@
   var ALL = window.DEMO_FIXTURES || [];
   var SCALES = ["individual", "small_scale", "large_scale", "case_tcs", "case_infosys"];
   var SCALE_LABEL = {
-    individual: "Individual", small_scale: "Small-Scale", large_scale: "Large-Scale",
-    case_tcs: "TCS FY25-26", case_infosys: "Infosys FY25-26"
+    individual: "Individual", small_scale: "Small-scale campus", large_scale: "Large-scale enterprise",
+    case_tcs: "TCS · FY 2025-26 (case study)", case_infosys: "Infosys · FY 2025-26 (case study)"
+  };
+  var VIEWS = ["overview", "scope_1", "scope_2", "scope_3", "estimates", "formulas", "reductions"];
+  var VIEW_LABEL = {
+    overview: "Overview", scope_1: "Scope 1 · Direct fuel", scope_2: "Scope 2 · Purchased power",
+    scope_3: "Scope 3 · Value chain", estimates: "Estimates", formulas: "Formulas & sources", reductions: "Reductions"
   };
   var SCOPE_NAME = { scope_1: "Scope 1", scope_2: "Scope 2", scope_3: "Scope 3" };
-  var state = { scale: "small_scale", path: "open_source", scope: "scope_1", picked: {} };
+  var SCOPE_CLASS = { scope_1: "c1", scope_2: "c2", scope_3: "c3" };
+  var CONF_TEXT = { full_data: "Full data", partial_data: "Partial data", overview_only: "Overview only" };
+  // Factors used by the calculator. Status mirrors person2 factors.py.
+  var FACTORS = [
+    { scope: "scope_1", name: "Diesel", value: "2.68 kg CO₂e / L", status: "sourced", source: "IPCC 2006 CO₂ default, converted per litre" },
+    { scope: "scope_1", name: "Petrol", value: "2.29 kg CO₂e / L", status: "sourced", source: "IPCC 2006 CO₂ default, converted per litre" },
+    { scope: "scope_1", name: "LPG", value: "1.61 kg CO₂e / L", status: "sourced", source: "IPCC 2006 CO₂ default, converted per litre" },
+    { scope: "scope_2", name: "Grid electricity (India)", value: "0.757 kg CO₂e / kWh", status: "sourced", source: "CEA CO₂ baseline, combined margin FY 2023-24 (secondary report)" },
+    { scope: "scope_3", name: "Laptop, embodied", value: "30 kg / device / yr", status: "illustrative", source: "Illustrative assumption" },
+    { scope: "scope_3", name: "Desktop, embodied", value: "60 kg / device / yr", status: "illustrative", source: "Illustrative assumption" },
+    { scope: "scope_3", name: "Server, embodied", value: "500 kg / device / yr", status: "illustrative", source: "Illustrative assumption" },
+    { scope: "scope_3", name: "Commute · car / bus / bike", value: "0.15 / 0.05 / 0.01 kg / km", status: "illustrative", source: "Illustrative assumption" },
+    { scope: "scope_3", name: "Waste · solid / e-waste", value: "0.5 / 3.0 kg / kg", status: "illustrative", source: "Illustrative assumption" },
+    { scope: "scope_3", name: "Cloud GPU", value: "0.4 kg / hour", status: "illustrative", source: "Illustrative assumption" }
+  ];
+  var state = { scale: "small_scale", path: "open_source", view: "overview", picked: {} };
 
   var $ = function (id) { return document.getElementById(id); };
   function esc(v) {
@@ -18,9 +38,10 @@
   }
   function t(v) { return Number(v).toLocaleString("en-IN", { minimumFractionDigits: 1, maximumFractionDigits: 1 }) + " t"; }
   function inr(v) { return "₹" + Math.round(v).toLocaleString("en-IN"); }
-  function lakh(v) { return "₹" + (v / 100000).toFixed(1) + " L"; }
   function profile() { return ALL.filter(function (p) { return p.id === state.scale; })[0] || ALL[0]; }
   function path() { return profile().paths[state.path] || profile().paths.open_source; }
+  function scopeOf(id) { return path().scopes.filter(function (s) { return s.id === id; })[0]; }
+  function estimatesFor(id) { return (profile().paths.open_source.intake.estimates[id] || []); }
   function gradeFor(bands, tons) {
     for (var i = 0; i < bands.length; i++) {
       var b = bands[i];
@@ -29,137 +50,203 @@
     return bands[bands.length - 1].grade;
   }
   function humanFactor(id) {
-    // e.g. scope_3.hardware.laptop.embodied_carbon_factor -> Laptop embodied carbon
     var parts = id.replace("scope_3.", "").split(".");
     var name = parts.filter(function (p) { return p !== "factor" && p !== "embodied_carbon_factor"; })
       .map(function (p) { return p.replace(/_/g, " "); }).join(" · ");
     return name.charAt(0).toUpperCase() + name.slice(1);
   }
 
-  // What kind of number each scope is, for the tags and the sidebar.
-  function scopeState(scope, p) {
+  // What kind of number each scope is.
+  function scopeState(scope) {
+    var p = profile();
     if (scope.tons === 0 && state.path === "closed_source") return "none";
     if (scope.id === "scope_3") {
-      var ill = (p.illustrative || []).some(function (x) { return x.indexOf("scope_3") === 0; });
-      return ill ? "illustrative" : (p.paths.open_source.intake.estimates.scope_3 || []).length ? "estimated" : "measured";
+      var ill = (path().illustrative || []).some(function (x) { return x.indexOf("scope_3") === 0; });
+      return ill ? "illustrative" : estimatesFor("scope_3").length ? "estimated" : "measured";
     }
     return state.path === "closed_source" ? "totals" : "measured";
   }
-  var TAG_TEXT = { measured: "Measured", estimated: "Estimated", illustrative: "Illustrative", totals: "Totals only", none: "Not calculated" };
-  var TAG_CLASS = { measured: "measured", estimated: "estimated", illustrative: "illustrative", totals: "estimated", none: "none" };
+  var TAG_TEXT = { measured: "Measured", estimated: "Estimated", illustrative: "Illustrative", sourced: "Sourced", totals: "Totals only", none: "Not calculated" };
+  var TAG_CLASS = { measured: "measured", estimated: "estimated", illustrative: "illustrative", sourced: "measured", totals: "estimated", none: "none" };
   function tag(kind) { return '<span class="tag ' + TAG_CLASS[kind] + '">' + TAG_TEXT[kind] + '</span>'; }
-
-  // ---- Header toggles ----
-  function renderScaleToggle() {
-    $("scale-toggle").innerHTML = SCALES.map(function (s) {
-      return '<button role="tab" aria-selected="' + (s === state.scale) + '" data-scale="' + s + '">' + SCALE_LABEL[s] + '</button>';
-    }).join("") +
-    '<button role="tab" aria-selected="' + (state.path === "closed_source") + '" data-path="toggle">' +
-      (state.path === "closed_source" ? "Totals only" : "Detailed exports") + '</button>';
-  }
+  function initials(name) { return name.split(/\s+/).slice(0, 2).map(function (w) { return w.charAt(0); }).join("").toUpperCase(); }
 
   // ---- Sidebar ----
-  function renderSidebar() {
-    var p = profile(), pa = path();
-    var trackers = [];
-    pa.sources.forEach(function (s) { if (trackers.indexOf(s.tracker) === -1) trackers.push(s.tracker); });
-    $("tracker-list").innerHTML = trackers.map(function (name) {
-      return '<li class="ok"><span class="dot measured"></span>' + esc(name) + '</li>';
-    }).join("");
-
-    var estimates = [];
-    pa.scopes.forEach(function (s) { (p.paths.open_source.intake.estimates[s.id] || []).forEach(function (e) { estimates.push(e); }); });
-    var illustrative = (pa.illustrative || []);
-    var measuredN = state.path === "closed_source" ? 0 : 2;
-    $("source-list").innerHTML =
-      '<li><span class="dot measured"></span>Measured scopes: ' + measuredN + '</li>' +
-      '<li><span class="dot estimated"></span>Estimates made: ' + estimates.length + '</li>' +
-      '<li><span class="dot illustrative"></span>Illustrative factors: ' + illustrative.length + '</li>';
-
-    var shares = pa.scopes.map(function (s) { return pa.total.tons ? (s.tons / pa.total.tons) * 100 : 0; });
-    $("quick-stats").innerHTML =
-      '<div><dt>Total</dt><dd>' + t(pa.total.tons) + '</dd></div>' +
-      '<div><dt>Grade</dt><dd>' + esc(pa.grade) + '</dd></div>' +
-      '<div><dt>Scope 1 share</dt><dd>' + shares[0].toFixed(0) + '%</dd></div>' +
-      '<div><dt>Scope 2 share</dt><dd>' + shares[1].toFixed(0) + '%</dd></div>' +
-      '<div><dt>Scope 3 share</dt><dd>' + shares[2].toFixed(0) + '%</dd></div>';
+  function renderNav() {
+    var sel = $("org-select");
+    if (!sel.options.length) {
+      sel.innerHTML = SCALES.map(function (s) { return '<option value="' + s + '">' + SCALE_LABEL[s] + '</option>'; }).join("");
+    }
+    sel.value = state.scale;
+    document.querySelectorAll(".seg2 button").forEach(function (b) {
+      b.setAttribute("aria-pressed", String(b.getAttribute("data-path") === state.path));
+    });
+    document.querySelectorAll("#view-nav a").forEach(function (a) {
+      if (a.getAttribute("data-view") === state.view) a.setAttribute("aria-current", "page");
+      else a.removeAttribute("aria-current");
+    });
+    var pa = path();
+    pa.scopes.forEach(function (s) {
+      var n = document.querySelector('[data-n="' + s.id + '"]');
+      if (n) n.textContent = s.tons ? Math.round(s.tons).toLocaleString("en-IN") + " t" : "–";
+    });
+    var est = 0;
+    pa.scopes.forEach(function (s) { est += estimatesFor(s.id).length; });
+    document.querySelector('[data-n="estimates"]').textContent = est + (pa.illustrative || []).length;
+    document.querySelector('[data-n="reductions"]').textContent = pa.actions.length;
   }
 
-  // ---- Summary ----
-  function renderSummary() {
-    var p = profile(), pa = path();
+  function renderHeader() {
+    var p = profile();
+    $("crumb").textContent = VIEW_LABEL[state.view];
     $("profile-title").textContent = p.label + " · " + p.sublabel;
     $("profile-sub").textContent = p.description;
     $("top-source").textContent = state.path === "closed_source" ? "Totals only" : "Detailed exports";
+    document.querySelectorAll(".view").forEach(function (v) {
+      v.classList.toggle("active", v.getAttribute("data-view") === state.view);
+    });
+  }
 
+  // ---- Overview ----
+  function renderOverview() {
+    var p = profile(), pa = path();
     var total = pa.total.tons || 0;
     var half = total ? ((pa.total.high - pa.total.low) / 2 / total) * 100 : 0;
-    var tipRows = pa.scopes.map(function (s) {
-      return SCOPE_NAME[s.id] + ": " + (s.tons ? s.confidence : "not calculated") + " (" + TAG_TEXT[scopeState(s, p)].toLowerCase() + ")";
-    }).join("<br>");
-
     var hi = pa.total.high || 1;
-    var bandLeft = (pa.total.low / hi) * 100;
-    var bandWidth = ((pa.total.high - pa.total.low) / hi) * 100;
-    var midPct = (total / hi) * 100;
     $("summary-cards").innerHTML =
       '<div class="card dark"><div class="label">Total footprint</div><div class="value">' + t(total) +
         '</div><div class="sub">tCO₂e a year · range ' + t(pa.total.low) + ' to ' + t(pa.total.high) + '</div>' +
-        '<div class="range"><div class="band" style="left:' + bandLeft.toFixed(1) + '%;width:' + bandWidth.toFixed(1) + '%"></div>' +
-        '<div class="mid" style="left:' + midPct.toFixed(1) + '%"></div></div></div>' +
-      '<div class="card" data-tip><div class="label">Grade</div><div class="value">' + esc(pa.grade) +
-        '</div><div class="sub">Illustrative benchmark for ' + esc(p.label.toLowerCase()) + '</div>' +
-        '<div class="tip">' + tipRows + '</div></div>' +
-      '<div class="card" data-tip><div class="label">Confidence</div><div class="value">±' + half.toFixed(0) +
-        '%</div><div class="sub">Each scope carries its own range</div>' +
-        '<div class="tip">' + tipRows + '<br><br>Overall range is the sum of the scope ranges.</div></div>';
+        '<div class="range"><div class="band" style="left:' + (pa.total.low / hi * 100).toFixed(1) + '%;width:' +
+        ((pa.total.high - pa.total.low) / hi * 100).toFixed(1) + '%"></div><div class="mid" style="left:' + (total / hi * 100).toFixed(1) + '%"></div></div></div>' +
+      '<div class="card"><div class="label">Grade</div><div class="value">' + esc(pa.grade) +
+        '</div><div class="sub">Illustrative benchmark for ' + esc(p.label.toLowerCase()) + '</div></div>' +
+      '<div class="card"><div class="label">Confidence</div><div class="value">±' + half.toFixed(0) +
+        '%</div><div class="sub">Sum of each scope\'s own range</div></div>';
 
-    $("confidence-explain").innerHTML = state.path === "closed_source"
-      ? "Totals only. Scope 1 and 2 come from consumption totals, so the range is wide. Scope 3 cannot be calculated from totals."
-      : "Scope 1 and 2 come from measured data. Scope 3 uses illustrative or estimated factors, so its range is wider. Hover the cards to see each scope's range.";
-    $("download").setAttribute("href", "#");
-  }
-
-  // ---- Scope tabs ----
-  function renderScopes() {
-    var p = profile(), pa = path();
-    $("scope-tabs").innerHTML = pa.scopes.map(function (s) {
-      return '<button role="tab" aria-selected="' + (s.id === state.scope) + '" data-scope="' + s.id + '">' +
-        SCOPE_NAME[s.id] + ' · ' + (s.tons ? t(s.tons) : "–") + '</button>';
+    $("split-bar").innerHTML = pa.scopes.map(function (s) {
+      return '<i class="' + SCOPE_CLASS[s.id] + '" style="width:' + (total ? s.tons / total * 100 : 0).toFixed(1) + '%" title="' + SCOPE_NAME[s.id] + '"></i>';
     }).join("");
-    var s = pa.scopes.filter(function (x) { return x.id === state.scope; })[0] || pa.scopes[0];
-    var kind = scopeState(s, p);
-    var max = Math.max.apply(null, s.drivers.map(function (d) { return d.tons; }).concat([0.0001]));
-    var drivers = s.drivers.length ? s.drivers.map(function (d) {
-      var w = (d.tons / max * 100).toFixed(1);
-      return '<div class="driver"><span>' + esc(d.name) + '</span><span class="num">' + t(d.tons) +
-        '</span><div class="bar"><i style="width:' + w + '%"></i></div></div>';
-    }).join("") : '<p class="muted">No drivers for this scope.</p>';
+    $("confidence-explain").textContent = state.path === "closed_source"
+      ? "Totals only: Scope 3 can't be calculated from consumption totals."
+      : "Click a scope for its full report.";
+    $("scope-tiles").innerHTML = pa.scopes.map(function (s) {
+      var share = total ? (s.tons / total * 100).toFixed(0) + "%" : "–";
+      return '<button class="tile" data-goto="' + s.id + '"><span class="nm"><i class="' + SCOPE_CLASS[s.id] + '"></i>' + esc(s.label) + '</span>' +
+        '<strong>' + (s.tons ? t(s.tons) : "–") + '</strong><span class="muted small">' + share + ' of total · ' + esc(s.confidence) + '</span>' +
+        '<span>' + tag(scopeState(s)) + '</span><span class="go">Open report →</span></button>';
+    }).join("");
 
-    var notes = [];
-    if (s.id === "scope_3") {
-      (pa.illustrative || []).filter(function (x) { return x.indexOf("scope_3") === 0; })
-        .forEach(function (x) { notes.push("Illustrative factor: " + humanFactor(x)); });
-      (p.paths.open_source.intake.estimates.scope_3 || []).forEach(function (e) { notes.push("Estimate: " + e); });
-    }
-    if (state.path === "closed_source" && s.id === "scope_3") {
-      notes.push("Totals only: Scope 3 needs activity data, so it is not calculated from totals.");
-    }
+    var meta = p.paths.open_source.intake.confidence_metadata || {};
+    $("quality").innerHTML = pa.scopes.map(function (s) {
+      var q = state.path === "closed_source" ? "Totals only" : (CONF_TEXT[meta[s.id]] || "–");
+      return '<li><span>' + SCOPE_NAME[s.id] + '</span><span class="muted">' + esc(q) + '</span><b>' + esc(s.confidence) + '</b></li>';
+    }).join("") +
+      '<li><span>Sources connected</span><b>' + pa.sources.length + '</b></li>';
 
-    $("scope-panel").innerHTML =
-      '<div class="panel-head"><div><p class="kicker">' + esc(s.label) + '</p><div class="value">' + (s.tons ? t(s.tons) : "–") +
-      '</div></div><div>' + tag(kind) + ' <span class="muted small">Range ' + t(s.low) + ' to ' + t(s.high) + ' (' + esc(s.confidence) + ')</span></div></div>' +
-      '<div style="margin-top:14px">' + drivers + '</div>' +
-      '<div class="formula">Method: ' + esc(s.formula) + '</div>' +
-      (notes.length ? '<ul class="note-list">' + notes.map(function (n) { return '<li>' + esc(n) + '</li>'; }).join("") + '</ul>' : "");
+    var a = pa.actions[0];
+    $("top-action").innerHTML = a
+      ? '<span class="ta-k">Best-value action</span><h3>' + esc(a.action) + '</h3><p class="muted">' + esc(a.description) + '</p>' +
+        '<p style="margin-top:12px">Saves <b>' + t(a.tons) + '</b> a year for ' + inr(a.cost_inr) + '</p>' +
+        '<a class="btn btn-small" href="#" data-goto="reductions">See all reductions →</a>'
+      : '<span class="ta-k">Reductions</span><h3>No actions yet</h3><p class="muted">The knowledge base has no actions for this profile.</p>';
   }
 
-  // ---- Actions ----
-  function renderActions() {
+  // ---- Scope report ----
+  function renderScopeView(id) {
+    var el = document.querySelector('.view[data-view="' + id + '"]');
+    var pa = path(), s = scopeOf(id);
+    if (!s) { el.innerHTML = ""; return; }
+    var total = pa.total.tons || 0;
+    var kind = scopeState(s);
+    var srcs = pa.sources.filter(function (x) { return x.scope === id; });
+    var max = Math.max.apply(null, s.drivers.map(function (d) { return d.tons; }).concat([0.0001]));
+    var notes = estimatesFor(id).map(function (e) { return { k: "estimated", text: e }; });
+    if (id === "scope_3") {
+      (pa.illustrative || []).filter(function (x) { return x.indexOf("scope_3") === 0; })
+        .forEach(function (x) { notes.push({ k: "illustrative", text: humanFactor(x) + " uses an illustrative factor" }); });
+      if (state.path === "closed_source") notes.push({ k: "none", text: "Totals only: Scope 3 needs activity data, so it is not calculated." });
+    }
+    var acts = pa.actions.filter(function (a) { return a.scope === id; });
+    var factors = FACTORS.filter(function (f) { return f.scope === id; });
+
+    el.innerHTML =
+      '<div class="scope-hero">' +
+        '<div class="card dark"><div class="label">' + esc(s.label) + '</div><div class="value">' + (s.tons ? t(s.tons) : "–") +
+          '</div><div class="sub">Range ' + t(s.low) + ' to ' + t(s.high) + '</div></div>' +
+        '<div class="card"><div class="label">Data status</div><div style="margin-top:14px">' + tag(kind) + '</div><div class="sub">Confidence ' + esc(s.confidence) + '</div></div>' +
+        '<div class="card"><div class="label">Share of total</div><div class="value">' + (total ? (s.tons / total * 100).toFixed(0) : 0) + '%</div><div class="sub">of ' + t(total) + '</div></div>' +
+      '</div>' +
+      '<div class="two">' +
+        '<div class="dcard"><h2>Data from your trackers</h2><div class="src-list">' +
+          (srcs.length ? srcs.map(function (x) {
+            return '<div class="src"><span class="ico">' + esc(initials(x.tracker)) + '</span><div><strong>' + esc(x.tracker) + '</strong><span>' +
+              esc(x.format) + ' · ' + esc(x.detail) + '</span></div>' + tag(state.path === "closed_source" ? "totals" : "measured") + '</div>';
+          }).join("") : '<div class="empty">No tracker feeds this scope in this view.</div>') +
+        '</div></div>' +
+        '<div class="dcard" id="scope-panel"><h2>Breakdown</h2>' +
+          (s.drivers.length ? s.drivers.map(function (d) {
+            return '<div class="driver"><span>' + esc(d.name) + '</span><span class="num">' + t(d.tons) +
+              '</span><div class="bar"><i style="width:' + (d.tons / max * 100).toFixed(1) + '%"></i></div></div>';
+          }).join("") : '<div class="empty">Nothing calculated for this scope.</div>') +
+        '</div>' +
+      '</div>' +
+      '<div class="dcard"><h2>How it was calculated</h2><div class="formula">Method: ' + esc(s.formula) + '</div>' +
+        (factors.length ? '<div class="tbl-wrap" style="margin-top:14px"><table class="tbl"><thead><tr><th>Factor</th><th>Value</th><th>Status</th></tr></thead><tbody>' +
+          factors.map(function (f) { return '<tr><td>' + esc(f.name) + '</td><td><code>' + esc(f.value) + '</code></td><td>' + tag(f.status) + '</td></tr>'; }).join("") +
+          '</tbody></table></div>' : '') +
+      '</div>' +
+      (notes.length ? '<div class="dcard"><h2>Estimates and gaps</h2><ul class="quality">' +
+        notes.map(function (n) { return '<li><span>' + esc(n.text) + '</span>' + tag(n.k) + '</li>'; }).join("") + '</ul></div>' : '') +
+      '<div class="dcard"><div class="dcard-head"><h2>Reductions for this scope</h2><a class="small" href="#" data-goto="reductions">All reductions →</a></div>' +
+        (acts.length ? '<ul class="quality">' + acts.map(function (a) {
+          return '<li><span>' + esc(a.action) + '</span><span class="muted">' + inr(a.cost_inr) + '</span><b>−' + t(a.tons) + '</b></li>';
+        }).join("") + '</ul>' : '<div class="empty">No actions target this scope yet.</div>') +
+      '</div>';
+  }
+
+  // ---- Estimates (traceability) ----
+  function renderEstimates() {
+    var p = profile(), pa = path();
+    var measured = pa.sources.map(function (s) { return esc(s.tracker) + " · " + esc(s.detail); });
+    var estimated = [];
+    Object.keys(p.paths.open_source.intake.estimates).forEach(function (k) {
+      (p.paths.open_source.intake.estimates[k] || []).forEach(function (e) { estimated.push(esc(SCOPE_NAME[k] || k) + " · " + esc(e)); });
+    });
+    (pa.assumptions || []).forEach(function (a) { estimated.push(esc(typeof a === "string" ? a : JSON.stringify(a))); });
+    var illustrative = (pa.illustrative || []).map(function (x) { return esc(humanFactor(x)); });
+    function card(title, kind, items, empty) {
+      return '<div class="trace"><span class="tag ' + TAG_CLASS[kind] + '">' + TAG_TEXT[kind] + '</span><h3>' + title + '</h3>' +
+        (items.length ? '<ul>' + items.map(function (i) { return '<li>' + i + '</li>'; }).join("") + '</ul>' : '<p class="muted small">' + empty + '</p>') + '</div>';
+    }
+    $("trace-grid").innerHTML =
+      card("From the trackers", "measured", measured, "Nothing measured in this view.") +
+      card("Estimates we filled in", "estimated", estimated, "No estimates were needed.") +
+      card("Illustrative factors", "illustrative", illustrative, "No illustrative factors in this view.");
+  }
+
+  // ---- Formulas & sources ----
+  function renderFormulas() {
     var pa = path();
-    var acts = pa.actions;
+    $("formula-table").innerHTML = '<div class="tbl-wrap"><table class="tbl"><thead><tr><th>Scope</th><th>Formula</th><th>Result</th><th>Range</th><th>Status</th></tr></thead><tbody>' +
+      pa.scopes.map(function (s) {
+        return '<tr><td><b>' + SCOPE_NAME[s.id] + '</b></td><td>' + esc(s.formula) + '</td><td><b>' + (s.tons ? t(s.tons) : "–") +
+          '</b></td><td>' + esc(s.confidence) + '</td><td>' + tag(scopeState(s)) + '</td></tr>';
+      }).join("") +
+      '<tr><td><b>Total</b></td><td>Scope 1 + Scope 2 + Scope 3</td><td><b>' + t(pa.total.tons) + '</b></td><td>' + t(pa.total.low) + ' to ' + t(pa.total.high) + '</td><td></td></tr>' +
+      '</tbody></table></div>';
+    $("factor-table").innerHTML = '<div class="tbl-wrap"><table class="tbl"><thead><tr><th>Factor</th><th>Value</th><th>Source</th><th>Status</th></tr></thead><tbody>' +
+      FACTORS.map(function (f) {
+        return '<tr><td>' + esc(f.name) + '</td><td><code>' + esc(f.value) + '</code></td><td class="muted">' + esc(f.source) + '</td><td>' + tag(f.status) + '</td></tr>';
+      }).join("") +
+      '<tr><td>Grade bands</td><td>–</td><td class="muted">Illustrative benchmarks, not a sourced standard</td><td>' + tag("illustrative") + '</td></tr>' +
+      '</tbody></table></div>';
+  }
+
+  // ---- Reductions ----
+  function renderActions() {
+    var acts = path().actions;
     if (!acts.length) {
-      $("action-cards").innerHTML = '<p class="muted">No reduction action applies at this scale yet. The knowledge base has no actions for individuals.</p>';
+      $("action-cards").innerHTML = '<div class="empty">No reduction action applies at this scale yet. The knowledge base has no actions for individuals.</div>';
       return;
     }
     $("action-cards").innerHTML = acts.map(function (a, i) {
@@ -173,18 +260,15 @@
     }).join("");
   }
 
-  function gradeLine(pa, tons) { return gradeFor(pa.grade_bands, tons); }
-
   function openImpact(index) {
-    var pa = path();
-    var a = pa.actions[index];
+    var pa = path(), a = pa.actions[index];
     if (!a) return;
     var after = Math.max(0, pa.total.tons - a.tons);
     $("impact-body").innerHTML =
       '<p class="kicker">See impact</p><h3 id="impact-title">' + esc(a.action) + '</h3>' +
       '<div class="kv">' +
       '<div><span>Today</span><strong>' + t(pa.total.tons) + ' · ' + esc(pa.grade) + '</strong></div>' +
-      '<div><span>After</span><strong>' + t(after) + ' · ' + esc(gradeLine(pa, after)) + '</strong></div>' +
+      '<div><span>After</span><strong>' + t(after) + ' · ' + esc(gradeFor(pa.grade_bands, after)) + '</strong></div>' +
       '<div><span>Saves</span><strong>' + t(a.tons) + ' a year</strong></div>' +
       '<div><span>Cost</span><strong>' + inr(a.cost_inr) + '</strong></div>' +
       '</div>' +
@@ -192,7 +276,6 @@
     $("impact-dialog").showModal();
   }
 
-  // ---- Scenario builder: stack actions, with an overlap warning ----
   function renderScenario() {
     var pa = path();
     var picked = state.picked[state.scale + state.path] || {};
@@ -213,38 +296,13 @@
     $("scenario-out").innerHTML =
       '<div><span>Total now</span><strong>' + t(pa.total.tons) + '</strong></div>' +
       '<div><span>After</span><strong>' + t(after) + '</strong></div>' +
-      '<div><span>Grade after</span><strong>' + esc(gradeLine(pa, after)) + '</strong></div>' +
+      '<div><span>Grade after</span><strong>' + esc(gradeFor(pa.grade_bands, after)) + '</strong></div>' +
       '<div><span>Cost</span><strong>' + inr(cost) + '</strong></div>';
     $("scenario-warn").innerHTML = chosen.length > 1
       ? '<p class="warn">These savings may overlap, so this total is an upper bound on the reduction.</p>' : "";
   }
 
-  // ---- Traceability ----
-  function renderTrace() {
-    var p = profile(), pa = path();
-    var measured = pa.sources.map(function (s) { return esc(s.tracker) + " · " + esc(s.detail); });
-    var estimated = [];
-    Object.keys(p.paths.open_source.intake.estimates).forEach(function (k) {
-      (p.paths.open_source.intake.estimates[k] || []).forEach(function (e) { estimated.push(esc(e)); });
-    });
-    var illustrative = (pa.illustrative || []).map(function (x) { return esc(humanFactor(x)); });
-    function card(title, kind, items, empty) {
-      return '<div class="trace"><span class="tag ' + TAG_CLASS[kind] + '">' + TAG_TEXT[kind] + '</span><h3>' + title + '</h3>' +
-        (items.length ? '<ul>' + items.map(function (i) { return '<li>' + i + '</li>'; }).join("") + '</ul>' : '<p class="muted small">' + empty + '</p>') + '</div>';
-    }
-    $("trace-grid").innerHTML =
-      card("From the trackers", "measured", measured, "Nothing measured in this view.") +
-      card("Estimates we filled in", "estimated", estimated, "No estimates were needed.") +
-      card("Illustrative factors", "illustrative", illustrative, "No illustrative factors in this view.") +
-      '<div class="trace" style="grid-column:1/-1"><h3>Sources and benchmarks</h3><ul>' +
-      '<li>Grid electricity: CEA CO₂ baseline, combined margin FY 2023-24 (0.757 kg CO₂e/kWh). Secondary report, primary to be checked.</li>' +
-      '<li>Diesel, petrol and LPG: IPCC 2006 CO₂ defaults, converted per litre. Sourced, derivation shown.</li>' +
-      '<li>Scope 3 factors: illustrative assumptions for the demo, not verified sources.</li>' +
-      '<li>Grade bands: illustrative benchmarks, not a sourced standard.</li></ul>' +
-      '<div class="download-row"><button class="btn btn-ghost btn-small" id="dl-json">Download report (JSON)</button>' +
-      '<button class="btn btn-ghost btn-small" id="dl-csv">Download breakdown (CSV)</button></div></div>';
-  }
-
+  // ---- Downloads ----
   function download(name, mime, text) {
     var blob = new Blob([text], { type: mime });
     var url = URL.createObjectURL(blob);
@@ -253,18 +311,16 @@
     document.body.appendChild(a); a.click(); a.remove();
     setTimeout(function () { URL.revokeObjectURL(url); }, 1000);
   }
-
   function downloadJson() {
     var p = profile();
     download(p.id + "-" + state.path + "-report.json", "application/json",
       JSON.stringify({ user_type: p.id, data_path: state.path, report: path() }, null, 2));
   }
-
   function downloadCsv() {
     var p = profile(), pa = path();
     var rows = ["scope,driver,tCO2e,confidence,state"];
     pa.scopes.forEach(function (s) {
-      var k = scopeState(s, p);
+      var k = scopeState(s);
       if (!s.drivers.length) rows.push(s.id + ",(none),0," + s.confidence + "," + k);
       s.drivers.forEach(function (d) {
         rows.push(s.id + ',"' + d.name.replace(/"/g, "'") + '",' + d.tons + "," + s.confidence + "," + k);
@@ -275,14 +331,21 @@
 
   // ---- Wiring ----
   function render() {
-    renderScaleToggle();
-    renderSidebar();
-    renderSummary();
-    renderScopes();
+    renderNav();
+    renderHeader();
+    renderOverview();
+    ["scope_1", "scope_2", "scope_3"].forEach(renderScopeView);
+    renderEstimates();
+    renderFormulas();
     renderActions();
     renderScenario();
-    renderTrace();
-    window.history.replaceState(null, "", "#" + state.scale + "/" + (state.path === "closed_source" ? "closed" : "open"));
+    window.history.replaceState(null, "", "#" + state.scale + "/" + (state.path === "closed_source" ? "closed" : "open") + "/" + state.view);
+  }
+  function go(view) {
+    state.view = view;
+    closeMenu();
+    render();
+    window.scrollTo(0, 0);
   }
 
   function readHash() {
@@ -290,18 +353,27 @@
     if (SCALES.indexOf(parts[0]) !== -1) state.scale = parts[0];
     if (parts[1] === "closed") state.path = "closed_source";
     if (parts[1] === "open") state.path = "open_source";
+    if (VIEWS.indexOf(parts[2]) !== -1) state.view = parts[2];
   }
+
+  var snav = $("snav"), menuBtn = $("menu-btn");
+  function closeMenu() { snav.classList.remove("open"); menuBtn.setAttribute("aria-expanded", "false"); }
+  menuBtn.addEventListener("click", function () {
+    var open = snav.classList.toggle("open");
+    menuBtn.setAttribute("aria-expanded", String(open));
+  });
 
   document.addEventListener("click", function (e) {
     var b;
-    if ((b = e.target.closest("[data-scale]"))) { state.scale = b.getAttribute("data-scale"); render(); return; }
-    if ((b = e.target.closest("[data-path]"))) { state.path = state.path === "closed_source" ? "open_source" : "closed_source"; render(); return; }
-    if ((b = e.target.closest("[data-scope]"))) { state.scope = b.getAttribute("data-scope"); renderScopes(); renderScopesTabs(); return; }
+    if ((b = e.target.closest("[data-view]")) && b.tagName === "A") { e.preventDefault(); go(b.getAttribute("data-view")); return; }
+    if ((b = e.target.closest("[data-goto]"))) { e.preventDefault(); go(b.getAttribute("data-goto")); return; }
+    if ((b = e.target.closest("[data-path]"))) { state.path = b.getAttribute("data-path"); render(); return; }
     if ((b = e.target.closest("[data-impact]"))) { openImpact(Number(b.getAttribute("data-impact"))); return; }
-    if (e.target.id === "dl-json") { downloadJson(); return; }
+    if (e.target.id === "dl-json" || e.target.closest("#download")) { e.preventDefault(); downloadJson(); return; }
     if (e.target.id === "dl-csv") { downloadCsv(); return; }
   });
   document.addEventListener("change", function (e) {
+    if (e.target.id === "org-select") { state.scale = e.target.value; render(); return; }
     if (e.target.matches("#scenario-slot input[data-pick]")) {
       var key = state.scale + state.path;
       state.picked[key] = state.picked[key] || {};
@@ -309,13 +381,6 @@
       updateScenarioOut();
     }
   });
-  function renderScopesTabs() {
-    var pa = path();
-    $("scope-tabs").querySelectorAll("button").forEach(function (b) {
-      b.setAttribute("aria-selected", String(b.getAttribute("data-scope") === state.scope));
-    });
-  }
-  $("download").addEventListener("click", function (e) { e.preventDefault(); downloadJson(); });
 
   if (!ALL.length) {
     $("main").innerHTML = '<p class="muted">Demo data did not load. Check that data/demo_fixtures.js is present.</p>';

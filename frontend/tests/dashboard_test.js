@@ -27,6 +27,7 @@ w.HTMLAnchorElement.prototype.click = function () { downloads.push({ downloaded:
 w.HTMLDialogElement = w.HTMLDialogElement || function () {};
 w.HTMLDialogElement.prototype.showModal = function () { this.setAttribute("open", ""); };
 w.HTMLDialogElement.prototype.close = function () { this.removeAttribute("open"); };
+w.scrollTo = () => {};
 w.eval(fixtures);
 w.eval(script);
 
@@ -34,39 +35,43 @@ const doc = w.document;
 const $ = (s) => doc.querySelector(s);
 const $$ = (s) => Array.from(doc.querySelectorAll(s));
 const click = (el) => el.dispatchEvent(new w.MouseEvent("click", { bubbles: true, cancelable: true }));
+const pick = (v) => { const sel = doc.querySelector("#org-select"); sel.value = v; change(sel); };
 const change = (el) => el.dispatchEvent(new w.Event("change", { bubbles: true }));
 
 // 1. Initial view
 check("initial title shows Small scale", $("#profile-title").textContent.includes("Small scale"), $("#profile-title").textContent);
 check("summary card shows total", $("#summary-cards").textContent.includes("228.6"), "");
-check("scope tabs rendered (3)", $$("#scope-tabs button").length === 3);
+check("sidebar has 7 views", $$("#view-nav a[data-view]").length === 7);
+check("only overview visible", $$(".view.active").length === 1 && $(".view.active").dataset.view === "overview");
 check("five action cards", $$("#action-cards .action").length === 5, String($$("#action-cards .action").length));
 
 // 2. Scale toggle loads different data
-click($('[data-scale="large_scale"]'));
+pick("large_scale");
 check("switch to Large-Scale changes title", $("#profile-title").textContent.includes("Large scale"), $("#profile-title").textContent);
 check("Large-Scale total is 904.2 t", $("#summary-cards").textContent.includes("904.2"));
 check("hash updates to large_scale", w.location.hash.startsWith("#large_scale"), w.location.hash);
 
 // 3. Case study toggle loads real company data
-click($('[data-scale="case_tcs"]'));
+pick("case_tcs");
 check("TCS toggle loads TCS title", $("#profile-title").textContent.includes("TCS") || $("#profile-title").textContent.toLowerCase().includes("tata"), $("#profile-title").textContent);
 check("TCS total shows 3,75,xxx t (Indian grouping)", /3,75,\d{3}/.test($("#summary-cards").textContent), $("#summary-cards").textContent.slice(0, 60));
 
 // 4. Data path toggle
-click($('[data-path="toggle"]'));
+click($('[data-path="closed_source"]'));
 check("data path toggle switches to totals", $("#top-source").textContent.includes("Totals"), $("#top-source").textContent);
-click($('[data-path="toggle"]'));
+click($('[data-path="open_source"]'));
 
 // back to small scale open
-click($('[data-scale="small_scale"]'));
+pick("small_scale");
 
-// 5. Scope tabs change the panel
-click($('[data-scope="scope_3"]'));
-check("Scope 3 tab shows illustrative tag", $("#scope-panel").textContent.includes("Illustrative"), "");
-check("Scope 3 panel lists drivers", $("#scope-panel").querySelectorAll(".driver").length >= 3, String($("#scope-panel").querySelectorAll(".driver").length));
-click($('[data-scope="scope_1"]'));
-check("Scope 1 panel shows formula", $("#scope-panel").textContent.includes("Method:"));
+// 5. Sidebar opens scope reports
+click($('#view-nav a[data-view="scope_3"]'));
+check("Scope 3 view is shown", $(".view.active").dataset.view === "scope_3" && w.location.hash.endsWith("/scope_3"), w.location.hash);
+check("Scope 3 tab shows illustrative tag", $(".view.active").textContent.includes("Illustrative"), "");
+check("Scope 3 panel lists drivers", $(".view.active #scope-panel").querySelectorAll(".driver").length >= 3, String($(".view.active #scope-panel").querySelectorAll(".driver").length));
+click($('#view-nav a[data-view="scope_1"]'));
+check("Scope 1 report shows formula and trackers", $(".view.active").textContent.includes("Method:") && $(".view.active").textContent.includes("Vehicle log"));
+click($('#view-nav a[data-view="reductions"]'));
 
 // 6. See impact opens a dialog with before and after
 click($('[data-impact="0"]'));

@@ -161,7 +161,7 @@ SCOPE_LABELS = {
 SCOPE_FORMULAS = {
     "scope_1": "Litres of fuel × kg CO2e per litre (IPCC 2006 defaults, converted)",
     "scope_2": "kWh × CEA combined margin (0.757 kg CO2e/kWh)",
-    "scope_3": "Devices, commute and waste × factor. Factors are placeholders, so these show zero.",
+    "scope_3": "Devices, commute and waste × factor. Factors are illustrative assumptions, not verified sources.",
 }
 PATH_INFO = {
     "open_source": {
