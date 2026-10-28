@@ -59,7 +59,12 @@ check("connected cards chart real rows", $$(".tcard.ok .mini-bars, .tcard.ok .mi
 check("meter card shows 12 monthly kWh", !!$(".tcard.ok .mini-line") && $("#connect-list").textContent.includes("2025-12"));
 check("disconnected card shows setup steps", $$(".tcard:not(.ok) .tc-steps li").length === 3);
 check("cards carry quality badges", $$(".tcard .tag").length === 7);
-check("connect / reconnect buttons", $("#connect-list").textContent.includes("Reconnect") && /Connect$/m.test($$(".tcard:not(.ok) .btn")[0].textContent));
+check("connect and disconnect buttons", $("#connect-list").textContent.includes("Disconnect") && /Connect$/m.test($$(".tcard:not(.ok) .btn")[0].textContent));
+const discBtn = $('[data-disc="Fleet & fuel log"]');
+click(discBtn);
+check("disconnect persists and drops the card to not connected", $$(".tcard.ok").length === 5 && $("#connect-list").textContent.includes("Disconnected in this browser") && w.localStorage.getItem("og-connections-v1").includes("Fleet"));
+click($('[data-reconn="Fleet & fuel log"]'));
+check("reconnect restores the card", $$(".tcard.ok").length === 6);
 nav("overview");
 check("quick stats show total and grade", $("#quick-stats").textContent.includes("264") && $("#quick-stats").textContent.includes("Grade"));
 

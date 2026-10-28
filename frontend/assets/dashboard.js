@@ -517,37 +517,61 @@
   }
 
   // ---- Connect ----
+  // Tracker status is kept per browser, so a disconnect survives a reload.
+  var CONN_KEY = "og-connections-v1";
+  function disconnectedSet() {
+    try { return JSON.parse(localStorage.getItem(CONN_KEY) || "{}"); } catch (e) { return {}; }
+  }
+  function setDisconnected(name, off) {
+    var set = disconnectedSet();
+    if (off) set[name] = true; else delete set[name];
+    try { localStorage.setItem(CONN_KEY, JSON.stringify(set)); } catch (e) { /* storage unavailable: session only */ }
+  }
   function renderConnect() {
-    var srcs = path().sources, cats = categories(effPath()), connected = 0;
+    var srcs = path().sources, cats = categories(effPath()), connected = 0, off = disconnectedSet();
     var html = PLATFORMS.map(function (p) {
-      var hit = srcs.filter(function (s) { return s.scope === p.scope && p.match.test(s.tracker); })[0];
+      var sourced = srcs.filter(function (s) { return s.scope === p.scope && p.match.test(s.tracker); })[0];
+      var disc = !!off[p.name];
+      var hit = sourced && !disc;
       if (hit) connected++;
       var cat = cats.filter(function (c) { return c.name === p.cat; })[0];
       var kind = hit ? (cat && cat.tons ? cat.kind : "measured") : "none";
       var body;
       if (hit && state.path === "closed_source") {
-        body = '<div class="tc-total"><span>Total provided</span><strong>' + esc(hit.detail) + '</strong><p class="muted small">Totals only: no detailed rows to chart.</p></div>';
+        body = '<div class="tc-total"><span>Total provided</span><strong>' + esc(sourced.detail) + '</strong><p class="muted small">Totals only: no detailed rows to chart.</p></div>';
       } else if (hit) {
         var d = platformData(p);
         body = d ? '<p class="tc-ct">' + esc(d.title) + '</p>' + d.chart +
             '<ul class="tc-sample">' + d.sample.map(function (s) { return '<li>' + esc(s) + '</li>'; }).join("") + '</ul>'
-          : '<div class="tc-total"><span>Data</span><strong>' + esc(hit.detail) + '</strong></div>';
+          : '<div class="tc-total"><span>Data</span><strong>' + esc(sourced.detail) + '</strong></div>';
+      } else if (sourced && disc) {
+        body = '<div class="tc-total"><span>Disconnected in this browser</span><strong>Status only: the figures still come from the saved export.</strong></div>';
       } else {
         body = '<ol class="tc-steps">' + p.steps.map(function (s) { return '<li>' + esc(s) + '</li>'; }).join("") + '</ol>';
       }
+      var actions = sourced && !disc
+        ? '<button class="btn btn-ghost btn-small" data-disc="' + esc(p.name) + '">Disconnect</button>'
+        : '<button class="btn btn-small" data-reconn="' + esc(p.name) + '">' + (sourced ? 'Reconnect' : 'Connect') + '</button>';
       return '<article class="tcard' + (hit ? ' ok' : '') + '">' +
         '<div class="tc-top"><div><h3>' + esc(p.name) + '</h3><p class="muted small">' + esc(p.note) + '</p></div>' +
-        '<span class="tc-st">' + (hit ? '✓ Connected' : '✗ Not connected') + '</span></div>' +
-        '<div class="tc-tags"><span class="chip-s">' + SCOPE_NAME[p.scope] + '</span>' + tag(kind) + (hit ? '<span class="muted small">' + esc(hit.tracker) + ' · ' + esc(hit.format) + '</span>' : '') + '</div>' +
+        '<span class="tc-st">' + (hit ? '✓ Connected' : (sourced && disc ? '✗ Disconnected' : '✗ Not connected')) + '</span></div>' +
+        '<div class="tc-tags"><span class="chip-s">' + SCOPE_NAME[p.scope] + '</span>' + tag(kind) +
+          (hit ? '<span class="muted small">' + esc(sourced.tracker) + ' · ' + esc(sourced.format) + ' · ' + (platformRows(p) || 0) + (platformRows(p) === 1 ? ' row' : ' rows') + '</span>' : '') + '</div>' +
         body +
-        '<a class="btn ' + (hit ? 'btn-ghost ' : '') + 'btn-small" href="' + p.demo + '">' + (hit ? 'Reconnect' : 'Connect') + '</a></article>';
+        '<div class="tc-actions">' + actions + (hit ? '<a class="btn btn-ghost btn-small" href="' + p.demo + '">Open setup</a>' : '<a class="btn btn-ghost btn-small" href="' + p.demo + '">Set up</a>') + '</div></article>';
     }).join("");
     $("connect-list").innerHTML = html;
     $("connect-head").innerHTML = '<div class="dcard ch"><div><h2>' + connected + ' of ' + PLATFORMS.length + ' trackers connected</h2>' +
-      '<p class="muted small">Charts show the rows each export contains. The demo files hold yearly or monthly data, not daily readings.</p></div>' +
+      '<p class="muted small">Charts show the rows each export contains. Status is kept in this browser.</p></div>' +
       '<div class="ch-bar"><i style="width:' + (connected / PLATFORMS.length * 100).toFixed(0) + '%"></i></div></div>';
     var n = document.querySelector('[data-n="connect"]');
     if (n) n.textContent = connected + "/" + PLATFORMS.length;
+  }
+  function platformRows(p) {
+    var raw = profile().raw || {};
+    var map = { Fleet: raw.vehicles, "DG set": raw.dg_set ? [raw.dg_set] : null, Electricity: raw.energy_meter || raw.energy, Cloud: raw.cloud, Hardware: raw.hardware, Commute: raw.commute, Waste: raw.waste };
+    var rows = map[p.cat];
+    return rows ? rows.length : 0;
   }
 
   // ---- Scope views ----
@@ -869,6 +893,8 @@
     if ((b = e.target.closest("[data-goto]"))) { e.preventDefault(); go(b.getAttribute("data-goto")); return; }
     if ((b = e.target.closest("[data-path]"))) { state.path = b.getAttribute("data-path"); render(); return; }
     if (e.target.id === "ai-apply") { aiApply(); return; }
+    if ((b = e.target.closest("[data-disc]"))) { setDisconnected(b.getAttribute("data-disc"), true); renderConnect(); live(); return; }
+    if ((b = e.target.closest("[data-reconn]"))) { setDisconnected(b.getAttribute("data-reconn"), false); renderConnect(); live(); return; }
     if (e.target.id === "ai-accept") { $("ai-out").insertAdjacentHTML("beforeend", '<p class="muted small">Plan kept. Edit any lever to change it.</p>'); return; }
     if (e.target.id === "ai-reject") { delete state.levers[key()]; $("ai-out").innerHTML = ""; renderLevers(scenario()); live(); return; }
     if (e.target.id === "dl-json") { downloadJson(); return; }
