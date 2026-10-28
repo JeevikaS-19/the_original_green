@@ -30,6 +30,11 @@ def _factor_is_placeholder(factor: Any) -> bool:
     return isinstance(factor, dict) and factor.get("status") == "placeholder"
 
 
+def _is_illustrative(factor: Any) -> bool:
+    """Demo-only assumption: usable in the calculation, but always reported as illustrative."""
+    return isinstance(factor, dict) and factor.get("status") == "illustrative_assumption"
+
+
 def _round(value: float) -> float:
     return round(value, 6)
 
@@ -165,13 +170,30 @@ def calculate_scope_3(cloud, hardware, commute, waste, conversion_factors):
     """Calculate cloud, hardware, commute, and waste categories when factors exist."""
     categories = {}
     unverified = []
+    illustrative = []
 
-    cloud_kg = _number(cloud.get("annual_co2e_kg")) if isinstance(cloud, dict) else 0.0
-    if cloud is not None and not isinstance(cloud, dict):
+    # Cloud: either a provider total (dict with annual_co2e_kg) or usage rows from a bill.
+    cloud_factors = conversion_factors.get("cloud", {})
+    cloud_kg = 0.0
+    cloud_details = []
+    if isinstance(cloud, dict):
+        cloud_kg = _number(cloud.get("annual_co2e_kg"))
+    elif isinstance(cloud, list) and cloud:
+        for row in cloud:
+            key = str(row.get("instance_type", "")).strip().lower()
+            family = "gpu" if ("gpu" in key or "a100" in key) else None
+            factor = cloud_factors.get(family) if family else None
+            factor_value = _factor_value(factor)
+            item_kg = _number(row.get("usage_hours")) * factor_value if factor_value is not None else 0.0
+            if factor_value is None:
+                unverified.append(f"scope_3.cloud.{key or 'unknown'}.factor")
+            elif _is_illustrative(factor):
+                illustrative.append(f"scope_3.cloud.{family}.factor")
+            cloud_kg += item_kg
+            cloud_details.append({"instance_type": key, "total_co2e_kg": _round(item_kg)})
+    else:
         unverified.append("scope_3.cloud")
-    elif cloud is None:
-        unverified.append("scope_3.cloud")
-    categories["3.1_cloud"] = {"total_co2e_kg": _round(cloud_kg)} if cloud is not None else None
+    categories["3.1_cloud"] = {"total_co2e_kg": _round(cloud_kg), "breakdown": cloud_details}
 
     hardware_total = 0.0
     hardware_details = []
@@ -183,6 +205,8 @@ def calculate_scope_3(cloud, hardware, commute, waste, conversion_factors):
         item_kg = _number(item.get("annual_co2e_kg"))
         if factor_value is not None:
             item_kg = _number(item.get("quantity"), 0) * factor_value
+            if _is_illustrative(factor):
+                illustrative.append(f"scope_3.hardware.{key}.embodied_carbon_factor")
         else:
             unverified.append(f"scope_3.hardware.{key or 'unknown'}.embodied_carbon_factor")
         hardware_total += item_kg
@@ -205,6 +229,8 @@ def calculate_scope_3(cloud, hardware, commute, waste, conversion_factors):
         mode_kg *= factor_value if factor_value is not None else 0
         if factor_value is None:
             unverified.append(f"scope_3.commute.{str(mode).lower()}.factor")
+        elif _is_illustrative(factor):
+            illustrative.append(f"scope_3.commute.{str(mode).lower()}.factor")
         commute_total += mode_kg
         commute_details[str(mode).lower()] = _round(mode_kg)
     categories["3.3_commute"] = {
@@ -226,6 +252,8 @@ def calculate_scope_3(cloud, hardware, commute, waste, conversion_factors):
         item_kg = mass * factor_value if factor_value is not None else 0.0
         if factor_value is None:
             unverified.append(f"scope_3.waste.{category or 'unknown'}.{disposal}.factor")
+        elif _is_illustrative(factor):
+            illustrative.append(f"scope_3.waste.{category}.{disposal}.factor")
         waste_total += item_kg
         waste_details.append({"category": category, "disposal_method": disposal, "total_co2e_kg": _round(item_kg)})
     categories["3.4_waste"] = {
@@ -240,6 +268,7 @@ def calculate_scope_3(cloud, hardware, commute, waste, conversion_factors):
         "total_co2e_tons": _tons(total),
         "categories": categories,
         "unverified_inputs": unverified,
+        "illustrative_inputs": illustrative,
     }
 
 
@@ -345,10 +374,14 @@ def calculate_all_scopes(intake_data):
     scope_3 = adjust_confidence(scope_3, effective_completeness(metadata.get("scope_3", "partial"), scope_3))
     total_kg = sum(_number(scope.get("total_co2e_kg")) for scope in (scope_1, scope_2, scope_3))
     unverified = list_unverified(intake_data)
+    illustrative = []
     for scope in (scope_1, scope_2, scope_3):
         for item in scope.get("unverified_inputs", []):
             if item not in unverified:
                 unverified.append(item)
+        for item in scope.get("illustrative_inputs", []):
+            if item not in illustrative:
+                illustrative.append(item)
     return {
         "timestamp": intake_data.get("timestamp", datetime.now(timezone.utc).isoformat()),
         "tier": intake_data.get("tier"),
@@ -362,4 +395,5 @@ def calculate_all_scopes(intake_data):
             "co2e_tons": _tons(total_kg),
         },
         "unverified_inputs": unverified,
+        "illustrative_inputs": illustrative,
     }

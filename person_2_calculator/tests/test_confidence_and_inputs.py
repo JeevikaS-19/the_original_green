@@ -73,3 +73,35 @@ def test_overview_confidence_is_plus_minus_40_percent():
     assert uncertainty_pct("overview") == 40
     result = adjust_confidence({"total_co2e_kg": 1000}, "overview")
     assert result["co2e_range_kg"] == {"low": 600.0, "high": 1400.0}
+
+
+def test_illustrative_factors_are_used_and_reported():
+    hardware = [{"device_type": "Laptop", "quantity": 10}]
+    result = calculate_scope_3(None, hardware, None, None, conversion_factors)
+    assert result["categories"]["3.2_hardware"]["total_co2e_kg"] == 10 * 30
+    assert "scope_3.hardware.laptop.embodied_carbon_factor" in result["illustrative_inputs"]
+    assert not any("laptop" in item for item in result["unverified_inputs"])
+
+
+def test_cloud_usage_rows_use_the_gpu_factor():
+    cloud = [{"instance_type": "gpu-a100-x4", "usage_hours": 500, "cost": 40000}]
+    result = calculate_scope_3(cloud, None, None, None, conversion_factors)
+    assert result["categories"]["3.1_cloud"]["total_co2e_kg"] == 500 * 0.4
+    assert "scope_3.cloud.gpu.factor" in result["illustrative_inputs"]
+
+
+def test_unknown_cloud_instance_stays_unverified():
+    cloud = [{"instance_type": "t3.medium", "usage_hours": 500, "cost": 100}]
+    result = calculate_scope_3(cloud, None, None, None, conversion_factors)
+    assert result["categories"]["3.1_cloud"]["total_co2e_kg"] == 0
+    assert any("t3.medium" in item for item in result["unverified_inputs"])
+
+
+def test_all_scopes_collects_illustrative_inputs_at_top_level():
+    intake = {
+        "scopes": {"scope_3": {"commute": {"total_employees": 10, "avg_distance_km": 10,
+                                            "mode_split": {"car": 1.0}}}},
+        "confidence_metadata": {"scope_3": "partial_data"},
+    }
+    result = calculate_all_scopes(intake)
+    assert "scope_3.commute.car.factor" in result["illustrative_inputs"]

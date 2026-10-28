@@ -103,26 +103,47 @@ INDIRECT_WATER_FACTOR = _placeholder(
     high=3.0,
 )
 
+def _illustrative(value: Any, unit: str, note: str) -> dict[str, Any]:
+    """Demo-only assumption. Not a sourced value; the report labels every use of it as illustrative."""
+    return {
+        "value": value,
+        "unit": unit,
+        "low": None,
+        "high": None,
+        "source": f"ILLUSTRATIVE demo assumption, not a sourced value. {note}",
+        "year": None,
+        "status": "illustrative_assumption",
+    }
+
+
+# Hardware: kg CO2e per device per YEAR (lifecycle figure divided by lifespan),
+# because the calculator reports annual totals.
 HARDWARE_EMBODIED_CARBON = {
-    "laptop": _placeholder(None, "kg CO2e/device"),
-    "desktop": _placeholder(None, "kg CO2e/device"),
+    "laptop": _illustrative(30, "kg CO2e/device/yr", "About 150 kg lifecycle over 5 years."),
+    "desktop": _illustrative(60, "kg CO2e/device/yr", "About 300 kg lifecycle over 5 years."),
     "monitor": _placeholder(None, "kg CO2e/device"),
-    "server": _placeholder(None, "kg CO2e/device"),
+    "server": _illustrative(500, "kg CO2e/device/yr", "About 2,500 kg lifecycle over 5 years."),
+    "gpu": _illustrative(333, "kg CO2e/device/yr", "About 1,000 kg lifecycle over 3 years."),
 }
 
 COMMUTE_FACTORS = {
-    "car": _placeholder(None, "kg CO2e/km"),
-    "bus": _placeholder(None, "kg CO2e/km"),
-    "bike": _placeholder(None, "kg CO2e/km"),
+    "car": _illustrative(0.15, "kg CO2e/km", "Per passenger-km, rounded."),
+    "bus": _illustrative(0.05, "kg CO2e/km", "Per passenger-km, rounded."),
+    "bike": _illustrative(0.01, "kg CO2e/km", "Per km, small embodied footprint."),
     "two_wheeler": _placeholder(None, "kg CO2e/km"),
     "wfh": _placeholder(0, "kg CO2e/km"),
 }
 
 WASTE_FACTORS = {
-    ("solid waste", "landfill"): _placeholder(None, "kg CO2e/kg"),
+    ("solid waste", "landfill"): _illustrative(0.5, "kg CO2e/kg", "Landfill of mixed solid waste."),
     ("solid waste", "recycling"): _placeholder(None, "kg CO2e/kg"),
-    ("e-waste", "recycling"): _placeholder(None, "kg CO2e/kg"),
-    ("wastewater", "treatment"): _placeholder(None, "kg CO2e/kg"),
+    ("e-waste", "recycling"): _illustrative(3.0, "kg CO2e/kg", "Recycling of electronic waste."),
+    ("wastewater", "treatment"): _illustrative(0.001, "kg CO2e/kg", "Treatment of wastewater."),
+}
+
+# Cloud: kg CO2e per instance-hour, by instance family.
+CLOUD_FACTORS = {
+    "gpu": _illustrative(0.4, "kg CO2e/hour", "A100-class GPU instance-hour."),
 }
 
 FUEL_PRICE_PER_LITRE = {
@@ -142,6 +163,7 @@ conversion_factors = {
     "hardware_embodied_carbon": HARDWARE_EMBODIED_CARBON,
     "commute": COMMUTE_FACTORS,
     "waste": WASTE_FACTORS,
+    "cloud": CLOUD_FACTORS,
     "fuel_price_per_litre": FUEL_PRICE_PER_LITRE,
     "tariff_per_kwh": TARIFF_PER_KWH,
 }
