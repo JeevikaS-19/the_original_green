@@ -1,0 +1,34 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Cloud usage bill · Tracker demo · Carbon Aggregation</title>
+<link rel="stylesheet" href="../assets/dashboard.css"></head>
+<body>
+<header class="topbar"><div class="top-left"><a class="logo" href="../index.html">Carbon Aggregation</a></div>
+<div class="top-right"><a class="btn btn-ghost btn-small" href="index.html">All tracker demos</a></div></header>
+<div class="main" style="max-width:1100px;margin:0 auto;padding:30px 24px 70px">
+
+<section class="block demo-hero">
+  <p class="kicker">Cloud tracker</p>
+  <h1>Cloud usage bill</h1>
+  <p>A cloud usage export, one row per instance family and region. The platform reads the usage hours, separates GPU from general-purpose instances, and calculates what it can.</p>
+  <p class="disclaimer">Demo. This shows how the platform reads a cloud usage export. It is not a connection to any provider.</p>
+</section>
+<section class="block">
+  <p class="kicker">Sample export: cloud usage (CSV)</p>
+  <pre class="code">instance_type,region,usage_hours,cost
+gpu-a100-x4,ap-south-1,9000,2700000
+gpu-a100-x4,ap-south-1,4000,1200000
+m6i.large,ap-south-1,36000,450000</pre>
+</section>
+<section class="block">
+  <p class="kicker">How the platform reads it</p>
+  <div class="steps-row"><div class="step"><div class="n">STEP 1</div><h3>Read the export</h3><p>Each row is a billed usage line, with its region and hours.</p></div><div class="step"><div class="n">STEP 2</div><h3>Map the columns</h3><p>Instance type, region, usage hours and cost are matched by name.</p></div><div class="step"><div class="n">STEP 3</div><h3>Classify instances</h3><p>GPU families use the GPU factor. General-purpose families have no factor yet, so they are flagged.</p></div><div class="step"><div class="n">STEP 4</div><h3>Calculate Scope 3.1</h3><p>GPU hours × 0.4 kg CO₂e per hour. Illustrative until a verified source is added.</p></div></div>
+</section>
+<section class="block">
+  <p class="kicker">What it finds</p>
+  <div class="result-grid"><div class="card"><div class="label">Usage lines</div><div class="value">3</div><div class="sub">2 instance families</div></div><div class="card"><div class="label">GPU hours</div><div class="value">13,000 h</div><div class="sub">gpu-a100-x4, two lines</div></div><div class="card"><div class="label">General-purpose hours</div><div class="value">36,000 h</div><div class="sub">m6i.large, not calculated</div></div><div class="card"><div class="label">Scope 3.1 (GPU)</div><div class="value">5.2 t</div><div class="sub">Illustrative factor</div></div></div>
+  <div class="gap-note"><strong>Not calculated, and why</strong><ul><li>General-purpose instances have no verified factor, so their 36,000 hours are not in the total.</li><li>Spend is shown, but spend-based estimates are used only as a fallback, and labelled as one.</li></ul></div>
+</section>
+
+<section class="block"><a class="btn btn-ghost" href="../dashboard.html#small_scale">Back to the dashboard</a></section>
+</div></body></html>

@@ -1,0 +1,35 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Energy meter export · Tracker demo · Carbon Aggregation</title>
+<link rel="stylesheet" href="../assets/dashboard.css"></head>
+<body>
+<header class="topbar"><div class="top-left"><a class="logo" href="../index.html">Carbon Aggregation</a></div>
+<div class="top-right"><a class="btn btn-ghost btn-small" href="index.html">All tracker demos</a></div></header>
+<div class="main" style="max-width:1100px;margin:0 auto;padding:30px 24px 70px">
+
+<section class="block demo-hero">
+  <p class="kicker">Energy tracker</p>
+  <h1>Energy meter export</h1>
+  <p>A monthly meter export. The platform reads the twelve readings, averages them, annualises them, and calculates Scope 2.</p>
+  <p class="disclaimer">Demo. This shows how the platform reads a monthly meter export. It is not a connection to any product.</p>
+</section>
+<section class="block">
+  <p class="kicker">Sample export: energy meter (CSV, first rows shown)</p>
+  <pre class="code">month,kwh,region_state
+2025-01,4600,Karnataka
+2025-02,4400,Karnataka
+2025-03,4800,Karnataka
+... 9 more months</pre>
+</section>
+<section class="block">
+  <p class="kicker">How the platform reads it</p>
+  <div class="steps-row"><div class="step"><div class="n">STEP 1</div><h3>Read the export</h3><p>Twelve monthly rows, with the region in each row.</p></div><div class="step"><div class="n">STEP 2</div><h3>Map the columns</h3><p>The kWh column is matched by name. Alternative names such as kwh_consumed are accepted.</p></div><div class="step"><div class="n">STEP 3</div><h3>Validate</h3><p>Each reading must be a number. A missing month would reduce the sample and be flagged.</p></div><div class="step"><div class="n">STEP 4</div><h3>Calculate Scope 2</h3><p>Annual kWh × 0.757 kg CO₂e per kWh (CEA combined margin, FY 2023-24).</p></div></div>
+</section>
+<section class="block">
+  <p class="kicker">What it finds</p>
+  <div class="result-grid"><div class="card"><div class="label">Readings found</div><div class="value">12 months</div><div class="sub">Karnataka</div></div><div class="card"><div class="label">Annual use</div><div class="value">58,100 kWh</div><div class="sub">Sum of the readings</div></div><div class="card"><div class="label">Average month</div><div class="value">4,842 kWh</div><div class="sub">Mean of the readings</div></div><div class="card"><div class="label">Scope 2</div><div class="value">44.0 t</div><div class="sub">Measured, ±15%</div></div></div>
+  <div class="gap-note"><strong>Not calculated, and why</strong><ul><li>The factor is the all-India combined margin. Companies with renewable contracts report market-based figures, which need contract data we do not have.</li><li>The rate comes from a secondary report of the CEA baseline. The primary document still needs checking.</li></ul></div>
+</section>
+
+<section class="block"><a class="btn btn-ghost" href="../dashboard.html#small_scale">Back to the dashboard</a></section>
+</div></body></html>

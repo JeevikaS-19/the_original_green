@@ -1,0 +1,34 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Fuel and fleet log · Tracker demo · Carbon Aggregation</title>
+<link rel="stylesheet" href="../assets/dashboard.css"></head>
+<body>
+<header class="topbar"><div class="top-left"><a class="logo" href="../index.html">Carbon Aggregation</a></div>
+<div class="top-right"><a class="btn btn-ghost btn-small" href="index.html">All tracker demos</a></div></header>
+<div class="main" style="max-width:1100px;margin:0 auto;padding:30px 24px 70px">
+
+<section class="block demo-hero">
+  <p class="kicker">Fleet tracker</p>
+  <h1>Fuel and fleet log</h1>
+  <p>A fuel-log export, one row per vehicle. The platform reads the vehicle, its fuel and its distance, then calculates Scope 1 for the fleet.</p>
+  <p class="disclaimer">Demo. This shows how the platform reads a fuel-log export. It is not a connection to any product.</p>
+</section>
+<section class="block">
+  <p class="kicker">Sample export: fleet log (CSV)</p>
+  <pre class="code">vehicle_id,make,model,year,fuel_type,annual_km,fuel_efficiency_l_per_100km
+BUS_01,Bus,Diesel 40-seater,2017,diesel,85000,30
+BUS_02,Bus,Diesel 40-seater,2019,diesel,70000,29
+VAN_01,Van,Diesel minivan,2020,diesel,25000,11</pre>
+</section>
+<section class="block">
+  <p class="kicker">How the platform reads it</p>
+  <div class="steps-row"><div class="step"><div class="n">STEP 1</div><h3>Read the export</h3><p>A CSV with one row per vehicle is read as it is. Nothing is typed in.</p></div><div class="step"><div class="n">STEP 2</div><h3>Map the columns</h3><p>Headers are matched by name, including common aliases such as annual_km or distance_km.</p></div><div class="step"><div class="n">STEP 3</div><h3>Validate each row</h3><p>Make and fuel type are required. A missing distance would be estimated and marked.</p></div><div class="step"><div class="n">STEP 4</div><h3>Calculate Scope 1</h3><p>Litres = distance × efficiency ÷ 100, then litres × 2.68 kg CO₂e per litre (diesel).</p></div></div>
+</section>
+<section class="block">
+  <p class="kicker">What it finds</p>
+  <div class="result-grid"><div class="card"><div class="label">Vehicles found</div><div class="value">3</div><div class="sub">2 buses, 1 van</div></div><div class="card"><div class="label">Distance a year</div><div class="value">180,000 km</div><div class="sub">Sum of annual km</div></div><div class="card"><div class="label">Fuel a year</div><div class="value">48,550 L</div><div class="sub">Diesel, from efficiency</div></div><div class="card"><div class="label">Scope 1 (fleet)</div><div class="value">130.1 t</div><div class="sub">Measured, ±15%</div></div></div>
+  <div class="gap-note"><strong>Not calculated, and why</strong><ul><li>Fuel efficiency is taken from the export. Where a vehicle has none, the platform would use a default and say so.</li><li>The DG set is a separate Scope 1 item. It appears in the dashboard, not in this file.</li></ul></div>
+</section>
+
+<section class="block"><a class="btn btn-ghost" href="../dashboard.html#small_scale">Back to the dashboard</a></section>
+</div></body></html>
