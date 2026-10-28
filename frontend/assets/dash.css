@@ -463,3 +463,37 @@
 .ai-btn:disabled { opacity: .6; cursor: progress; }
 .ai-out { font-size: 14px; color: var(--ink); margin: 0; }
 .ai-out:empty { display: none; }
+
+/* Reduction: compact table; inputs read as plain text until hovered or focused */
+.red-layout { align-items: start; }
+.red-right { display: grid; gap: 16px; align-content: start; min-width: 0; }
+.red-right .ai-one { margin: 0; }
+.red-tbl th, .red-tbl td { padding: 7px 10px; vertical-align: middle; }
+.red-tbl td.muted { max-width: 46ch; line-height: 1.4; }
+.red-tbl tr.input-row th { font-weight: 500; color: var(--muted); font-size: 13px; }
+.red-tbl input[type=number] {
+  width: 120px; border: 0; border-bottom: 1px dashed transparent; border-radius: 0; background: transparent;
+  padding: 2px 4px; text-align: right; font: inherit; font-variant-numeric: tabular-nums; color: var(--ink);
+  -moz-appearance: textfield; transition: border-color .2s, background .2s;
+}
+.red-tbl input[type=number]::-webkit-outer-spin-button, .red-tbl input[type=number]::-webkit-inner-spin-button { -webkit-appearance: none; margin: 0; }
+.red-tbl tr.input-row:hover input[type=number] { border-bottom-color: var(--g2); }
+.red-tbl input[type=number]:hover { background: var(--paper); }
+.red-tbl input[type=number]:focus { outline: none; border-bottom: 1px solid var(--moss-deep); background: var(--white); }
+.red-tbl input[type=number]:disabled { color: var(--g3); }
+.red-tbl tr.input-row.off th, .red-tbl tr.input-row.off td { color: var(--g3); }
+.red-tbl tr.input-row td:first-child { white-space: nowrap; }
+.red-layout { grid-template-columns: minmax(0, 1.6fr) minmax(0, 1fr); }
+.red-tbl tr.input-row th { white-space: nowrap; }
+.red-tbl td.muted { max-width: 34ch; }
+@media (max-width: 1100px) { .red-layout { grid-template-columns: 1fr; } }
+.red-tbl td.num, .red-tbl th.num { white-space: nowrap; }
+.red-tbl th:last-child, .red-tbl td:last-child { width: 38%; }
+.red-tbl td.muted { font-size: 12.5px; max-width: none; }
+.red-tbl { table-layout: fixed; }
+.red-tbl th:nth-child(1), .red-tbl td:nth-child(1) { width: 31%; }
+.red-tbl th:nth-child(2), .red-tbl td:nth-child(2) { width: 14%; }
+.red-tbl th:nth-child(3), .red-tbl td:nth-child(3) { width: 12%; }
+.red-tbl th:nth-child(4), .red-tbl td:nth-child(4) { width: 14%; }
+.red-tbl th:nth-child(5), .red-tbl td:nth-child(5) { width: 29%; }
+.red-tbl th:last-child, .red-tbl td:last-child { width: 29%; }
