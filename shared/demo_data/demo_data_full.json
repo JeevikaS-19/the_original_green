@@ -1,0 +1,62 @@
+{
+  "tier": "school",
+  "scopes": {
+    "scope_1": {
+      "vehicles": [
+        {
+          "vehicle_id": "BUS_001",
+          "make": "Ashok Leyland",
+          "model": "CNG Bus",
+          "year": 2020,
+          "fuel_type": "CNG",
+          "annual_distance_km": 80000,
+          "lifespan_years": 8
+        },
+        {
+          "vehicle_id": "BUS_002",
+          "make": "Tata",
+          "model": "Diesel Coach",
+          "year": 2018,
+          "fuel_type": "diesel",
+          "annual_distance_km": 100000,
+          "lifespan_years": 8
+        }
+      ],
+      "dg_set": {
+        "capacity_kva": 50,
+        "fuel_type": "diesel",
+        "hours_per_year": 500,
+        "fuel_consumption_per_hour": 15
+      }
+    },
+    "scope_2": {
+      "energy_meter": {
+        "monthly_kwh": 5000,
+        "region_state": "Karnataka",
+        "cea_grid_factor": 0.55
+      }
+    },
+    "scope_3": {
+      "cloud": null,
+      "hardware": [
+        {
+          "device_type": "Laptop",
+          "model": "Dell Latitude",
+          "quantity": 30,
+          "purchase_year": 2023,
+          "expected_lifespan_years": 5
+        }
+      ],
+      "commute": {
+        "total_employees": 200,
+        "mode_split": {"car": 0.2, "bus": 0.6, "bike": 0.15, "wfh": 0.05},
+        "avg_distance_km": 12
+      },
+      "waste": [
+        {"category": "Solid Waste", "mass_kg_per_month": 500},
+        {"category": "E-waste", "mass_kg_per_month": 50},
+        {"category": "Wastewater", "mass_kg_per_month": 1000}
+      ]
+    }
+  }
+}

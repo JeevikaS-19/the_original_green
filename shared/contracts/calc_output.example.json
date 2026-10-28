@@ -1,0 +1,48 @@
+{
+  "timestamp": "2026-10-28T13:00:00",
+  "tier": "tier_2",
+  "scopes": {
+    "scope_1": {
+      "scope": "Scope 1 (Direct Fuel)",
+      "total_co2e_kg": 80000,
+      "total_co2e_tons": 80,
+      "breakdown": [
+        {"vehicle_id": "BUS_001", "fuel_type": "cng", "annual_co2e_kg": 40000},
+        {"source": "DG Set (diesel)", "annual_co2e_kg": 40000}
+      ],
+      "methodology": "Fuel consumption (L/year) x emission factor (kg CO2e/L)"
+    },
+    "scope_2": {
+      "scope": "Scope 2 (Purchased Electricity)",
+      "total_co2e_kg": 33000,
+      "total_co2e_tons": 33,
+      "breakdown": {
+        "electricity": {
+          "annual_kwh": 60000,
+          "region": "karnataka",
+          "grid_intensity": 0.55,
+          "annual_co2e_kg": 33000
+        },
+        "water_metrics": {
+          "direct_cooling_liters": 30000,
+          "indirect_power_generation_liters": 150000
+        }
+      }
+    },
+    "scope_3": {
+      "scope": "Scope 3 (Indirect)",
+      "total_co2e_kg": 8000,
+      "total_co2e_tons": 8,
+      "categories": {
+        "3.1_cloud": null,
+        "3.2_hardware": {"total_co2e_kg": 6000},
+        "3.3_commute": {"total_co2e_kg": 1000},
+        "3.4_waste": {"total_co2e_kg": 1000}
+      }
+    }
+  },
+  "total": {
+    "co2e_kg": 121000,
+    "co2e_tons": 121
+  }
+}

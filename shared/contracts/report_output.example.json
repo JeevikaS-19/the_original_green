@@ -1,0 +1,22 @@
+{
+  "report": {
+    "summary": "Total footprint 121 tCO2e/year. Scope 1 is the largest driver.",
+    "grade": "C",
+    "total_emissions": 121,
+    "breakdown_by_scope": {
+      "scope_1": {"co2e_tons": 80, "confidence": "±15%"},
+      "scope_2": {"co2e_tons": 33, "confidence": "±30%"},
+      "scope_3": {"co2e_tons": 8, "confidence": "±50%"}
+    },
+    "suggestions": [
+      {
+        "action": "Switch fleet buses to CNG",
+        "carbon_saved_tons": 8,
+        "cost_inr": 3000000,
+        "payback_months": 48,
+        "roi_tons_per_lakh": 0.27,
+        "scope": "scope_1"
+      }
+    ]
+  }
+}
