@@ -989,6 +989,19 @@
     if (e.target.id === "ai-apply") { aiApply(); return; }
     if ((b = e.target.closest("[data-disc]"))) { setDisconnected(b.getAttribute("data-disc"), true); renderConnect(); live(); return; }
     if ((b = e.target.closest("[data-reconn]"))) { setDisconnected(b.getAttribute("data-reconn"), false); renderConnect(); live(); return; }
+    if (e.target.id === "flood-today" && window.Flood) {
+      var fsc = scenario();
+      window.Flood.reset();
+      window.Flood.go(1, 2600, "Today", t(fsc.eff.total.tons) + " a year", "The whole screen is today's total.");
+      return;
+    }
+    if (e.target.id === "flood-plan" && window.Flood) {
+      var psc = scenario(), now = psc.eff.total.tons, ratio = now ? psc.after / now : 1;
+      if (!window.Flood.isOn()) window.Flood.setLevel(1);
+      window.Flood.go(ratio, 7000, "With your plan", t(psc.after) + " a year",
+        psc.rows.length ? "The water drains to " + Math.round(ratio * 100) + "% of today's level." : "Tick actions in Adjust below. With no plan, the water stays where it is.");
+      return;
+    }
     if (e.target.id === "ai-accept") { $("ai-out").insertAdjacentHTML("beforeend", '<p class="muted small">Plan kept. Edit any lever to change it.</p>'); return; }
     if (e.target.id === "ai-reject") { delete state.levers[key()]; $("ai-out").innerHTML = ""; renderLevers(scenario()); live(); return; }
     if (e.target.id === "dl-json") { downloadJson(); return; }

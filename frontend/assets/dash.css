@@ -443,3 +443,14 @@
 .cmp-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; }
 .cmp-grid .chart { height: 260px; }
 @media (max-width: 900px) { .cmp-grid { grid-template-columns: 1fr; } }
+
+/* Full-screen flood: the screen is the container. Water level = share of today's emissions. */
+.flood-actions { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 14px; }
+#flood { position: fixed; inset: 0; z-index: 200; background: rgba(246,247,242,.55); opacity: 0; pointer-events: none; transition: opacity .6s var(--ease); }
+#flood.on { opacity: 1; pointer-events: auto; }
+#flood canvas { position: absolute; inset: 0; display: block; }
+.flood-label { position: absolute; left: 32px; top: 28px; max-width: 460px; background: rgba(255,255,255,.82); backdrop-filter: blur(6px); border-radius: 18px; padding: 18px 22px; box-shadow: var(--shadow-1); }
+.flood-kicker { font-size: 11px; font-weight: 700; letter-spacing: .12em; text-transform: uppercase; color: var(--moss-deep); }
+.flood-value { font-size: 34px; font-weight: 650; letter-spacing: -.03em; margin: 4px 0; font-variant-numeric: tabular-nums; }
+.flood-sub { font-size: 13px; color: var(--muted); }
+.flood-close { position: absolute; right: 24px; top: 24px; height: 38px; padding: 0 18px; border: 0; border-radius: 999px; background: var(--ink); color: var(--paper); font: 600 14px Inter, sans-serif; cursor: pointer; }
