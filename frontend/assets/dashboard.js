@@ -88,7 +88,7 @@
   function createProject(name) {
     var id = "p" + Date.now().toString(36);
     saveProjects();
-    projects.list.push({ id: id, name: name, edits: {}, levers: {} });
+    projects.list.push({ id: id, name: name, edits: {}, levers: {}, blank: true });
     projects.active = id;
     state.edits = {}; state.levers = {};
     saveProjects();
@@ -100,6 +100,8 @@
       return '<option value="' + esc(p.id) + '">' + esc(p.name) + '</option>';
     }).join("") + '<option value="__new__">+ New project…</option>';
     sel.value = projects.active;
+    var active = projects.list.filter(function (p) { return p.id === projects.active; })[0];
+    $("inputs-project").textContent = active ? active.name : "";
   }
   function importCsv(text) {
     var fields = { litres: "litres", kwh: "kwh", renewable: "renewable", s3pct: "s3pct" };
@@ -162,8 +164,12 @@
     return { litres: Math.round(s.scope_1 * 1000 / DIESEL), kwh: Math.round(s.scope_2 * 1000 / GRID), renewable: 0, s3pct: 100 };
   }
   function inputs() {
-    if (!state.edits[key()]) state.edits[key()] = baseInputs();
+    if (!state.edits[key()]) state.edits[key()] = activeBlank() ? { litres: null, kwh: null, renewable: null, s3pct: null } : baseInputs();
     return state.edits[key()];
+  }
+  function activeBlank() {
+    var p = projects.list.filter(function (x) { return x.id === projects.active; })[0];
+    return !!(p && p.blank);
   }
   function isEdited() {
     var a = inputs(), b = baseInputs();
@@ -746,6 +752,22 @@
       (sc.noSaving ? 'Some actions have no payback period (a recurring cost), so they add no money saved. ' : '') +
       'Cost and savings scale in proportion from the knowledge base\'s figures for each action. Slider caps are assumptions.</p>';
   }
+  // Project inputs as an editable table. Blank values stay blank.
+  function renderEdits() {
+    var v = inputs(), b = baseInputs();
+    var fields = [
+      { k: "litres", label: "Fuel burned (Scope 1)", unit: "litres a year, diesel-equivalent", on: b.litres > 0 },
+      { k: "kwh", label: "Electricity used (Scope 2)", unit: "kWh a year", on: b.kwh > 0 },
+      { k: "renewable", label: "Renewable share (Scope 2)", unit: "% of electricity", on: b.kwh > 0 },
+      { k: "s3pct", label: "Scope 3 activity", unit: "% of the sample: staff, devices, travel, waste", on: baseScope("scope_3").tons > 0 }
+    ];
+    $("edits").innerHTML = fields.map(function (f) {
+      var val = v[f.k] === null || v[f.k] === undefined ? "" : v[f.k];
+      return '<tr' + (f.on ? '' : ' class="off"') + '><th>' + f.label + '</th><td class="num"><input type="number" min="0" step="any" data-edit="' + f.k +
+        '" value="' + val + '" aria-label="' + esc(f.label) + '"' + (f.on ? '' : ' disabled') + '></td><td class="muted">' + (f.on ? f.unit : 'No tracker data') + '</td></tr>';
+    }).join("");
+  }
+
   // Estimates filled in by the intake (AI or rules), with the reason for each.
   function renderMissing() {
     var list = path().assumptions || [];
@@ -792,7 +814,7 @@
     return plan;
   }
   // One button: the screen floods while the AI works, the plan is applied, then the water drains to it.
-  var AI_BUDGET = 2500000; // planning budget, not shown to the user
+  var AI_BUDGET = Infinity; // no budget: the AI applies every applicable action
   var aiBusy = false;
   function runAi() {
     if (aiBusy) return;
@@ -812,7 +834,10 @@
         ? "Grade " + after.grade + ". The water drains to " + Math.round(ratio * 100) + "% of today's level."
         : "Nothing fits the AI's budget, so the water stays where it is.";
       if (window.Flood) window.Flood.go(ratio, reduce ? 0 : 3500, "Plan applied", t(after.after) + " a year", sub);
-      setTimeout(finish, reduce || !window.Flood ? 0 : 3600);
+      setTimeout(function () {
+        if (window.Flood) window.Flood.hide();
+        finish();
+      }, reduce || !window.Flood ? 0 : 3600 + 1200);
     };
     if (window.Flood) {
       window.Flood.reset();
@@ -925,6 +950,7 @@
     renderProjects();
     renderConnect();
     renderMissing();
+    renderEdits();
     $("ai-out").innerHTML = "";
     live();
     window.history.replaceState(null, "", "#" + state.scale + "/" + (state.path === "closed_source" ? "closed" : "open") + "/" + state.view);
@@ -963,6 +989,14 @@
     if (e.target.id === "dl-json") { downloadJson(); return; }
     if (e.target.id === "dl-csv") { downloadCsv(); return; }
     if (e.target.id === "dl-pdf") { downloadPdf(); return; }
+  });
+  document.addEventListener("input", function (e) {
+    var k = e.target.getAttribute && e.target.getAttribute("data-edit");
+    if (!k) return;
+    var v = e.target.value === "" ? null : Math.max(0, Number(e.target.value) || 0);
+    if (k === "renewable" && v !== null) v = Math.min(100, v);
+    inputs()[k] = v;
+    live();
   });
   document.addEventListener("change", function (e) {
     if (e.target.id === "org-select") { state.scale = e.target.value; render(); return; }
