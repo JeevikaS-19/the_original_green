@@ -629,6 +629,36 @@
   }
 
   // ---- Scope views ----
+  // Scope page: what the trackers supplied, what was filled in, and how each value was reached.
+  var CAT_WORDS = { "Fleet": /vehicle|fleet|fuel/i, "DG set": /generator|\bdg\b/i, "Electricity": /electric|kwh|tariff/i,
+    "Cloud": /cloud|gpu/i, "Hardware": /laptop|desktop|server|device|hardware/i, "Commute": /commut|travel|mode/i, "Waste": /waste/i };
+  function scopeTables(id, s, srcs, gaps, cats, factors) {
+    var basis = path().assumptions || [];
+    var rowsOr = function (arr, fn, empty, cols) {
+      return arr.length ? arr.map(fn).join("") : '<tr><td colspan="' + cols + '" class="muted">' + empty + '</td></tr>';
+    };
+    var supplied = rowsOr(srcs, function (x) {
+      return '<tr><td><b>' + esc(x.tracker) + '</b></td><td>' + esc(x.format) + '</td><td>' + esc(x.detail) + '</td><td>' +
+        tag(state.path === "closed_source" ? "totals" : "measured") + '</td></tr>';
+    }, "No tracker feeds this scope.", 4);
+    var missing = rowsOr(gaps, function (g) {
+      return '<tr><td><b>' + esc(g) + '</b></td><td colspan="2" class="muted">Not in the trackers. Filled in from the rules or AI, see below.</td><td>' + tag("estimated") + '</td></tr>';
+    }, "Nothing is missing from the trackers for this scope.", 4);
+    var values = cats.filter(function (c) { return c.tons > 0; });
+    var filled = rowsOr(values, function (c) {
+      var words = CAT_WORDS[c.name];
+      var why = (words && basis.filter(function (a) { return words.test(a); })[0]) || c.formula;
+      return '<tr><td><b>' + esc(c.name) + '</b></td><td class="num">' + t(c.tons) + '</td><td>' + tag(c.kind) + '</td><td class="muted">' + esc(why) + '</td></tr>';
+    }, "No values calculated for this scope.", 4);
+    return '<div class="dcard"><h2>From your trackers</h2><div class="tbl-wrap"><table class="tbl"><thead><tr><th>Tracker</th><th>Format</th><th>What it holds</th><th>Status</th></tr></thead><tbody>' + supplied + '</tbody></table></div></div>' +
+      '<div class="dcard"><h2>Not supplied, filled in</h2><p class="muted small">Each estimate widens the confidence band. Replace it by connecting the tracker.</p><div class="tbl-wrap"><table class="tbl"><thead><tr><th>Item</th><th colspan="2">Note</th><th>Status</th></tr></thead><tbody>' + missing + '</tbody></table></div></div>' +
+      '<div class="dcard"><h2>Values and how they were reached</h2><div class="tbl-wrap"><table class="tbl"><thead><tr><th>Category</th><th class="num">tCO₂e</th><th>Status</th><th>Basis: assumption or formula</th></tr></thead><tbody>' + filled + '</tbody></table></div></div>' +
+      '<div class="dcard"><h2>How it was calculated</h2><div class="formula">Method: ' + esc(s.formula) + '</div>' +
+        '<div class="tbl-wrap" style="margin-top:14px"><table class="tbl"><thead><tr><th>Factor</th><th>Value</th><th>Source</th><th>Status</th></tr></thead><tbody>' +
+        factors.map(function (f) { return '<tr><td>' + esc(f.name) + '</td><td><code>' + esc(f.value) + '</code></td><td class="muted">' + esc(f.source) + '</td><td>' + tag(f.status) + '</td></tr>'; }).join("") +
+        '</tbody></table></div></div>';
+  }
+
   function renderScopeView(id, sc) {
     var el = document.querySelector('.view[data-view="' + id + '"]');
     var eff = sc.eff, s = eff.scopes.filter(function (x) { return x.id === id; })[0];
@@ -655,25 +685,7 @@
         '<div class="card"><div class="label">Confidence band</div><div class="value">' + esc(s.confidence) + '</div><div style="margin-top:8px">' + tag(kind) + '</div></div>' +
         '<div class="card"><div class="label">Share of total</div><div class="value">' + (total ? (s.tons / total * 100).toFixed(0) : 0) + '%</div><div class="sub">of ' + t(total) + '</div></div>' +
       '</div>' +
-      '<div class="two">' +
-        '<div class="dcard"><h2>Measured data from trackers</h2><div class="src-list">' +
-          (srcs.length ? srcs.map(function (x) {
-            return '<div class="src"><span class="ico">' + esc(x.tracker.split(/\s+/).slice(0, 2).map(function (w) { return w.charAt(0); }).join("").toUpperCase()) +
-              '</span><div><strong>' + esc(x.tracker) + '</strong><span>' + esc(x.format) + ' · ' + esc(x.detail) + '</span></div>' +
-              tag(state.path === "closed_source" ? "totals" : "measured") + '</div>';
-          }).join("") : '<div class="empty">No tracker feeds this scope.</div>') +
-        '</div></div>' +
-        '<div class="dcard" id="scope-panel"><h2>Categories</h2>' + cats.map(function (c) {
-          return '<div class="driver' + (c.tons ? '' : ' off') + (state.cat === c.name ? ' hl' : '') + '"><span>' + esc(c.name) + ' ' + tag(c.kind) + '</span><span class="num">' + (c.tons ? t(c.tons) : '–') +
-            '</span><div class="bar"><i style="width:' + (s.tons ? c.tons / s.tons * 100 : 0).toFixed(1) + '%"></i></div></div>';
-        }).join("") + '</div>' +
-      '</div>' +
-      '<div class="dcard"><h2>How it was calculated</h2><div class="formula">Method: ' + esc(s.formula) + '</div>' +
-        '<div class="tbl-wrap" style="margin-top:14px"><table class="tbl"><thead><tr><th>Factor</th><th>Value</th><th>Source</th><th>Status</th></tr></thead><tbody>' +
-        factors.map(function (f) { return '<tr><td>' + esc(f.name) + '</td><td><code>' + esc(f.value) + '</code></td><td class="muted">' + esc(f.source) + '</td><td>' + tag(f.status) + '</td></tr>'; }).join("") +
-        '</tbody></table></div></div>' +
-      (gaps.length ? '<div class="dcard"><h2>Low or missing data</h2><p class="muted small" style="margin-bottom:12px">Filled by the intake estimator (rules, or Gemini when a key is set). Each estimate widens the band.</p><ul class="quality">' +
-        gaps.map(function (g) { return '<li><span>' + esc(g) + '</span>' + tag("estimated") + '</li>'; }).join("") + '</ul></div>' : '');
+      scopeTables(id, s, srcs, gaps, cats, factors);
   }
 
   // ---- Reduction ----

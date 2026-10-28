@@ -78,7 +78,7 @@ check("quick stats show total and grade", $("#quick-stats").textContent.includes
 click($('#scope-sel button[data-view="scope_3"]'));
 check("Scope 3 selected shows its view", active().dataset.view === "scope_3" && w.location.hash.endsWith("/scope_3"), w.location.hash);
 check("Scope 3 shows illustrative and confidence band", active().textContent.includes("Illustrative") && active().textContent.includes("Confidence band"));
-check("Scope 3 lists low or missing data", active().textContent.includes("Low or missing data"));
+check("Scope 3 lists low or missing data", active().textContent.includes("Not supplied, filled in"));
 click($('#scope-sel button[data-view="scope_1"]'));
 check("Scope 1 shows formula and trackers", active().textContent.includes("Method:") && active().textContent.includes("Vehicle log"));
 

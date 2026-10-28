@@ -430,3 +430,8 @@
 .import { display: flex; flex-wrap: wrap; align-items: center; gap: 10px; margin-top: 14px; }
 .import .btn { cursor: pointer; }
 #project-select { width: auto; min-width: 180px; }
+
+/* Entrance motion only moves content; it never hides it */
+.dash .view.active { animation: none; }
+@keyframes lift { from { transform: translateY(10px); } to { transform: none; } }
+.dash .view.active > * { animation: lift .5s var(--ease) both; }
