@@ -141,7 +141,8 @@ def test_zero_and_missing_inputs_are_safe():
     assert '"tons": 0.0' in zero_json
     missing = generate_report({})
     assert len(missing["report"]["warnings"]) >= 4
-    assert missing["report"]["grade"] == "A"
+    # Nothing was calculated, so there is no grade. "A" would claim a clean result.
+    assert missing["report"]["grade"] == "N/A"
 
 
 def test_format_inr_cases():

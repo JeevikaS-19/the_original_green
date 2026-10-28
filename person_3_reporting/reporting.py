@@ -20,6 +20,7 @@ SCOPE_NAMES = {
     "scope_3": "Scope 3 (Other indirect emissions)",
 }
 SCOPE_KEYS = ("scope_1", "scope_2", "scope_3")
+TIER_ORG_TYPE = {"tier_1": "individual", "tier_2": "school", "tier_3": "enterprise"}
 GRADE_BENCHMARKS = {
     "individual": ((2, "A"), (5, "B"), (10, "C"), (15, "D"), (math.inf, "F")),
     "school": ((50, "A"), (150, "B"), (300, "C"), (500, "D"), (math.inf, "F")),
@@ -243,10 +244,12 @@ def normalize_calc_results(raw: Any) -> dict[str, Any]:
             metadata = raw.get("confidence_metadata")
             if isinstance(metadata, dict):
                 confidence = metadata.get(scope_key)
+        unverified = source.get("unverified_inputs")
         scopes[scope_key] = {
             "tons": tons,
             "confidence": str(confidence) if confidence is not None else None,
             "categories": categories,
+            "unverified_inputs": [str(path) for path in unverified] if isinstance(unverified, list) else [],
             "has_data": bool(
                 categories
                 or any(
@@ -266,6 +269,8 @@ def normalize_calc_results(raw: Any) -> dict[str, Any]:
     if tier is None:
         tier = "tier_2"
         warnings.append("Tier was missing or unrecognized; defaulted to tier_2.")
+    if org_type is None and org_value is None:
+        org_type = TIER_ORG_TYPE[tier]
     if org_type is None:
         org_type = "school"
         warnings.append(
@@ -277,6 +282,15 @@ def normalize_calc_results(raw: Any) -> dict[str, Any]:
     for scope_key in SCOPE_KEYS:
         if scopes[scope_key]["confidence"] is None:
             scopes[scope_key]["confidence"] = TIER_CONFIDENCE[tier]
+        unverified = scopes[scope_key]["unverified_inputs"]
+        if unverified:
+            warnings.append(
+                f"{SCOPE_NAMES[scope_key]}: {len(unverified)} input(s) use placeholder or missing factors "
+                "and count as zero; the confidence label may overstate certainty."
+            )
+    missing_paths = [str(path) for path in raw.get("unverified_inputs") or []]
+    if missing_paths:
+        warnings.append(f"Missing or unverified inputs: {', '.join(missing_paths)}.")
 
     activity = raw.get("activity_summary")
     if not isinstance(activity, dict):
@@ -550,7 +564,8 @@ def generate_report(
 
     suggestions, skipped = rank_suggestions(normalized)
     total = normalized["total_tons"]
-    grade = calculate_grade(total, normalized["org_type"])
+    # A zero total usually means nothing could be calculated, not that emissions are zero.
+    grade = calculate_grade(total, normalized["org_type"]) if total > 0 else "N/A"
     by_scope: dict[str, dict[str, Any]] = {}
     for scope_key in SCOPE_KEYS:
         scope = normalized["scopes"][scope_key]
@@ -562,11 +577,16 @@ def generate_report(
             "has_data": scope["has_data"],
         }
     top_drivers = _top_drivers(normalized)
-    driver_text = top_drivers[0]["name"] if top_drivers else "no measured emissions"
-    summary = (
-        f"Annual emissions are {total:.1f} tCO2e, earning grade {grade}; "
-        f"the largest reported driver is {driver_text}."
-    )
+    if top_drivers:
+        summary = (
+            f"Annual emissions are {total:.1f} tCO2e, earning grade {grade}; "
+            f"the largest reported driver is {top_drivers[0]['name']}."
+        )
+    else:
+        summary = (
+            f"No emissions could be calculated from the data provided, so no grade is assigned "
+            f"(grade {grade})."
+        )
     report = {
         "meta": {
             "organization": normalized["organization"],

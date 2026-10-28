@@ -7,8 +7,13 @@ illustrative grades, and ranked reduction-planning suggestions.
 ## Run from the repository root
 
 ```powershell
-python -m person_3_reporting.reporting --input .\person_2_calculator\output\calc_output.json --out-dir .\person_3_reporting\output --org-type school --formats json,txt,md,html
+python -m person_3_reporting.reporting --input .\integration\output\calc_open_source.json --out-dir .\person_3_reporting\output --formats json,txt,md,html
 ```
+
+`calc_open_source.json` is written by `integration/run_demo.py`, which runs the
+intake and calculator first. Person 2's calculator does not write a file yet.
+The organization type is taken from the tier in the calculation output; pass
+`--org-type` only to override it.
 
 Run the same module from inside this folder by supplying paths relative to this
 folder, for example:
