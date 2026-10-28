@@ -7,6 +7,7 @@ import json
 from datetime import datetime
 from pathlib import Path
 
+from estimation import estimate
 from parsers import parse_scope_1, parse_scope_2, parse_scope_3
 from validators import (
     CONFIDENCE_LABELS,
@@ -158,3 +159,22 @@ def run_totals_intake(tier_answer, totals_json, output_file=OUTPUT_FILE):
         scopes.get("scope_3"),
     )
     return send_to_calculator(payload, output_file), estimates
+
+
+def run_estimated_intake(tier_answer, uploaded, org, client=None, output_file=OUTPUT_FILE):
+    """Intake for partial data: fill the gaps with labelled assumptions, then validate as usual.
+
+    uploaded: {"scope_1": {...}, "scope_2": {...}, "scope_3": {...}} from the parsers (any may be empty).
+    org: {"employee_count": int, "state": str, "energy_bill_inr": number}
+    client: optional LLM callable. Without it, rule-based defaults are used.
+
+    Returns (output_path, assumptions, notes). Scopes with any assumption are at most partial.
+    """
+    tier = tier_selector(tier_answer)
+    merged, assumptions, notes = estimate(uploaded, org, client=client)
+    payload, _ = validate_and_route(tier, merged.get("scope_1"), merged.get("scope_2"), merged.get("scope_3"))
+    for scope in assumptions:
+        if payload["confidence_metadata"].get(scope) == "full_data":
+            payload["confidence_metadata"][scope] = "partial_data"
+    payload["assumptions"] = assumptions
+    return send_to_calculator(payload, output_file), assumptions, notes
