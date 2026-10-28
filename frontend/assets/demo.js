@@ -159,6 +159,12 @@
       var dataPath = path.intake.data_path[scope.id];
       var confidence = path.intake.confidence_metadata[scope.id];
       var estimates = path.intake.estimates[scope.id] || [];
+      if (!dataPath) {
+        // No intake entry: this scope was not part of the data, e.g. Scope 3 from totals.
+        return '<tr><td class="nowrap">' + esc(SCOPE_SHORT[scope.id]) + '</td>' +
+          '<td><span class="badge badge-muted">Not provided</span></td>' +
+          '<td>Not calculated from this data</td><td><span class="badge badge-muted">None</span></td></tr>';
+      }
       var assumed = estimates.length
         ? '<ul>' + estimates.map(function (note) { return '<li>' + esc(note) + '</li>'; }).join("") + '</ul>'
         : '<span class="badge badge-muted">None</span>';

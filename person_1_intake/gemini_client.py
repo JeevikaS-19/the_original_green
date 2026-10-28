@@ -6,12 +6,16 @@ Optional: GEMINI_MODEL (default below). Nothing here runs unless a caller asks f
 
 import json
 import os
+import time
+import urllib.error
 import urllib.request
 from pathlib import Path
 
 ENV_FILE = Path(__file__).resolve().parents[1] / ".env"  # repo root; git-ignored
 
-DEFAULT_MODEL = "gemini-2.5-flash"  # change with GEMINI_MODEL if your account uses another model
+DEFAULT_MODEL = "gemini-3.8-flash"  # older models are retired for new keys; change with GEMINI_MODEL
+RETRIES = 3
+RETRY_SECONDS = 5
 ENDPOINT = "https://generativelanguage.googleapis.com/v1beta/models/{model}:generateContent"
 
 
@@ -49,8 +53,15 @@ def gemini_client_from_env(timeout=30):
             "Content-Type": "application/json",
             "x-goog-api-key": key,
         })
-        with urllib.request.urlopen(request, timeout=timeout) as response:
-            data = json.loads(response.read().decode("utf-8"))
-        return data["candidates"][0]["content"]["parts"][0]["text"]
+        for attempt in range(RETRIES + 1):
+            try:
+                with urllib.request.urlopen(request, timeout=timeout) as response:
+                    data = json.loads(response.read().decode("utf-8"))
+                return data["candidates"][0]["content"]["parts"][0]["text"]
+            except urllib.error.HTTPError as error:
+                # Busy or rate-limited: wait and try again. Other errors are raised at once.
+                if error.code not in (429, 503) or attempt == RETRIES:
+                    raise
+                time.sleep(RETRY_SECONDS * (attempt + 1))
 
     return call

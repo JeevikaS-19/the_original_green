@@ -316,6 +316,8 @@ def estimate(uploaded, org, client=None):
             proposal = LLMProposer(client).propose(missing, org)
         except ProposalRejected as error:
             notes.append(f"LLM proposal rejected ({error}); rule-based defaults used instead.")
+        except (OSError, ValueError, KeyError, IndexError) as error:  # network errors, timeouts, bad JSON shape
+            notes.append(f"LLM call failed ({error}); rule-based defaults used instead.")
     if proposal is None:
         proposal = RuleProposer().propose(missing, org)
         validate_proposal(proposal, missing)
