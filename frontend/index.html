@@ -6,225 +6,299 @@
   <title>Carbon Aggregation · Unified carbon accounting</title>
   <meta name="description" content="Unified carbon accounting with transparent methodology. Scope 1, 2 and 3 from the trackers you already use, with confidence ranges and every assumption visible.">
   <script>document.documentElement.classList.add("js");</script>
-  <link rel="stylesheet" href="assets/site.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;650;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="assets/home.css">
 </head>
 <body>
   <div class="progress" id="progress" aria-hidden="true"></div>
 
   <header class="nav" id="nav">
     <div class="wrap nav-inner">
-      <a class="logo" href="#top">Carbon Aggregation</a>
+      <a class="logo" href="#top"><span class="logo-mark" aria-hidden="true"></span>Carbon Aggregation</a>
       <nav class="nav-links" aria-label="Main">
         <a href="#problem">Problem</a>
         <a href="#solution">Solution</a>
-        <a href="#architecture">Architecture</a>
-        <a href="#layers">Layers</a>
+        <a href="#flow">How it works</a>
+        <a href="#layers">Method</a>
         <a href="tracker-demo/index.html">Tracker demos</a>
       </nav>
-      <a class="btn btn-small" href="dashboard.html#small_scale">Try demo</a>
+      <a class="btn btn-sm" href="dashboard.html#small_scale">Open demo <span class="arrow">→</span></a>
     </div>
   </header>
 
   <main id="top">
-    <!-- 1. Hero + group identity -->
-    <section class="hero" id="hero">
+    <!-- 1. Hero -->
+    <section class="hero">
       <div class="wrap hero-grid">
-        <div class="reveal">
-          <p class="kicker">Carbon Aggregation · Team Original Green</p>
-          <h1>Unified carbon accounting, with the method shown.</h1>
-          <p class="sub">Unified carbon accounting with transparent methodology.</p>
-          <div class="hero-actions">
-            <a class="btn" href="#problem">See How It Works</a>
+        <div>
+          <p class="eyebrow reveal">Team Original Green · Carbon Aggregation</p>
+          <h1 class="h1 reveal d1">Unified carbon accounting, with the method shown.</h1>
+          <p class="lede reveal d2">Unified carbon accounting with transparent methodology. Read the trackers you already use, see every scope with its range, and know exactly which numbers are measured.</p>
+          <div class="hero-actions reveal d3">
+            <a class="btn" href="#problem">See how it works <span class="arrow">→</span></a>
             <a class="btn btn-ghost" href="dashboard.html#small_scale">Open the dashboard</a>
           </div>
-        </div>
-        <div class="hero-card reveal d1" aria-label="Sample report summary">
-          <div class="hc-top"><span>Annual footprint · demo</span><span class="pill">Illustrative</span></div>
-          <div class="hc-total"><strong id="hero-total">–</strong><span>tCO₂e a year</span></div>
-          <div class="hc-bars" aria-hidden="true">
-            <span style="--w:62%" class="s1"></span>
-            <span style="--w:24%" class="s2"></span>
-            <span style="--w:14%" class="s3"></span>
+          <div class="hero-meta reveal d3">
+            <span>Scope 1, 2 and 3</span><span>Ranges on every scope</span><span>Every assumption visible</span>
           </div>
-          <div class="hc-legend"><span><i class="s1"></i>Scope 1</span><span><i class="s2"></i>Scope 2</span><span><i class="s3"></i>Scope 3</span></div>
-          <div class="hc-row"><span>Grade</span><strong id="hero-grade">–</strong></div>
-          <div class="hc-row"><span>Confidence</span><strong id="hero-conf">–</strong></div>
+        </div>
+
+        <div class="reveal d2" style="position:relative">
+          <div class="mock" aria-label="Sample footprint summary, demo data">
+            <div class="mock-top">
+              <div class="mock-dots" aria-hidden="true"><i></i><i></i><i></i></div>
+              <span class="mock-title">Campus · 200 staff · FY 2025-26</span>
+            </div>
+            <div class="mock-body">
+              <div class="mock-total">
+                <div><span>Annual footprint</span><br><strong>228.6 t</strong> <span>CO₂e</span></div>
+                <div class="mock-grade" title="Grade">C</div>
+              </div>
+              <div class="mock-stack" aria-hidden="true">
+                <span class="s1" data-w="63"></span><span class="s2" data-w="19"></span><span class="s3" data-w="18"></span>
+              </div>
+              <div class="mock-legend">
+                <span><i style="background:var(--stone)"></i>Scope 1</span>
+                <span><i style="background:var(--moss)"></i>Scope 2</span>
+                <span><i style="background:var(--g2)"></i>Scope 3</span>
+              </div>
+              <div class="mock-rows">
+                <div class="mock-row"><span>Scope 1 · fleet and DG</span><span class="amt">143.0 t <span class="badge measured">Measured ±10%</span></span></div>
+                <div class="mock-row"><span>Scope 2 · electricity</span><span class="amt">44.0 t <span class="badge measured">Measured ±10%</span></span></div>
+                <div class="mock-row"><span>Scope 3 · devices, commute, waste</span><span class="amt">41.7 t <span class="badge illustrative">Illustrative</span></span></div>
+              </div>
+            </div>
+          </div>
+          <div class="mock-float" aria-hidden="true">
+            <span>Top action</span>
+            <strong>Route optimisation</strong>
+            <span>Saves 3.0 t a year · ₹2.0 L</span>
+          </div>
         </div>
       </div>
     </section>
 
-    <!-- 2. The problem: collapsible tabs -->
-    <section class="section" id="problem">
+    <!-- 2. Problem: interactive cards -->
+    <section class="section alt" id="problem">
       <div class="wrap">
-        <p class="kicker">The Scope 3 measurement gap</p>
-        <h2>Most of an organisation's footprint is the part nobody measures.</h2>
-        <div class="accordion">
-          <details class="acc reveal" open>
-            <summary><span class="acc-num">01</span>Fragmented data</summary>
-            <div class="acc-body">
-              <p><strong>Problem.</strong> Fleets sit in fuel logs, power in meter portals, cloud in provider bills, and people data in HR systems. None of them talk to each other.</p>
-              <p><strong>Impact.</strong> Scope 1 and 2 are visible. Scope 3 is not.</p>
-              <p><strong>Example.</strong> A campus tracks its buses (Scope 1) but has no method for staff commuting (Scope 3).</p>
+        <div class="section-head reveal">
+          <p class="eyebrow">The Scope 3 measurement gap</p>
+          <h2 class="h2">Most of an organisation's footprint is the part nobody measures.</h2>
+          <p class="lede">Four reasons the number on your dashboard is incomplete. Select one to see what we do about it.</p>
+        </div>
+
+        <div class="problem-grid">
+          <article class="p-card reveal" tabindex="0" role="button" aria-expanded="true">
+            <div class="p-head">
+              <div class="p-ico"><svg viewBox="0 0 24 24"><rect x="3" y="4" width="8" height="7" rx="2"/><rect x="13" y="4" width="8" height="5" rx="2"/><rect x="3" y="13" width="8" height="7" rx="2"/><rect x="13" y="11" width="8" height="9" rx="2"/></svg></div>
+              <span class="p-plus" aria-hidden="true">+</span>
             </div>
-          </details>
-          <details class="acc reveal">
-            <summary><span class="acc-num">02</span>Estimation black boxes</summary>
-            <div class="acc-body">
-              <p><strong>Problem.</strong> Tools that estimate Scope 3 rarely say how. There is no range and no visible assumption.</p>
-              <p><strong>What organisations need.</strong> "This is estimated from headcount and a mode split. Confidence ±30%. Here is why."</p>
+            <h3 class="p-title">Fragmented data</h3>
+            <p class="p-line">Fleets, power and cloud each live in a different tool.</p>
+            <div class="p-body"><div class="p-inner"><div>
+              <p><strong>The problem.</strong> Fleet logs, meter portals, cloud bills and HR data never meet. Scope 1 and 2 are visible. Scope 3 is not.</p>
+              <p class="p-example">A campus tracks its buses, but has no method for staff commuting.</p>
+            </div></div></div>
+          </article>
+
+          <article class="p-card reveal d1" tabindex="0" role="button" aria-expanded="false">
+            <div class="p-head">
+              <div class="p-ico"><svg viewBox="0 0 24 24"><path d="M4 7h16M4 12h10M4 17h7"/></svg></div>
+              <span class="p-plus" aria-hidden="true">+</span>
             </div>
-          </details>
-          <details class="acc reveal">
-            <summary><span class="acc-num">03</span>Category complexity</summary>
-            <div class="acc-body">
-              <p><strong>Problem.</strong> Cloud, hardware, commute and waste each need a different method.</p>
-              <p><strong>Our approach.</strong> Activity-based where the data exists (instance-hours, device counts, km). Spend-based only as a fallback, and labelled as such.</p>
+            <h3 class="p-title">Estimation black boxes</h3>
+            <p class="p-line">Tools estimate, but never say how.</p>
+            <div class="p-body"><div class="p-inner"><div>
+              <p><strong>The problem.</strong> No range, no visible assumption. A number with hidden error looks more certain than it is.</p>
+              <p class="p-example">"Estimated from headcount and a mode split. Confidence ±30%. Here is why."</p>
+            </div></div></div>
+          </article>
+
+          <article class="p-card reveal" tabindex="0" role="button" aria-expanded="false">
+            <div class="p-head">
+              <div class="p-ico"><svg viewBox="0 0 24 24"><circle cx="6" cy="6" r="2.5"/><circle cx="18" cy="6" r="2.5"/><circle cx="12" cy="18" r="2.5"/><path d="M8 7.5l3 8M16 7.5l-3 8M8.5 6h7"/></svg></div>
+              <span class="p-plus" aria-hidden="true">+</span>
             </div>
-          </details>
-          <details class="acc reveal">
-            <summary><span class="acc-num">04</span>Hardware invisibility</summary>
-            <div class="acc-body">
-              <p><strong>Problem.</strong> Device lifecycle emissions are rarely tracked. An ERP sees "IT spend", not "500 laptops over a five-year life".</p>
-              <p><strong>Our approach.</strong> An asset register, with embodied carbon spread over each device's lifespan.</p>
-              <p class="case-note"><strong>From public reports.</strong> Infosys reports that its FY 2025-26 laptop procurement, tied to product carbon footprints, avoided 8,955 tCO₂e. TCS's commuting category alone is 302,962 tCO₂e of its FY 2025-26 Scope 3 (573,872 tCO₂e in total).</p>
+            <h3 class="p-title">Category complexity</h3>
+            <p class="p-line">Cloud, hardware, commute and waste each need their own method.</p>
+            <div class="p-body"><div class="p-inner"><div>
+              <p><strong>Our approach.</strong> Activity-based where the data exists: instance hours, device counts, kilometres. Spend-based only as a labelled fallback.</p>
+            </div></div></div>
+          </article>
+
+          <article class="p-card reveal d1" tabindex="0" role="button" aria-expanded="false">
+            <div class="p-head">
+              <div class="p-ico"><svg viewBox="0 0 24 24"><rect x="4" y="5" width="16" height="11" rx="2"/><path d="M9 20h6M12 16v4"/></svg></div>
+              <span class="p-plus" aria-hidden="true">+</span>
             </div>
-          </details>
+            <h3 class="p-title">Hardware invisibility</h3>
+            <p class="p-line">An ERP sees IT spend, not devices and their lifespans.</p>
+            <div class="p-body"><div class="p-inner"><div>
+              <p><strong>Our approach.</strong> An asset register, with embodied carbon spread over each device's life. Factors are marked illustrative until a verified source is added.</p>
+              <p class="p-example">Public reports show the scale: TCS's FY 2025-26 Scope 3 is 573,872 tCO₂e, and its commuting category alone is 302,962 tCO₂e.</p>
+            </div></div></div>
+          </article>
         </div>
       </div>
     </section>
 
-    <!-- 3. The solution: comparison with methodology -->
-    <section class="section section-alt" id="solution">
+    <!-- 3. Solution: comparison table -->
+    <section class="section" id="solution">
       <div class="wrap">
-        <p class="kicker">The solution</p>
-        <h2>Current trackers versus this platform.</h2>
-        <p class="lede">Hover a row to see how we calculate it. The methodology is the reason to trust the number.</p>
-        <div class="table-wrap reveal">
-          <table class="cmp">
-            <thead>
-              <tr><th>Feature</th><th>Current trackers</th><th>This platform</th></tr>
-            </thead>
+        <div class="section-head reveal">
+          <p class="eyebrow">The solution</p>
+          <h2 class="h2">Current trackers, against this platform.</h2>
+          <p class="lede">Select a row to see how the number is worked out.</p>
+        </div>
+        <div class="table-card reveal">
+          <table class="cmp" id="cmp">
+            <thead><tr><th>Feature</th><th>Current trackers</th><th>This platform</th></tr></thead>
             <tbody>
-              <tr tabindex="0" data-method="Direct: fleet distance × fuel factor (IPCC 2006 defaults, converted to per-litre). Fuel factors are marked sourced until primary documents are checked.">
-                <th>Scope 1 tracking</th><td>Fleet tools, single source</td><td class="ok">Measured · distance × fuel factor</td></tr>
-              <tr tabindex="0" data-method="Direct: kWh × grid factor. We use the CEA combined margin (FY 2023-24). Companies with renewable contracts report market-based figures, which we cannot yet calculate.">
-                <th>Scope 2 tracking</th><td>Meter portals</td><td class="ok">Measured · kWh × CEA combined margin</td></tr>
-              <tr tabindex="0" data-method="Activity-based: employees × mode split × distance × working days × mode factor. The mode split is a survey where it exists, otherwise an assumption, shown on screen.">
-                <th>Scope 3: commute</th><td>Not covered</td><td class="est">Estimated · mode split × distance</td></tr>
-              <tr tabindex="0" data-method="Lifecycle: device count × embodied carbon per year (lifecycle ÷ lifespan). Factors are illustrative until primary LCA sources are added.">
-                <th>Scope 3: hardware</th><td>Not covered</td><td class="ill">Illustrative · device count × embodied carbon</td></tr>
-              <tr tabindex="0" data-method="Usage-based: instance-hours × a per-hour factor where usage is in the bill. Spend-based only as a fallback, labelled as such.">
-                <th>Scope 3: cloud</th><td>Not covered</td><td class="est">Estimated · instance-hours</td></tr>
-              <tr tabindex="0" data-method="Mass-based: kg per month × 12 × a waste-category factor. Waste factors are illustrative until a verified source is added.">
-                <th>Scope 3: waste</th><td>Not covered</td><td class="ill">Illustrative · kg × category factor</td></tr>
-              <tr tabindex="0" data-method="Each scope carries a range. Measured data gives ±15%, partly estimated data ±30%, and totals-only data ±40%.">
-                <th>Confidence</th><td>One number, no range</td><td class="ok">A range on every scope</td></tr>
-              <tr tabindex="0" data-method="Every number is tagged as measured, estimated or illustrative, and its source or assumption is shown.">
-                <th>Source documentation</th><td>Black box</td><td class="ok">Every number tagged, assumptions shown</td></tr>
-              <tr tabindex="0" data-method="Scope 3 is split into categories with no double counting. Each category records what it includes and what it leaves out.">
-                <th>Category rules</th><td>Not applicable</td><td class="ok">Explicit per category, no double counting</td></tr>
+              <tr class="active" tabindex="0" data-k="Scope 1" data-m="Direct: distance × fuel factor. Fuel factors are IPCC 2006 defaults, converted to litres. Marked sourced until the primary document is checked." data-s="measured" data-v="Measured">
+                <th>Scope 1 tracking</th><td>Fleet tools, one source</td><td class="yes">Distance × fuel factor <span class="badge measured">Measured</span></td></tr>
+              <tr tabindex="0" data-k="Scope 2" data-m="Direct: kWh × grid factor. We use the CEA combined margin for FY 2023-24. Companies with renewable contracts report market-based figures, which we cannot calculate yet." data-s="measured" data-v="Measured">
+                <th>Scope 2 tracking</th><td>Meter portals</td><td class="yes">kWh × CEA combined margin <span class="badge measured">Measured</span></td></tr>
+              <tr tabindex="0" data-k="Scope 3: commute" data-m="Employees × mode split × distance × working days × mode factor. The split is a survey where one exists, otherwise an assumption shown on screen." data-s="estimated" data-v="Estimated">
+                <th>Scope 3 · commute</th><td>Not covered</td><td class="yes">Mode split × distance <span class="badge estimated">Estimated</span></td></tr>
+              <tr tabindex="0" data-k="Scope 3: hardware" data-m="Device count × embodied carbon per year (lifecycle ÷ lifespan). Illustrative until primary lifecycle sources are added." data-s="illustrative" data-v="Illustrative">
+                <th>Scope 3 · hardware</th><td>Not covered</td><td class="yes">Device count × embodied carbon <span class="badge illustrative">Illustrative</span></td></tr>
+              <tr tabindex="0" data-k="Confidence" data-m="Each scope carries a range: measured data ±10–15%, partly estimated ±30%, totals only ±40%." data-s="measured" data-v="Range per scope">
+                <th>Confidence</th><td>One number, no range</td><td class="yes">A range on every scope</td></tr>
+              <tr tabindex="0" data-k="Sources" data-m="Every number is tagged measured, estimated or illustrative, and its source or assumption is shown beside it." data-s="measured" data-v="Tagged">
+                <th>Source documentation</th><td>Black box</td><td class="yes">Every number tagged</td></tr>
             </tbody>
           </table>
+          <div class="method" aria-live="polite">
+            <div class="method-text"><h4 id="m-k">Scope 1 tracking</h4><p id="m-m">Direct: distance × fuel factor. Fuel factors are IPCC 2006 defaults, converted to litres. Marked sourced until the primary document is checked.</p></div>
+            <div class="method-side">
+              <span class="k">Data state</span><span class="v" id="m-v">Measured</span>
+            </div>
+          </div>
         </div>
-        <p class="method-line" id="method-line" aria-live="polite">Hover or focus a row to see its methodology.</p>
       </div>
     </section>
 
-    <!-- 4. Innovation: three layers -->
-    <section class="section" id="flow">
+    <!-- 4. Innovation: three-layer flow -->
+    <section class="section alt" id="flow">
       <div class="wrap">
-        <p class="kicker">The innovation</p>
-        <h2>Three layers of transparent calculation.</h2>
-        <div class="flow reveal">
-          <div class="flow-node">
-            <span>Layer 1</span><strong>Input</strong>
-            <small>Trackers parsed. Gaps proposed and labelled.</small>
+        <div class="section-head reveal">
+          <p class="eyebrow">How it works</p>
+          <h2 class="h2">Three layers, from file to action.</h2>
+          <p class="lede">Each layer does one job, and passes on what it knows and how sure it is.</p>
+        </div>
+        <div class="flow" id="flow-track">
+          <div class="f-step" data-step="0">
+            <div class="f-dot"><span>01</span></div>
+            <p class="f-num">Layer 1</p>
+            <h3 class="f-title">Input</h3>
+            <p class="f-desc">Trackers are read as exports. Gaps are proposed, and each proposal is labelled.</p>
           </div>
-          <div class="flow-line" aria-hidden="true"><i></i></div>
-          <div class="flow-node">
-            <span>Layer 2</span><strong>Calculate</strong>
-            <small>Each scope, its factor, its range.</small>
+          <div class="f-step" data-step="1">
+            <div class="f-dot"><span>02</span></div>
+            <p class="f-num">Layer 2</p>
+            <h3 class="f-title">Calculate</h3>
+            <p class="f-desc">Every scope gets its factor, its formula and its range, and nothing is double counted.</p>
           </div>
-          <div class="flow-line" aria-hidden="true"><i></i></div>
-          <div class="flow-node">
-            <span>Layer 3</span><strong>Reduce</strong>
-            <small>Actions ranked by tonnes per rupee.</small>
+          <div class="f-step" data-step="2">
+            <div class="f-dot"><span>03</span></div>
+            <p class="f-num">Layer 3</p>
+            <h3 class="f-title">Reduce</h3>
+            <p class="f-desc">Actions are ranked by tonnes saved per lakh of rupees, with payback, and can be stacked.</p>
           </div>
         </div>
       </div>
     </section>
 
     <!-- 5. Architecture -->
-    <section class="section section-alt" id="architecture">
+    <section class="section" id="architecture">
       <div class="wrap">
-        <p class="kicker">Architecture</p>
-        <h2>Each layer is documented, auditable and extensible.</h2>
+        <div class="section-head reveal">
+          <p class="eyebrow">Architecture</p>
+          <h2 class="h2">Each layer is documented, auditable and extensible.</h2>
+        </div>
         <div class="arch reveal">
           <div class="arch-box">
-            <h3>Layer 1 · Input</h3>
-            <ul><li>Trackers and files</li><li>Parse and categorise</li><li>Propose assumptions</li></ul>
+            <p class="k">Layer 1</p>
+            <h3>Input</h3>
+            <ul><li>Tracker exports and uploads</li><li>Parsing and categorisation</li><li>Proposed assumptions, labelled</li></ul>
           </div>
-          <div class="arch-arrow" aria-hidden="true">→</div>
+          <div class="arch-link" aria-hidden="true"></div>
           <div class="arch-box">
-            <h3>Layer 2 · Calculate</h3>
-            <ul><li>Scope 1: litres × fuel factor</li><li>Scope 2: kWh × grid factor</li><li>Scope 3: activity, or spend as fallback</li><li>Confidence propagation</li></ul>
+            <p class="k">Layer 2</p>
+            <h3>Calculate</h3>
+            <ul><li>Scope 1: litres × fuel factor</li><li>Scope 2: kWh × grid factor</li><li>Scope 3: activity, spend as fallback</li><li>Confidence propagation</li></ul>
           </div>
-          <div class="arch-arrow" aria-hidden="true">→</div>
+          <div class="arch-link" aria-hidden="true"></div>
           <div class="arch-box">
-            <h3>Layer 3 · Reduce</h3>
-            <ul><li>Rank actions by cost per tonne</li><li>Scenarios: stack actions</li><li>Reduction path</li></ul>
+            <p class="k">Layer 3</p>
+            <h3>Reduce</h3>
+            <ul><li>Actions ranked by cost per tonne</li><li>Scenarios that stack</li><li>A reduction path over time</li></ul>
           </div>
         </div>
       </div>
     </section>
 
-    <!-- 6. Each layer in detail: tabs -->
-    <section class="section" id="layers">
+    <!-- 6. Layer details -->
+    <section class="section alt" id="layers">
       <div class="wrap">
-        <p class="kicker">Each layer in detail</p>
-        <h2>The working, shown.</h2>
-        <div class="tabs" role="tablist" aria-label="Layers">
-          <button class="tab" role="tab" aria-selected="true" aria-controls="layer-1" id="tab-1" data-tab="1">Layer 1 · Input</button>
-          <button class="tab" role="tab" aria-selected="false" aria-controls="layer-2" id="tab-2" data-tab="2">Layer 2 · Calculate</button>
-          <button class="tab" role="tab" aria-selected="false" aria-controls="layer-3" id="tab-3" data-tab="3">Layer 3 · Reduce</button>
+        <div class="section-head reveal">
+          <p class="eyebrow">Method</p>
+          <h2 class="h2">The working, shown.</h2>
         </div>
-        <div class="panel" id="layer-1" role="tabpanel" aria-labelledby="tab-1">
-          <p>Each upload is tagged <span class="tag ok">measured</span>. Anything we fill in is tagged <span class="tag est">estimated</span> and says why. Each estimate lowers the confidence one level.</p>
-          <div class="grid-2">
-            <div class="box"><h4>What the uploads give</h4><ul><li>Fleet log: 2 buses, 85,000 km each a year</li><li>Meter export: 12 monthly readings</li><li>Waste log: monthly kg by category</li></ul></div>
-            <div class="box"><h4>What we propose</h4><ul><li>Commute split from a benchmark, if there is no survey (shown as estimated)</li><li>Hardware count from headcount, if there is no register (illustrative)</li></ul></div>
+        <div class="seg reveal" role="tablist" aria-label="Layers">
+          <span class="seg-ind" id="seg-ind"></span>
+          <button class="tab" role="tab" aria-selected="true" data-tab="1">Input</button>
+          <button class="tab" role="tab" aria-selected="false" data-tab="2">Calculate</button>
+          <button class="tab" role="tab" aria-selected="false" data-tab="3">Reduce</button>
+        </div>
+
+        <div class="layer-panel" id="layer-1" role="tabpanel">
+          <div>
+            <h3>Every upload is measured. Every gap is labelled.</h3>
+            <p>Anything we fill in is tagged estimated and says why. Each estimate lowers the confidence one level, so the range always reflects what was filled in.</p>
+          </div>
+          <div class="formulas">
+            <div class="fx"><div class="top"><span class="badge measured">Measured</span><span class="muted" style="font-size:13px">Fleet log</span></div><code>2 buses · 85,000 km and 70,000 km a year</code></div>
+            <div class="fx"><div class="top"><span class="badge estimated">Estimated</span><span class="muted" style="font-size:13px">Commute</span></div><code>Mode split 40 / 35 / 15 / 10 from a benchmark</code><small>Replace with a staff survey to remove the estimate.</small></div>
           </div>
         </div>
-        <div class="panel" id="layer-2" role="tabpanel" aria-labelledby="tab-2" hidden>
-          <div class="formula"><span class="f-label tag ok">Scope 2 · measured</span>
-            <code>58,100 kWh a year × 0.757 kg CO₂e/kWh = 43,982 kg = 44.0 t</code>
-            <span class="f-src">CEA CO₂ baseline, combined margin FY 2023-24 (secondary report; primary to be checked)</span></div>
-          <div class="formula"><span class="f-label tag ok">Scope 1 · measured</span>
-            <code>Diesel: litres × 2.68 kg CO₂e/L (IPCC 2006 defaults, converted)</code>
-            <span class="f-src">Confidence ±15% with full fleet data</span></div>
-          <div class="formula"><span class="f-label tag ill">Scope 3 · illustrative</span>
-            <code>Laptops: 30 × 30 kg CO₂e a year = 900 kg</code>
-            <span class="f-src">Illustrative factor, not a sourced value</span></div>
-          <p class="note">Confidence: all measured ±15%. Any estimate ±30%. Totals only ±40%.</p>
+
+        <div class="layer-panel" id="layer-2" role="tabpanel" hidden>
+          <div>
+            <h3>Each scope, its formula, its range.</h3>
+            <p>Every number traces to a factor and a source status. Illustrative factors are never presented as sourced.</p>
+          </div>
+          <div class="formulas">
+            <div class="fx"><div class="top"><span class="badge measured">Scope 2 · measured</span></div><code>58,100 kWh × 0.757 kg CO₂e/kWh = 44.0 t</code><small>CEA CO₂ baseline, combined margin FY 2023-24. Secondary report; primary to be checked.</small></div>
+            <div class="fx"><div class="top"><span class="badge measured">Scope 1 · measured</span></div><code>Diesel: litres × 2.68 kg CO₂e/L</code><small>IPCC 2006 CO₂ defaults, converted per litre.</small></div>
+            <div class="fx"><div class="top"><span class="badge illustrative">Scope 3 · illustrative</span></div><code>30 laptops × 30 kg CO₂e a year = 900 kg</code><small>Illustrative factor, not a sourced value.</small></div>
+          </div>
         </div>
-        <div class="panel" id="layer-3" role="tabpanel" aria-labelledby="tab-3" hidden>
-          <div class="formula"><span class="f-label tag est">Ranking</span>
-            <code>tonnes saved a year ÷ lakh of rupees</code>
-            <span class="f-src">Ranked by cost-efficiency, not raw emissions</span></div>
-          <p>Each action shows its tonnes saved, capital and recurring cost, payback, and the grade it would earn. Savings from different actions overlap, so they are not added together. Scenarios show one action at a time.</p>
+
+        <div class="layer-panel" id="layer-3" role="tabpanel" hidden>
+          <div>
+            <h3>Ranked by what each rupee buys.</h3>
+            <p>Savings are ranked by tonnes per lakh of rupees, not raw emissions, so actions a budget can actually afford come first. Stacked actions warn when their savings may overlap.</p>
+          </div>
+          <div class="formulas">
+            <div class="fx"><div class="top"><span class="badge estimated">Ranking</span></div><code>tonnes saved a year ÷ lakh of rupees</code><small>Route optimisation: 3.0 t ÷ ₹2.0 L = 1.50 t per lakh.</small></div>
+          </div>
         </div>
       </div>
     </section>
 
-    <section class="cta-band">
-      <div class="wrap cta-inner">
-        <div>
-          <h2>See the dashboard, then the trackers.</h2>
-          <p>Switch between the three scales, open the methodology, and see how each tracker's file is read.</p>
-        </div>
-        <div class="cta-actions">
-          <a class="btn" href="dashboard.html#small_scale">Open the dashboard</a>
-          <a class="btn btn-ghost" href="tracker-demo/index.html">Tracker demos</a>
+    <section class="section" style="padding-top:0">
+      <div class="wrap">
+        <div class="cta reveal">
+          <p class="eyebrow" style="color:var(--g2)">Try it</p>
+          <h2 class="h2">See the dashboard, then the trackers.</h2>
+          <p>Switch between scales, open the method behind each number, and see how each tracker's file is read.</p>
+          <div class="hero-actions">
+            <a class="btn" href="dashboard.html#small_scale">Open the dashboard <span class="arrow">→</span></a>
+            <a class="btn btn-ghost" href="tracker-demo/index.html">Tracker demos</a>
+          </div>
         </div>
       </div>
     </section>
@@ -233,11 +307,10 @@
   <footer class="footer">
     <div class="wrap footer-inner">
       <span>Carbon Aggregation · team Original Green (T3-02) · HackFest 2026</span>
-      <span class="muted">Demo data only. Illustrative factors are not verified sources.</span>
+      <span>Demo data only. Illustrative factors are not verified sources.</span>
     </div>
   </footer>
 
-  <script src="data/demo_fixtures.js"></script>
-  <script src="assets/site.js"></script>
+  <script src="assets/home.js"></script>
 </body>
 </html>
