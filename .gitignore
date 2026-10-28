@@ -5,3 +5,4 @@ output/
 # Local secrets: never commit keys
 .env
 *.env
+node_modules/
