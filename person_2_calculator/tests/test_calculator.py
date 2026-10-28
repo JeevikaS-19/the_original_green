@@ -34,7 +34,7 @@ def test_scope_2_uses_all_india_grid_factor():
     result = calculate_scope_2({"monthly_kwh": 100}, conversion_factors)
 
     assert result["breakdown"]["electricity"]["region"] == "all-india"
-    assert result["total_co2e_kg"] == 948
+    assert result["total_co2e_kg"] == 908.4  # 100 kWh x 12 x 0.757
 
 
 def test_missing_placeholder_factors_are_explicitly_unverified():
@@ -48,7 +48,7 @@ def test_missing_placeholder_factors_are_explicitly_unverified():
         },
     })
 
-    assert result["scopes"]["scope_2"]["total_co2e_kg"] == 9.48
+    assert result["scopes"]["scope_2"]["total_co2e_kg"] == 9.084  # 1 kWh x 12 x 0.757
     assert "scope_3.cloud" in result["unverified_inputs"]
 
 

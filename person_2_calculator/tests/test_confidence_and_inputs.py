@@ -1,4 +1,7 @@
 from calculator import (
+    calculate_scope_1,
+    adjust_confidence,
+    uncertainty_pct,
     COMMUTING_DAYS_PER_YEAR,
     calculate_all_scopes,
     calculate_scope_3,
@@ -55,3 +58,18 @@ def test_wastewater_uses_its_treatment_factor_by_default():
     result = calculate_scope_3(None, None, None, waste, factors)
     assert result["categories"]["3.4_waste"]["total_co2e_kg"] == 100 * 12 * 0.5
     assert not any("waste" in item for item in result["unverified_inputs"])
+
+
+def test_fuel_totals_use_the_sourced_litre_factors():
+    # Closed-source input: litres per year, no vehicle detail. Diesel 2.68 kg/L (IPCC-derived).
+    result = calculate_scope_1(None, None, conversion_factors,
+                               fuel_totals=[{"fuel_type": "diesel", "litres_per_year": 1000}])
+    assert result["total_co2e_kg"] == 2680
+    assert result["unverified_inputs"] == []
+
+
+def test_overview_confidence_is_plus_minus_40_percent():
+    assert uncertainty_pct("overview_only") == 50  # unknown label keeps the widest band
+    assert uncertainty_pct("overview") == 40
+    result = adjust_confidence({"total_co2e_kg": 1000}, "overview")
+    assert result["co2e_range_kg"] == {"low": 600.0, "high": 1400.0}

@@ -68,7 +68,7 @@ def _efficiency_factor(vehicle: dict[str, Any], factors: dict[str, Any]) -> tupl
     return _factor_value(factor), _factor_is_placeholder(factor) or factor is None
 
 
-def calculate_scope_1(vehicles, dg_set, conversion_factors):
+def calculate_scope_1(vehicles, dg_set, conversion_factors, fuel_totals=None):
     """Calculate direct fuel emissions from vehicles and a DG set."""
     fuel_factors = conversion_factors.get("fuel", {})
     efficiency_factors = conversion_factors.get("fuel_efficiency", {})
@@ -91,6 +91,21 @@ def calculate_scope_1(vehicles, dg_set, conversion_factors):
             "vehicle_id": vehicle.get("vehicle_id"),
             "fuel_type": fuel_type,
             "annual_fuel_litres": _round(fuel_litres),
+            "annual_co2e_kg": _round(annual_kg),
+        })
+        total += annual_kg
+
+    # Totals-only input (closed-source path): litres of fuel per year, no vehicle detail.
+    for entry in fuel_totals or []:
+        fuel_type = str(entry.get("fuel_type", "")).strip().lower()
+        emission_factor, missing_emission_factor = _fuel_factor(fuel_type, fuel_factors)
+        litres = _number(entry.get("litres_per_year"))
+        annual_kg = litres * emission_factor if emission_factor is not None else 0.0
+        if missing_emission_factor:
+            unverified.append(f"scope_1.fuel_total[{fuel_type or 'unknown'}].fuel_factor")
+        breakdown.append({
+            "source": f"Fuel total ({fuel_type})",
+            "annual_fuel_litres": _round(litres),
             "annual_co2e_kg": _round(annual_kg),
         })
         total += annual_kg
@@ -249,7 +264,8 @@ def effective_completeness(label, scope_result):
 def uncertainty_pct(data_completeness):
     """Return the uncertainty percentage for a completeness label."""
     label = str(data_completeness).lower().replace("_data", "")
-    return {"full": 10, "partial": 25, "missing": 50}.get(label, 50)
+    # overview = totals only (closed-source path): ±40%, per the landing page.
+    return {"full": 10, "partial": 25, "overview": 40, "missing": 50}.get(label, 50)
 
 
 def adjust_confidence(scope_result, data_completeness):
@@ -290,7 +306,8 @@ def list_unverified(intake_data):
     """Return input paths that are missing, null, or driven by placeholders."""
     scopes = (intake_data or {}).get("scopes", {})
     paths = []
-    if not scopes.get("scope_1", {}).get("vehicles") and not scopes.get("scope_1", {}).get("dg_set"):
+    scope_1 = scopes.get("scope_1", {})
+    if not scope_1.get("vehicles") and not scope_1.get("dg_set") and not scope_1.get("fuel_totals"):
         paths.append("scope_1")
     if not scopes.get("scope_2", {}).get("energy_meter"):
         paths.append("scope_2")
@@ -310,6 +327,7 @@ def calculate_all_scopes(intake_data):
         scopes.get("scope_1", {}).get("vehicles"),
         scopes.get("scope_1", {}).get("dg_set"),
         conversion_factors,
+        fuel_totals=scopes.get("scope_1", {}).get("fuel_totals"),
     )
     scope_2 = calculate_scope_2(
         scopes.get("scope_2", {}).get("energy_meter"),

@@ -48,18 +48,43 @@ def _verified(
     }
 
 
-# TODO: update this all-India factor when the latest CEA version is approved.
-GRID_FACTOR = _verified(
-    0.79,
+def _sourced(
+    value: Any,
+    unit: str,
+    *,
+    source: str,
+    year: str,
+) -> dict[str, Any]:
+    """Cited from a secondary source, primary document not yet checked. Usable, but flagged in the source text."""
+    return {
+        "value": value,
+        "unit": unit,
+        "low": None,
+        "high": None,
+        "source": source,
+        "year": year,
+        "status": "sourced",
+    }
+
+
+# All-India combined margin. Secondary sources report 0.757 for FY2023-24 (CEA baseline v20.0).
+# Primary CEA PDF could not be opened during this check; confirm before the final submission.
+GRID_FACTOR = _sourced(
+    0.757,
     "kg CO2e/kWh",
-    source="CEA CO2 Baseline Database, weighted average",
-    year="FY2019-20",
+    source="CEA CO2 Baseline Database v20.0, combined margin (secondary report; primary PDF to confirm)",
+    year="FY2023-24",
 )
 
+# Litre factors derived from IPCC 2006 Vol 2 Ch 1 CO2 defaults (Table 1.4, kg/TJ)
+# times default density and net calorific value (Table 1.2 NCV; densities typical).
+# diesel: 0.84 kg/L x 43.0 MJ/kg x 74,100 kg/TJ = 2.68 kg/L
+# petrol: 0.745 kg/L x 44.3 MJ/kg x 69,300 kg/TJ = 2.29 kg/L
+# lpg:    0.54 kg/L x 47.3 MJ/kg x 63,100 kg/TJ = 1.61 kg/L
 FUEL_FACTORS = {
-    "diesel": _placeholder(2.68, "kg CO2e/L"),
-    "petrol": _placeholder(2.31, "kg CO2e/L"),
-    "lpg": _placeholder(None, "kg CO2e/L"),
+    "diesel": _sourced(2.68, "kg CO2e/L", source="IPCC 2006 Vol 2 Ch 1 Table 1.4, derived", year="2006"),
+    "petrol": _sourced(2.29, "kg CO2e/L", source="IPCC 2006 Vol 2 Ch 1 Table 1.4, derived", year="2006"),
+    "lpg": _sourced(1.61, "kg CO2e/L", source="IPCC 2006 Vol 2 Ch 1 Table 1.4, derived", year="2006"),
     # CNG is commonly sold by mass, not litres; no litre value is assumed.
     "cng": _placeholder(None, "kg CO2e/L"),
 }
