@@ -9,8 +9,6 @@ const methodology = fs.readFileSync(path.join(root, "data/methodology.json"), "u
 const dom = new JSDOM(html, { runScripts: "outside-only", url: "http://localhost:8011/individual.html" });
 const w = dom.window;
 w.fetch = () => Promise.resolve({ json: () => Promise.resolve(JSON.parse(methodology)) });
-w.URL.createObjectURL = () => "blob:x";
-w.HTMLAnchorElement.prototype.click = function () {};
 const errors = [];
 w.addEventListener("error", (e) => errors.push(e.message));
 w.eval(script);
@@ -18,25 +16,49 @@ w.eval(script);
 const results = [];
 const check = (name, ok, detail) => results.push((ok ? "PASS " : "FAIL ") + name + (detail ? "  [" + detail + "]" : ""));
 const doc = w.document;
-const set = (name, v) => { doc.querySelector('[name="' + name + '"]').value = v; };
-
+const $ = (s) => doc.querySelector(s);
+const $$ = (s) => Array.from(doc.querySelectorAll(s));
+const click = (el) => el.dispatchEvent(new w.MouseEvent("click", { bubbles: true, cancelable: true }));
 const tick = () => new Promise((r) => setTimeout(r, 20));
+const submit = () => $("#add").dispatchEvent(new w.Event("submit", { cancelable: true, bubbles: true }));
+
 (async () => {
   await tick();
-  set("fuel", "petrol"); set("km", "10000"); set("eff", "7");
-  set("kwh", "330"); set("ren", "0");
-  set("commute_km", "12"); set("days", "5"); set("mode", "car");
-  set("laptops", "1"); set("solid", "0"); set("ewaste", "0");
-  doc.getElementById("form").dispatchEvent(new w.Event("submit", { cancelable: true, bubbles: true }));
-  const text = doc.getElementById("result").textContent;
-  // Hand check: petrol 700 L × 2.29 = 1.60 t; 330 × 12 × 0.757 = 3.00 t; commute 12×2×5×50×0.15 = 0.90 t; laptop 0.03 t → 5.53 t
-  check("scope 1 is 1.60 t", text.includes("1.60 t"), text.slice(0, 80));
-  check("scope 2 is 3.00 t", text.includes("3.00 t"));
-  check("total is 5.53 t", text.includes("5.53 t"));
-  check("grade F at 5.53 t per person", text.includes("F"));
-  check("scope 3 band is partial ±25%", text.includes("±25%"));
-  check("saved to localStorage note", doc.getElementById("saved-note").textContent.includes("Saved"));
-  check("links to reduction plan", !!doc.querySelector('a[href="dashboard.html#individual/open/reduction"]'));
+  // Demo: the sample person, hand-calculated: petrol 10,000 km × 7 L/100 km × 2.29 = 1.60 t;
+  // electricity 330 kWh × 12 × 0.757 = 3.00 t; commute 12 × 2 × 250 × 0.15 = 0.90 t; laptop 0.03 t. Total 5.53 t.
+  check("demo shows the sample total", $("#result").textContent.includes("5.53 t"), $("#result").textContent.slice(0, 60));
+  check("demo has no add form", $("#add").hidden === true);
+  check("demo does not save", !w.localStorage.getItem("og-individual-activities-v1"));
+
+  // Your tracker: starts empty, then add, edit, delete
+  click($('[data-mode="live"]'));
+  await tick();
+  check("live mode shows the add form", $("#add").hidden === false);
+  check("live starts with no activities", $("#rows").textContent.includes("No activities yet"));
+
+  $("#kind").value = "car_petrol"; $("#add").elements.qty.value = "10000"; submit();
+  $("#kind").value = "electricity"; $("#add").elements.qty.value = "330"; submit();
+  check("adding activities updates the total to 4.60 t", $("#result").textContent.includes("4.60 t"), $("#result").textContent.slice(0, 60));
+  check("activities are saved in this browser", (w.localStorage.getItem("og-individual-activities-v1") || "").includes("electricity"));
+
+  const editBtn = $$("[data-edit]").filter((b) => b.closest("tr").textContent.includes("Electricity"))[0];
+  click(editBtn);
+  check("edit loads the activity into the form", $("#add").elements.qty.value === "330" && $("#submit").textContent.includes("Save"));
+  $("#add").elements.qty.value = "165"; submit();
+  check("saving an edit updates the total to 3.10 t", $("#result").textContent.includes("3.10 t"), $("#result").textContent.slice(0, 60));
+
+  const delBtn = $$("[data-del]").filter((b) => b.closest("tr").textContent.includes("Car, petrol"))[0];
+  click(delBtn);
+  check("delete removes the activity and updates the total to 1.50 t", $("#result").textContent.includes("1.50 t") && $$("#rows tr").length === 1, $("#result").textContent.slice(0, 60));
+
+  // Back to demo keeps the saved tracker intact
+  click($('[data-mode="demo"]'));
+  await tick();
+  check("switching back to demo shows the sample again", $("#result").textContent.includes("5.53 t"));
+  click($('[data-mode="live"]'));
+  await tick();
+  check("your saved activities survive a switch", $("#result").textContent.includes("1.50 t"));
+
   check("no script errors", errors.length === 0, errors.join("; "));
   console.log(results.join("\n"));
   const failed = results.filter((r) => r.startsWith("FAIL")).length;

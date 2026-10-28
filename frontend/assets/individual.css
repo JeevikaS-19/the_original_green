@@ -36,3 +36,15 @@
   .ind-row { grid-template-columns: 1fr auto; }
   .ind-row .ind-bar { grid-column: 1 / -1; grid-row: 2; }
 }
+.mode { display: inline-flex; padding: 4px; background: var(--g1); border-radius: 999px; margin: 14px 0 6px; }
+.mode button { border: 0; background: transparent; height: 36px; padding: 0 18px; border-radius: 999px; font: 600 14px Inter, sans-serif; color: var(--muted); cursor: pointer; }
+.mode button[aria-pressed="true"] { background: var(--white); color: var(--ink); box-shadow: var(--shadow-1); }
+.ind-tbl td:last-child { white-space: nowrap; }
+.ind-tbl .num { text-align: right; font-variant-numeric: tabular-nums; }
+.ind-tbl tr.flag td { background: #fbf6e9; }
+.ind-add { display: grid; grid-template-columns: 2fr 1fr 1fr auto auto; gap: 12px; align-items: end; margin-top: 18px; padding-top: 16px; border-top: 1px solid var(--line); }
+.ind-add label { display: grid; gap: 6px; font-size: 13px; font-weight: 550; }
+.ind-add input, .ind-add select { height: 40px; border: 1px solid var(--line); border-radius: 10px; padding: 0 12px; font: inherit; background: var(--paper); min-width: 0; }
+.ind-add .btn { height: 40px; }
+.ind .dcard { margin-top: 0; }
+@media (max-width: 900px) { .ind-add { grid-template-columns: 1fr; } }
