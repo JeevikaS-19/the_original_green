@@ -46,7 +46,7 @@ const active = () => $(".view.active");
 // 1. Name, sidebar and overview
 check("named The Original Green", doc.title.includes("The Original Green") && $(".logo").textContent.includes("The Original Green"));
 check("initial title shows Small scale", $("#profile-title").textContent.includes("Small scale"), $("#profile-title").textContent);
-check("overview total 228.6", $("#summary-cards").textContent.includes("228.6"));
+check("overview total 264.0 (commute×2)", $("#summary-cards").textContent.includes("264"));
 check("summary has Total, Grade, Confidence, Trend", ["Total", "Grade", "Confidence", "Trend"].every((k) => $("#summary-cards").textContent.includes(k)));
 check("trend chart drawn", !!$("#trend-chart svg"));
 check("categories listed with formula tips", $$("#cat-list .cat").length >= 6 && $$("#cat-list .ftip").length >= 6, String($$("#cat-list .cat").length));
@@ -61,7 +61,7 @@ check("disconnected card shows setup steps", $$(".tcard:not(.ok) .tc-steps li").
 check("cards carry quality badges", $$(".tcard .tag").length === 7);
 check("connect / reconnect buttons", $("#connect-list").textContent.includes("Reconnect") && /Connect$/m.test($$(".tcard:not(.ok) .btn")[0].textContent));
 nav("overview");
-check("quick stats show total and grade", $("#quick-stats").textContent.includes("228.6") && $("#quick-stats").textContent.includes("Grade"));
+check("quick stats show total and grade", $("#quick-stats").textContent.includes("264") && $("#quick-stats").textContent.includes("Grade"));
 
 // 2. Scope selector
 click($('#scope-sel button[data-view="scope_3"]'));
@@ -114,7 +114,7 @@ const kwh = $('[data-edit="kwh"]');
 input(kwh, String(Number(kwh.value) * 2));
 check("editing kWh changes the total", !$("#quick-stats").textContent.includes("228.6"), $("#quick-stats").textContent.slice(0, 40));
 click($("#reset-edits"));
-check("reset restores the total", $("#quick-stats").textContent.includes("228.6"));
+check("reset restores the total", $("#quick-stats").textContent.includes("264"));
 
 // 4. AI Apply
 $("#ai-budget").value = "2500000";

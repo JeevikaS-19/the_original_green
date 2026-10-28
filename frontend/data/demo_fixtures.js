@@ -189,9 +189,9 @@ window.DEMO_FIXTURES = [
           {
             "id": "scope_3",
             "label": "Scope 3 · Devices, commute, waste",
-            "tons": 0.82,
-            "low": 0.41,
-            "high": 1.24,
+            "tons": 1.5,
+            "low": 0.75,
+            "high": 2.25,
             "confidence": "±50%",
             "drivers": [
               {
@@ -204,7 +204,7 @@ window.DEMO_FIXTURES = [
               },
               {
                 "name": "Commute",
-                "tons": 0.7
+                "tons": 1.4
               },
               {
                 "name": "Waste",
@@ -215,35 +215,35 @@ window.DEMO_FIXTURES = [
           }
         ],
         "total": {
-          "tons": 5.46,
-          "low": 4.58,
-          "high": 6.34
+          "tons": 6.13,
+          "low": 4.92,
+          "high": 7.35
         },
-        "grade": "C",
+        "grade": "F",
         "grade_bands": [
           {
             "grade": "A",
             "from": 0,
-            "to": 2
+            "to": 0.8
           },
           {
             "grade": "B",
-            "from": 2,
-            "to": 5
+            "from": 0.8,
+            "to": 1.5
           },
           {
             "grade": "C",
-            "from": 5,
-            "to": 10
+            "from": 1.5,
+            "to": 2.5
           },
           {
             "grade": "D",
-            "from": 10,
-            "to": 15
+            "from": 2.5,
+            "to": 4.0
           },
           {
             "grade": "F",
-            "from": 15,
+            "from": 4.0,
             "to": null
           }
         ],
@@ -357,31 +357,31 @@ window.DEMO_FIXTURES = [
           "low": 2.78,
           "high": 6.49
         },
-        "grade": "B",
+        "grade": "F",
         "grade_bands": [
           {
             "grade": "A",
             "from": 0,
-            "to": 2
+            "to": 0.8
           },
           {
             "grade": "B",
-            "from": 2,
-            "to": 5
+            "from": 0.8,
+            "to": 1.5
           },
           {
             "grade": "C",
-            "from": 5,
-            "to": 10
+            "from": 1.5,
+            "to": 2.5
           },
           {
             "grade": "D",
-            "from": 10,
-            "to": 15
+            "from": 2.5,
+            "to": 4.0
           },
           {
             "grade": "F",
-            "from": 15,
+            "from": 4.0,
             "to": null
           }
         ],
@@ -648,9 +648,9 @@ window.DEMO_FIXTURES = [
           {
             "id": "scope_3",
             "label": "Scope 3 · Devices, commute, waste",
-            "tons": 41.65,
-            "low": 20.83,
-            "high": 62.48,
+            "tons": 77.05,
+            "low": 38.53,
+            "high": 115.58,
             "confidence": "±50%",
             "drivers": [
               {
@@ -663,7 +663,7 @@ window.DEMO_FIXTURES = [
               },
               {
                 "name": "Commute",
-                "tons": 35.4
+                "tons": 70.8
               },
               {
                 "name": "Waste",
@@ -674,35 +674,35 @@ window.DEMO_FIXTURES = [
           }
         ],
         "total": {
-          "tons": 228.61,
-          "low": 189.09,
-          "high": 268.13
+          "tons": 264.01,
+          "low": 206.79,
+          "high": 321.23
         },
-        "grade": "C",
+        "grade": "B",
         "grade_bands": [
           {
             "grade": "A",
             "from": 0,
-            "to": 50
+            "to": 0.8
           },
           {
             "grade": "B",
-            "from": 50,
-            "to": 150
+            "from": 0.8,
+            "to": 1.5
           },
           {
             "grade": "C",
-            "from": 150,
-            "to": 300
+            "from": 1.5,
+            "to": 2.5
           },
           {
             "grade": "D",
-            "from": 300,
-            "to": 500
+            "from": 2.5,
+            "to": 4.0
           },
           {
             "grade": "F",
-            "from": 500,
+            "from": 4.0,
             "to": null
           }
         ],
@@ -870,31 +870,31 @@ window.DEMO_FIXTURES = [
           "low": 112.18,
           "high": 261.74
         },
-        "grade": "C",
+        "grade": "F",
         "grade_bands": [
           {
             "grade": "A",
             "from": 0,
-            "to": 50
+            "to": 0.8
           },
           {
             "grade": "B",
-            "from": 50,
-            "to": 150
+            "from": 0.8,
+            "to": 1.5
           },
           {
             "grade": "C",
-            "from": 150,
-            "to": 300
+            "from": 1.5,
+            "to": 2.5
           },
           {
             "grade": "D",
-            "from": 300,
-            "to": 500
+            "from": 2.5,
+            "to": 4.0
           },
           {
             "grade": "F",
-            "from": 500,
+            "from": 4.0,
             "to": null
           }
         ],
@@ -1288,9 +1288,9 @@ window.DEMO_FIXTURES = [
           {
             "id": "scope_3",
             "label": "Scope 3 · Devices, commute, waste",
-            "tons": 229.27,
-            "low": 171.95,
-            "high": 286.59,
+            "tons": 389.02,
+            "low": 291.76,
+            "high": 486.27,
             "confidence": "±25%",
             "drivers": [
               {
@@ -1303,7 +1303,7 @@ window.DEMO_FIXTURES = [
               },
               {
                 "name": "Commute",
-                "tons": 159.8
+                "tons": 319.5
               },
               {
                 "name": "Waste",
@@ -1314,35 +1314,35 @@ window.DEMO_FIXTURES = [
           }
         ],
         "total": {
-          "tons": 904.17,
-          "low": 779.36,
-          "high": 1028.98
+          "tons": 1063.92,
+          "low": 899.18,
+          "high": 1228.67
         },
-        "grade": "B",
+        "grade": "C",
         "grade_bands": [
           {
             "grade": "A",
             "from": 0,
-            "to": 500
+            "to": 0.8
           },
           {
             "grade": "B",
-            "from": 500,
-            "to": 1500
+            "from": 0.8,
+            "to": 1.5
           },
           {
             "grade": "C",
-            "from": 1500,
-            "to": 3000
+            "from": 1.5,
+            "to": 2.5
           },
           {
             "grade": "D",
-            "from": 3000,
-            "to": 5000
+            "from": 2.5,
+            "to": 4.0
           },
           {
             "grade": "F",
-            "from": 5000,
+            "from": 4.0,
             "to": null
           }
         ],
@@ -1515,31 +1515,31 @@ window.DEMO_FIXTURES = [
           "low": 404.94,
           "high": 944.86
         },
-        "grade": "B",
+        "grade": "F",
         "grade_bands": [
           {
             "grade": "A",
             "from": 0,
-            "to": 500
+            "to": 0.8
           },
           {
             "grade": "B",
-            "from": 500,
-            "to": 1500
+            "from": 0.8,
+            "to": 1.5
           },
           {
             "grade": "C",
-            "from": 1500,
-            "to": 3000
+            "from": 1.5,
+            "to": 2.5
           },
           {
             "grade": "D",
-            "from": 3000,
-            "to": 5000
+            "from": 2.5,
+            "to": 4.0
           },
           {
             "grade": "F",
-            "from": 5000,
+            "from": 4.0,
             "to": null
           }
         ],
@@ -1759,9 +1759,9 @@ window.DEMO_FIXTURES = [
           {
             "id": "scope_3",
             "label": "Scope 3 · Devices, commute, waste",
-            "tons": 164.07,
-            "low": 82.04,
-            "high": 246.11,
+            "tons": 282.57,
+            "low": 141.29,
+            "high": 423.86,
             "confidence": "±50%",
             "drivers": [
               {
@@ -1774,7 +1774,7 @@ window.DEMO_FIXTURES = [
               },
               {
                 "name": "Commute",
-                "tons": 118.5
+                "tons": 237.0
               },
               {
                 "name": "Waste",
@@ -1785,35 +1785,35 @@ window.DEMO_FIXTURES = [
           }
         ],
         "total": {
-          "tons": 856.56,
-          "low": 601.4,
-          "high": 1111.72
+          "tons": 975.06,
+          "low": 660.65,
+          "high": 1289.47
         },
-        "grade": "B",
+        "grade": "C",
         "grade_bands": [
           {
             "grade": "A",
             "from": 0,
-            "to": 500
+            "to": 0.8
           },
           {
             "grade": "B",
-            "from": 500,
-            "to": 1500
+            "from": 0.8,
+            "to": 1.5
           },
           {
             "grade": "C",
-            "from": 1500,
-            "to": 3000
+            "from": 1.5,
+            "to": 2.5
           },
           {
             "grade": "D",
-            "from": 3000,
-            "to": 5000
+            "from": 2.5,
+            "to": 4.0
           },
           {
             "grade": "F",
-            "from": 5000,
+            "from": 4.0,
             "to": null
           }
         ],
@@ -2104,31 +2104,31 @@ window.DEMO_FIXTURES = [
           "low": 336226.35,
           "high": 415366.87
         },
-        "grade": "F",
+        "grade": "A",
         "grade_bands": [
           {
             "grade": "A",
             "from": 0,
-            "to": 500
+            "to": 0.8
           },
           {
             "grade": "B",
-            "from": 500,
-            "to": 1500
+            "from": 0.8,
+            "to": 1.5
           },
           {
             "grade": "C",
-            "from": 1500,
-            "to": 3000
+            "from": 1.5,
+            "to": 2.5
           },
           {
             "grade": "D",
-            "from": 3000,
-            "to": 5000
+            "from": 2.5,
+            "to": 4.0
           },
           {
             "grade": "F",
-            "from": 5000,
+            "from": 4.0,
             "to": null
           }
         ],
@@ -2246,31 +2246,31 @@ window.DEMO_FIXTURES = [
           "low": 222492.06,
           "high": 519148.15
         },
-        "grade": "F",
+        "grade": "A",
         "grade_bands": [
           {
             "grade": "A",
             "from": 0,
-            "to": 500
+            "to": 0.8
           },
           {
             "grade": "B",
-            "from": 500,
-            "to": 1500
+            "from": 0.8,
+            "to": 1.5
           },
           {
             "grade": "C",
-            "from": 1500,
-            "to": 3000
+            "from": 1.5,
+            "to": 2.5
           },
           {
             "grade": "D",
-            "from": 3000,
-            "to": 5000
+            "from": 2.5,
+            "to": 4.0
           },
           {
             "grade": "F",
-            "from": 5000,
+            "from": 4.0,
             "to": null
           }
         ],
@@ -2514,31 +2514,31 @@ window.DEMO_FIXTURES = [
           "low": 161661.34,
           "high": 204739.26
         },
-        "grade": "F",
+        "grade": "A",
         "grade_bands": [
           {
             "grade": "A",
             "from": 0,
-            "to": 500
+            "to": 0.8
           },
           {
             "grade": "B",
-            "from": 500,
-            "to": 1500
+            "from": 0.8,
+            "to": 1.5
           },
           {
             "grade": "C",
-            "from": 1500,
-            "to": 3000
+            "from": 1.5,
+            "to": 2.5
           },
           {
             "grade": "D",
-            "from": 3000,
-            "to": 5000
+            "from": 2.5,
+            "to": 4.0
           },
           {
             "grade": "F",
-            "from": 5000,
+            "from": 4.0,
             "to": null
           }
         ],
@@ -2656,31 +2656,31 @@ window.DEMO_FIXTURES = [
           "low": 105091.79,
           "high": 245214.17
         },
-        "grade": "F",
+        "grade": "A",
         "grade_bands": [
           {
             "grade": "A",
             "from": 0,
-            "to": 500
+            "to": 0.8
           },
           {
             "grade": "B",
-            "from": 500,
-            "to": 1500
+            "from": 0.8,
+            "to": 1.5
           },
           {
             "grade": "C",
-            "from": 1500,
-            "to": 3000
+            "from": 1.5,
+            "to": 2.5
           },
           {
             "grade": "D",
-            "from": 3000,
-            "to": 5000
+            "from": 2.5,
+            "to": 4.0
           },
           {
             "grade": "F",
-            "from": 5000,
+            "from": 4.0,
             "to": null
           }
         ],

@@ -220,7 +220,7 @@ def calculate_scope_3(cloud, hardware, commute, waste, conversion_factors):
     commute_details = {}
     commute = commute or {}
     days = _number(commute.get("commuting_days_per_year"), COMMUTING_DAYS_PER_YEAR)
-    distance = _number(commute.get("avg_distance_km")) * days
+    distance = _number(commute.get("avg_distance_km")) * 2 * days
     commute_factors = conversion_factors.get("commute", {})
     for mode, share in (commute.get("mode_split") or {}).items():
         factor = commute_factors.get(str(mode).lower())
@@ -236,6 +236,7 @@ def calculate_scope_3(cloud, hardware, commute, waste, conversion_factors):
     categories["3.3_commute"] = {
         "total_co2e_kg": _round(commute_total),
         "breakdown": commute_details,
+        "total_employees": _number(commute.get("total_employees")),
     }
 
     waste_total = 0.0

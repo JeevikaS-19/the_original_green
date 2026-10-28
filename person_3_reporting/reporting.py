@@ -22,11 +22,11 @@ SCOPE_NAMES = {
 SCOPE_KEYS = ("scope_1", "scope_2", "scope_3")
 TIER_ORG_TYPE = {"tier_1": "individual", "tier_2": "school", "tier_3": "enterprise"}
 GRADE_BENCHMARKS = {
-    "individual": ((2, "A"), (5, "B"), (10, "C"), (15, "D"), (math.inf, "F")),
-    "school": ((50, "A"), (150, "B"), (300, "C"), (500, "D"), (math.inf, "F")),
-    "enterprise": ((500, "A"), (1500, "B"), (3000, "C"), (5000, "D"), (math.inf, "F")),
+    "individual": ((0.8, "A"), (1.5, "B"), (2.5, "C"), (4.0, "D"), (math.inf, "F")),
+    "school": ((0.8, "A"), (1.5, "B"), (2.5, "C"), (4.0, "D"), (math.inf, "F")),
+    "enterprise": ((0.8, "A"), (1.5, "B"), (2.5, "C"), (4.0, "D"), (math.inf, "F")),
 }
-GRADE_BASIS = "Illustrative benchmarks - replace with sourced data."
+GRADE_BASIS = "Intensity-based benchmarks (t CO2e/employee/year): India per-capita ~2.0-2.1 t/person/year. Grade bands: A < 0.8, B < 1.5, C < 2.5, D < 4.0, F ≥ 4.0. Sources: CEA combined margin 0.757 kg/kWh (FY23-24), IPCC 2006 fuel factors, TCS BRSR FY26 (Scope 1+2+3 intensity 1.58 t/employee), Infosys BRSR FY26."
 TIER_CONFIDENCE = {
     "tier_1": "±40% (default for tier)",
     "tier_2": "±15-30% (default for tier)",
@@ -493,14 +493,25 @@ def rank_suggestions(calculation_results: dict[str, Any]) -> tuple[list[dict[str
     return suggestions, skipped
 
 
-def calculate_grade(co2e_tons: Any, org_type: str = "school") -> str:
-    """Assign an illustrative A-F grade using organization-specific thresholds."""
+def calculate_grade(co2e_tons: Any, org_type: str = "school", employee_count: Any = None) -> str:
+    """Assign an A-F grade using intensity benchmarks (t CO2e/employee/year).
+
+    For individuals (org_type='individual', employee_count=1), intensity = total tonnes.
+    For organizations, intensity = total tonnes / employee count.
+    """
     tons = _number(co2e_tons)
     tons = max(0, tons if tons is not None else 0)
     normalized_org, _ = _normalize_org_type(org_type)
+    employees = _number(employee_count) if employee_count is not None else None
+
+    if normalized_org == "individual" or employees is None or employees < 1:
+        intensity = tons
+    else:
+        intensity = tons / employees
+
     benchmarks = GRADE_BENCHMARKS.get(normalized_org or "school", GRADE_BENCHMARKS["school"])
     for upper_bound, grade in benchmarks:
-        if tons < upper_bound:
+        if intensity < upper_bound:
             return grade
     return "F"
 
@@ -559,6 +570,7 @@ def generate_report(
     calc_results: dict[str, Any],
     org_type: str | None = None,
     use_llm: bool = False,
+    employee_count: Any = None,
 ) -> dict[str, Any]:
     """Build the report using deterministic rules; LLM phrasing is not enabled."""
     del use_llm
@@ -574,8 +586,17 @@ def generate_report(
 
     suggestions, skipped = rank_suggestions(normalized)
     total = normalized["total_tons"]
+
+    # Extract or use provided employee count from calculation results (in Scope 3 commute category)
+    if employee_count is None and isinstance(calc_results, dict):
+        scope_3 = calc_results.get("scopes", {}).get("scope_3", {})
+        if isinstance(scope_3, dict):
+            commute_cat = scope_3.get("categories", {}).get("3.3_commute", {})
+            if isinstance(commute_cat, dict):
+                employee_count = commute_cat.get("total_employees")
+
     # A zero total usually means nothing could be calculated, not that emissions are zero.
-    grade = calculate_grade(total, normalized["org_type"]) if total > 0 else "N/A"
+    grade = calculate_grade(total, normalized["org_type"], employee_count) if total > 0 else "N/A"
     by_scope: dict[str, dict[str, Any]] = {}
     for scope_key in SCOPE_KEYS:
         scope = normalized["scopes"][scope_key]

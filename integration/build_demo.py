@@ -35,6 +35,7 @@ PERSONAS = [
         "tier_answer": "Individual",
         "tier": "tier_1",
         "org_type": "individual",
+        "employees": 1,
         "label": "Individual",
         "sublabel": "Software developer, one car",
         "description": "One person with a petrol car, home electricity and a work laptop.",
@@ -118,6 +119,7 @@ CASE_STUDIES = [
         "tier_answer": "Large Enterprise",
         "tier": "tier_3",
         "org_type": "enterprise",
+        "employees": 580000,
         "label": "Case: TCS FY 2025-26",
         "sublabel": "Public disclosure, summary-based",
         "description": "Tata Consultancy Services, from its FY 2025-26 sustainability disclosures. Our calculated figures are set against the disclosed ones.",
@@ -138,6 +140,7 @@ CASE_STUDIES = [
         "tier_answer": "Large Enterprise",
         "tier": "tier_3",
         "org_type": "enterprise",
+        "employees": 312000,
         "label": "Case: Infosys FY 2025-26",
         "sublabel": "Public disclosure, summary-based",
         "description": "Infosys, from its FY 2025-26 sustainability disclosures. Our calculated figures are set against the disclosed ones.",
@@ -234,7 +237,7 @@ def path_fixture(persona, path_key, intake_path, estimates):
     problems = check_calc_output(calc)
     if problems:
         raise SystemExit(f"{persona['id']} {path_key}: contract problems: {problems}")
-    full_report = generate_report(calc)
+    full_report = generate_report(calc, employee_count=persona.get("employees"))
     report = full_report["report"]
 
     out = OUTPUT / persona["id"] / path_key
