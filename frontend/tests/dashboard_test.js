@@ -112,7 +112,7 @@ check("overview trend shows the plan", $("#summary-cards").textContent.includes(
 nav("reduction");
 const kwh = $('[data-edit="kwh"]');
 input(kwh, String(Number(kwh.value) * 2));
-check("editing kWh changes the total", !$("#quick-stats").textContent.includes("228.6"), $("#quick-stats").textContent.slice(0, 40));
+check("editing kWh changes the total", !$("#quick-stats").textContent.includes("264.0"), $("#quick-stats").textContent.slice(0, 40));
 click($("#reset-edits"));
 check("reset restores the total", $("#quick-stats").textContent.includes("264"));
 

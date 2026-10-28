@@ -5,9 +5,9 @@ import copy
 import pytest
 
 try:
-    from person_3_reporting.reporting import generate_report, normalize_calc_results
+    from person_3_reporting.reporting import calculate_grade, generate_report, normalize_calc_results
 except ImportError:
-    from reporting import generate_report, normalize_calc_results
+    from reporting import calculate_grade, generate_report, normalize_calc_results
 
 
 def calc_payload(tier, unverified_scope_1=None, total_kg=(87100, 46452, 0)):
@@ -58,9 +58,15 @@ def test_zero_total_has_no_grade():
     assert report["grade"] == "N/A"
 
 
-def test_nonzero_total_still_graded():
+def test_nonzero_total_still_graded_with_headcount():
+    report = generate_report(calc_payload("tier_2"), employee_count=200)["report"]
+    assert report["grade"] == calculate_grade(report["total_emissions"], "school", 200)
+    assert report["grade"] != "N/A"
+
+
+def test_organisation_without_headcount_is_not_graded():
     report = generate_report(calc_payload("tier_2"))["report"]
-    assert report["grade"] == "B"
+    assert report["grade"] == "N/A"
 
 
 def test_input_payload_is_not_mutated():

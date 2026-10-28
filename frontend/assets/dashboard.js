@@ -719,7 +719,7 @@
 
     $("factor-table").innerHTML = '<div class="tbl-wrap"><table class="tbl"><thead><tr><th>Factor</th><th>Value</th><th>Source</th><th>Status</th></tr></thead><tbody>' +
       FACTORS.map(function (f) { return '<tr><td>' + esc(f.name) + '</td><td><code>' + esc(f.value) + '</code></td><td class="muted">' + esc(f.source) + '</td><td>' + tag(f.status) + '</td></tr>'; }).join("") +
-      '<tr><td>Grade bands</td><td>–</td><td class="muted">Illustrative benchmarks, not a sourced standard</td><td>' + tag("illustrative") + '</td></tr></tbody></table></div>';
+      '<tr><td>Grade bands</td><td>–</td><td class="muted">t CO₂e per employee (per person for individuals); thresholds are planning bands, see methodology</td><td>' + tag("illustrative") + '</td></tr></tbody></table></div>';
   }
 
   // ---- Downloads ----

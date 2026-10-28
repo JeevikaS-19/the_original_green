@@ -116,19 +116,20 @@ def test_roi_values_for_all_actions():
 
 
 @pytest.mark.parametrize(
-    ("tons", "org_type", "grade"),
+    ("tons", "org_type", "employees", "grade"),
     [
-        (0, "school", "A"),
-        (50, "school", "B"),
-        (121, "school", "B"),
-        (99999, "school", "F"),
-        (2, "individual", "B"),
-        (500, "enterprise", "B"),
-        (50, "unknown", "B"),
+        (0, "school", 200, "A"),
+        (250, "school", 200, "B"),
+        (300, "school", 200, "C"),
+        (99999, "school", 200, "F"),
+        (1.5, "individual", None, "B"),
+        (600, "enterprise", 500, "B"),
+        (50, "unknown", 200, "A"),
+        (50, "school", None, "N/A"),
     ],
 )
-def test_grade_boundaries(tons, org_type, grade):
-    assert calculate_grade(tons, org_type) == grade
+def test_grade_boundaries(tons, org_type, employees, grade):
+    assert calculate_grade(tons, org_type, employees) == grade
 
 
 def test_zero_and_missing_inputs_are_safe():

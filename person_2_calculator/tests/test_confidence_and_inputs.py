@@ -41,12 +41,12 @@ def test_all_scopes_reports_scope_level_gaps_at_top_level():
     assert len(top) == len(set(top))
 
 
-def test_commute_defaults_to_250_working_days():
+def test_commute_counts_return_trip_over_250_working_days():
     assert COMMUTING_DAYS_PER_YEAR == 250
     commute = {"total_employees": 10, "avg_distance_km": 10, "mode_split": {"car": 1.0}}
     factors = {"commute": {"car": {"value": 1.0, "unit": "kg", "status": "verified"}}}
     result = calculate_scope_3(None, None, commute, None, {**conversion_factors, **factors})
-    assert result["categories"]["3.3_commute"]["total_co2e_kg"] == 10 * 10 * 250
+    assert result["categories"]["3.3_commute"]["total_co2e_kg"] == 10 * 10 * 250 * 2
 
 
 def test_wastewater_uses_its_treatment_factor_by_default():
