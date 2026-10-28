@@ -259,28 +259,51 @@ class RuleProposer:
 
 
 class LLMProposer:
-    """Asks an LLM for proposals. `client` is any callable taking a prompt and returning text.
+    """Asks an LLM for proposals. `client` is any callable taking a prompt and returning text."""
 
-    No client is configured in this repository, so this class is not used by default.
-    """
-
-    def __init__(self, client):
+    def __init__(self, client, methodology=None):
         self.client = client
+        self.methodology = methodology
 
     def prompt(self, missing, org):
+        method = (
+            "Methodology to follow:\n"
+            + (self.methodology if isinstance(self.methodology, str) else json.dumps(self.methodology)) + "\n"
+            if self.methodology else ""
+        )
         return (
-            "You fill in missing inputs for a carbon footprint estimate. Return JSON only.\n"
-            "Rules: use India-specific defaults; be conservative (mid-range); never invent sources; "
-            "give every value an 'assumption' sentence with your reasoning; never override uploaded data.\n"
+            "You fill in missing inputs for a carbon footprint estimate. Return JSON only, no prose.\n"
+            + method
+            + "Rules: use India-specific defaults; be conservative (mid-range); never invent sources; "
+            "give every value an 'assumption' sentence with your reasoning and the numbers used; "
+            "never override uploaded data.\n"
             f"Organisation: {json.dumps(org)}\n"
             f"Missing fields: {json.dumps(missing)}\n"
+            "Field shapes: vehicles = list of {vehicle_id, make, model, fuel_type (diesel|petrol), "
+            "annual_distance_km, fuel_efficiency_l_per_100km}; dg_set = {capacity_kva, fuel_type, hours_per_year, "
+            "fuel_consumption_per_hour}; energy_meter = {monthly_kwh, region_state}; hardware = list of "
+            "{device_type, model, quantity, purchase_year, expected_lifespan_years}; commute = {total_employees, "
+            "mode_split: {car, bus, bike, wfh} summing to 1, avg_distance_km (one way)}; waste = list of "
+            "{category, mass_kg_per_month}.\n"
             "Format: {scope: {field: {\"value\": ..., \"assumption\": \"...\"}}}"
         )
 
-    def propose(self, missing, org):
-        text = self.client(self.prompt(missing, org))
+    @staticmethod
+    def _json(text):
+        text = str(text).strip()
+        if text.startswith("```"):
+            text = text.split("\n", 1)[1] if "\n" in text else text
+            text = text.rsplit("```", 1)[0]
+        return json.loads(text)
+
+    def propose(self, missing, org, trace=None):
+        prompt = self.prompt(missing, org)
+        text = self.client(prompt)
+        if trace is not None:
+            trace["prompt_chars"] = len(prompt)
+            trace["raw_response"] = str(text)
         try:
-            proposal = json.loads(text)
+            proposal = self._json(text)
         except json.JSONDecodeError as error:
             raise ProposalRejected(f"response is not JSON: {error.msg}")
         return validate_proposal(proposal, missing)
@@ -300,27 +323,46 @@ def merge(uploaded, proposal):
     return merged, assumptions
 
 
-def estimate(uploaded, org, client=None):
+def estimate(uploaded, org, client=None, methodology=None, trace=None):
     """Full estimation step. Returns (merged_scopes, assumptions, notes).
 
     notes records what happened, for example when an LLM proposal was rejected and rules were used.
+    trace, if a dict is given, is filled with what the AI saw and returned, for display.
     """
+    import time
+
     missing = detect_missing(uploaded, org)
     notes = []
+    if trace is not None:
+        trace.update({"missing": missing, "org": org, "used": "none"})
     if not missing:
         return {scope: dict(uploaded.get(scope) or {}) for scope in SCOPE_FIELDS}, {}, notes
 
     proposal = None
     if client is not None:
+        start = time.time()
         try:
-            proposal = LLMProposer(client).propose(missing, org)
+            proposal = LLMProposer(client, methodology).propose(missing, org, trace)
+            if trace is not None:
+                trace["used"] = "llm"
+                trace["validation"] = "passed"
         except ProposalRejected as error:
             notes.append(f"LLM proposal rejected ({error}); rule-based defaults used instead.")
+            if trace is not None:
+                trace["validation"] = f"rejected: {error}"
         except (OSError, ValueError, KeyError, IndexError) as error:  # network errors, timeouts, bad JSON shape
             notes.append(f"LLM call failed ({error}); rule-based defaults used instead.")
+            if trace is not None:
+                trace["validation"] = f"call failed: {error}"
+        if trace is not None:
+            trace["seconds"] = round(time.time() - start, 1)
     if proposal is None:
         proposal = RuleProposer().propose(missing, org)
         validate_proposal(proposal, missing)
+        if trace is not None:
+            trace["used"] = "rules"
 
     merged, assumptions = merge(uploaded, proposal)
+    if trace is not None:
+        trace["proposal"] = proposal
     return merged, assumptions, notes

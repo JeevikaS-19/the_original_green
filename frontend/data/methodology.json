@@ -1,0 +1,367 @@
+{
+  "version": 1,
+  "factors": {
+    "grid": {
+      "value": 0.757,
+      "unit": "kg CO2e/kWh",
+      "source": "CEA CO2 Baseline Database v20.0, combined margin (secondary report; primary PDF to confirm)",
+      "year": "FY2023-24",
+      "status": "sourced"
+    },
+    "fuel": {
+      "diesel": {
+        "value": 2.68,
+        "unit": "kg CO2e/L",
+        "source": "IPCC 2006 Vol 2 Ch 1 Table 1.4, derived",
+        "year": "2006",
+        "status": "sourced"
+      },
+      "petrol": {
+        "value": 2.29,
+        "unit": "kg CO2e/L",
+        "source": "IPCC 2006 Vol 2 Ch 1 Table 1.4, derived",
+        "year": "2006",
+        "status": "sourced"
+      },
+      "lpg": {
+        "value": 1.61,
+        "unit": "kg CO2e/L",
+        "source": "IPCC 2006 Vol 2 Ch 1 Table 1.4, derived",
+        "year": "2006",
+        "status": "sourced"
+      },
+      "cng": {
+        "value": null,
+        "unit": "kg CO2e/L",
+        "source": "UNVERIFIED placeholder",
+        "year": null,
+        "status": "placeholder"
+      }
+    },
+    "fuel_efficiency": {
+      "bus": {
+        "value": 25,
+        "unit": "L/100 km",
+        "source": "UNVERIFIED placeholder",
+        "year": null,
+        "status": "placeholder"
+      },
+      "car": {
+        "value": 7,
+        "unit": "L/100 km",
+        "source": "UNVERIFIED placeholder",
+        "year": null,
+        "status": "placeholder"
+      },
+      "two_wheeler": {
+        "value": 3,
+        "unit": "L/100 km",
+        "source": "UNVERIFIED placeholder",
+        "year": null,
+        "status": "placeholder"
+      },
+      "fuel_default": {
+        "value": null,
+        "unit": "L/100 km",
+        "source": "UNVERIFIED placeholder",
+        "year": null,
+        "status": "placeholder"
+      }
+    },
+    "indirect_water": {
+      "value": 2.5,
+      "unit": "L/kWh",
+      "source": "UNVERIFIED placeholder",
+      "year": null,
+      "status": "placeholder"
+    },
+    "hardware_embodied_carbon": {
+      "laptop": {
+        "value": 30,
+        "unit": "kg CO2e/device/yr",
+        "source": "ILLUSTRATIVE demo assumption, not a sourced value. About 150 kg lifecycle over 5 years.",
+        "year": null,
+        "status": "illustrative_assumption"
+      },
+      "desktop": {
+        "value": 60,
+        "unit": "kg CO2e/device/yr",
+        "source": "ILLUSTRATIVE demo assumption, not a sourced value. About 300 kg lifecycle over 5 years.",
+        "year": null,
+        "status": "illustrative_assumption"
+      },
+      "monitor": {
+        "value": null,
+        "unit": "kg CO2e/device",
+        "source": "UNVERIFIED placeholder",
+        "year": null,
+        "status": "placeholder"
+      },
+      "server": {
+        "value": 500,
+        "unit": "kg CO2e/device/yr",
+        "source": "ILLUSTRATIVE demo assumption, not a sourced value. About 2,500 kg lifecycle over 5 years.",
+        "year": null,
+        "status": "illustrative_assumption"
+      },
+      "gpu": {
+        "value": 333,
+        "unit": "kg CO2e/device/yr",
+        "source": "ILLUSTRATIVE demo assumption, not a sourced value. About 1,000 kg lifecycle over 3 years.",
+        "year": null,
+        "status": "illustrative_assumption"
+      }
+    },
+    "commute": {
+      "car": {
+        "value": 0.15,
+        "unit": "kg CO2e/km",
+        "source": "ILLUSTRATIVE demo assumption, not a sourced value. Per passenger-km, rounded.",
+        "year": null,
+        "status": "illustrative_assumption"
+      },
+      "bus": {
+        "value": 0.05,
+        "unit": "kg CO2e/km",
+        "source": "ILLUSTRATIVE demo assumption, not a sourced value. Per passenger-km, rounded.",
+        "year": null,
+        "status": "illustrative_assumption"
+      },
+      "bike": {
+        "value": 0.01,
+        "unit": "kg CO2e/km",
+        "source": "ILLUSTRATIVE demo assumption, not a sourced value. Per km, small embodied footprint.",
+        "year": null,
+        "status": "illustrative_assumption"
+      },
+      "two_wheeler": {
+        "value": null,
+        "unit": "kg CO2e/km",
+        "source": "UNVERIFIED placeholder",
+        "year": null,
+        "status": "placeholder"
+      },
+      "wfh": {
+        "value": 0,
+        "unit": "kg CO2e/km",
+        "source": "UNVERIFIED placeholder",
+        "year": null,
+        "status": "placeholder"
+      }
+    },
+    "waste": {
+      "solid waste / landfill": {
+        "value": 0.5,
+        "unit": "kg CO2e/kg",
+        "source": "ILLUSTRATIVE demo assumption, not a sourced value. Landfill of mixed solid waste.",
+        "year": null,
+        "status": "illustrative_assumption"
+      },
+      "solid waste / recycling": {
+        "value": null,
+        "unit": "kg CO2e/kg",
+        "source": "UNVERIFIED placeholder",
+        "year": null,
+        "status": "placeholder"
+      },
+      "e-waste / recycling": {
+        "value": 3.0,
+        "unit": "kg CO2e/kg",
+        "source": "ILLUSTRATIVE demo assumption, not a sourced value. Recycling of electronic waste.",
+        "year": null,
+        "status": "illustrative_assumption"
+      },
+      "wastewater / treatment": {
+        "value": 0.001,
+        "unit": "kg CO2e/kg",
+        "source": "ILLUSTRATIVE demo assumption, not a sourced value. Treatment of wastewater.",
+        "year": null,
+        "status": "illustrative_assumption"
+      }
+    },
+    "cloud": {
+      "gpu": {
+        "value": 0.4,
+        "unit": "kg CO2e/hour",
+        "source": "ILLUSTRATIVE demo assumption, not a sourced value. A100-class GPU instance-hour.",
+        "year": null,
+        "status": "illustrative_assumption"
+      }
+    },
+    "fuel_price_per_litre": {
+      "diesel": {
+        "value": null,
+        "unit": "INR/L",
+        "source": "UNVERIFIED placeholder",
+        "year": null,
+        "status": "placeholder"
+      },
+      "petrol": {
+        "value": null,
+        "unit": "INR/L",
+        "source": "UNVERIFIED placeholder",
+        "year": null,
+        "status": "placeholder"
+      },
+      "lpg": {
+        "value": null,
+        "unit": "INR/L",
+        "source": "UNVERIFIED placeholder",
+        "year": null,
+        "status": "placeholder"
+      }
+    },
+    "tariff_per_kwh": {
+      "value": null,
+      "unit": "INR/kWh",
+      "source": "UNVERIFIED placeholder",
+      "year": null,
+      "status": "placeholder"
+    }
+  },
+  "formulas": {
+    "scope_1.vehicle": "annual_km x (L per 100 km / 100) x fuel factor (kg CO2e/L)",
+    "scope_1.fuel_total": "litres per year x fuel factor (kg CO2e/L)",
+    "scope_1.dg_set": "run hours per year x litres per hour x fuel factor",
+    "scope_2.electricity": "kWh per year x grid factor (kg CO2e/kWh), location-based, one all-India factor",
+    "scope_3.hardware": "device count x embodied-carbon factor per device per year",
+    "scope_3.commute": "one-way km x 2 (return trip) x 250 working days x employees x mode share x mode factor",
+    "scope_3.waste": "kg per year x waste factor for that category and disposal route",
+    "scope_3.cloud": "GPU hours x cloud GPU factor",
+    "confidence": "full data ±10%, partial ±25%, totals only ±40%, missing ±50%; total range is the sum of scope ranges",
+    "intensity": "total t CO2e / employees (organisations) or / 1 (individuals)"
+  },
+  "categories": {
+    "scope_1": {
+      "vehicles": "Company-owned or leased vehicles: fuel logs, fleet km, fuel cards",
+      "dg_set": "Diesel generators: run-hour logs, diesel purchases for backup power",
+      "fuel_total": "Any other fuel burnt on site: LPG/PNG for canteens, boilers",
+      "refrigerants": "AC/chiller gas top-ups (HFCs). No factor in this calculator: flag, do not calculate"
+    },
+    "scope_2": {
+      "energy_meter": "Purchased grid electricity: meter readings, electricity bills (kWh)"
+    },
+    "scope_3": {
+      "cloud": "Cloud compute bills, GPU hours (Cat. 1 purchased services)",
+      "hardware": "Laptops, desktops, servers, GPUs bought (Cat. 2 capital goods)",
+      "commute": "Staff travel between home and work: commute surveys (Cat. 7)",
+      "waste": "Solid waste, e-waste, wastewater from vendor logs (Cat. 5)",
+      "business_travel": "Flights, trains, hotels for work (Cat. 6). Not calculated here: flag",
+      "purchased_goods": "Other purchases (Cat. 1). Not calculated here: flag"
+    },
+    "out_of_scope": "Personal spending, revenue, salaries, anything that is not an emission activity"
+  },
+  "grading": {
+    "basis": "Graded on intensity, not size. Organisations: t CO2e per employee per year, A < 0.8, B < 1.5, C < 2.5, D < 4.0, F >= 4.0. Individuals: t per person against India's per-capita figure (~2.0 t, approximate), A < 0.5x, B < 1x, C < 1.5x, D < 2x. Reference point: TCS FY26 disclosed Scope 1+2+3 = 914,687 t over 580,000 employees = 1.58 t/employee. Organisations without a headcount are not graded.",
+    "india_per_capita_t": 2.0,
+    "bands": {
+      "individual": [
+        [
+          1.0,
+          "A"
+        ],
+        [
+          2.0,
+          "B"
+        ],
+        [
+          3.0,
+          "C"
+        ],
+        [
+          4.0,
+          "D"
+        ],
+        [
+          null,
+          "F"
+        ]
+      ],
+      "school": [
+        [
+          0.8,
+          "A"
+        ],
+        [
+          1.5,
+          "B"
+        ],
+        [
+          2.5,
+          "C"
+        ],
+        [
+          4.0,
+          "D"
+        ],
+        [
+          null,
+          "F"
+        ]
+      ],
+      "enterprise": [
+        [
+          0.8,
+          "A"
+        ],
+        [
+          1.5,
+          "B"
+        ],
+        [
+          2.5,
+          "C"
+        ],
+        [
+          4.0,
+          "D"
+        ],
+        [
+          null,
+          "F"
+        ]
+      ]
+    }
+  },
+  "report_template": [
+    {
+      "section": "Summary",
+      "contents": "Total t CO2e, range, intensity per employee, grade and grade basis"
+    },
+    {
+      "section": "Scope 1",
+      "contents": "Measured sources, estimated sources, formula, inputs, result, confidence"
+    },
+    {
+      "section": "Scope 2",
+      "contents": "kWh, grid factor, location-based result, renewable share if known"
+    },
+    {
+      "section": "Scope 3",
+      "contents": "Each category: measured, estimated or illustrative, with formula and inputs"
+    },
+    {
+      "section": "Assumptions",
+      "contents": "Every assumed value: what, why, formula, effect on the total, how to replace it"
+    },
+    {
+      "section": "Other reportable items",
+      "contents": "Energy use, fuel use, waste by type, intensity, data quality mix"
+    },
+    {
+      "section": "Reduction plan",
+      "contents": "Ranked actions with t saved, cost, payback; what to change and where"
+    },
+    {
+      "section": "Sources",
+      "contents": "Every factor with its source, year and status (sourced or illustrative)"
+    }
+  ],
+  "rules": [
+    "Never invent a source. Factors marked illustrative_assumption must be called illustrative.",
+    "Never override uploaded data; only fill fields that are missing.",
+    "Every estimated value needs a one-sentence assumption with the reasoning and the numbers used.",
+    "Use India-specific, mid-range defaults. Be conservative.",
+    "If something cannot be calculated with these factors, say so instead of guessing a number."
+  ]
+}

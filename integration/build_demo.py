@@ -13,6 +13,7 @@ demo shows pipeline results, not stand-in numbers.
 import csv
 import json
 import math
+import os
 import sys
 from pathlib import Path
 
@@ -21,6 +22,8 @@ from intake_to_calc import run_calculator, check_calc_output  # also sets up the
 from intake import run_estimated_intake, run_intake, run_totals_intake  # person_1_intake
 from parsers import parse_scope_3  # person_1_intake
 from person_3_reporting.reporting import GRADE_BENCHMARKS, generate_report, render_text
+from gemini_client import GeminiNotConfigured, gemini_client_from_env, load_env_file  # person_1_intake
+import methodology
 
 HERE = Path(__file__).resolve().parent
 DEMO = HERE.parent / "shared" / "demo_data"
@@ -211,7 +214,16 @@ def run_closed(persona):
     )
 
 
-def run_estimated(persona):
+def ai_client():
+    """Gemini, if a key is configured. The build still works without it (rules are used and logged)."""
+    load_env_file()
+    try:
+        return gemini_client_from_env(timeout=90), os.environ.get("GEMINI_MODEL", "default")
+    except GeminiNotConfigured:
+        return None, None
+
+
+def run_estimated(persona, method):
     folder = DEMO / persona["folder"]
     org = json.loads((folder / "org.json").read_text(encoding="utf-8"))
     uploaded = {
@@ -219,11 +231,15 @@ def run_estimated(persona):
         "scope_2": {},
         "scope_3": parse_scope_3(cloud_csv=DEMO / "large_scale" / "cloud.csv"),
     }
+    client, model = ai_client()
+    trace = {"model": model, "methodology_version": method["version"]}
     path, assumptions, notes = run_estimated_intake(
         persona["tier_answer"], uploaded, org,
+        client=client, methodology=methodology.compact(method), trace=trace,
         output_file=OUTPUT / persona["id"] / "open_source" / "intake_output.json",
     )
-    return path, assumptions, notes
+    trace["notes"] = notes
+    return path, assumptions, notes, trace
 
 
 def grade_bands(org_type):
@@ -432,7 +448,10 @@ def build():
                 "closed_source": path_fixture(persona, "closed_source", closed_path, closed_estimates),
             },
         })
-    est_path, est_assumptions, est_notes = run_estimated(PARTIAL_PERSONA)
+    method = methodology.build()
+    (FRONTEND_DATA.parent / "methodology.json").write_text(json.dumps(method, indent=2, ensure_ascii=False), encoding="utf-8")
+    est_path, est_assumptions, est_notes, trace = run_estimated(PARTIAL_PERSONA, method)
+    print("AI estimation:", trace.get("used"), trace.get("validation", ""), trace.get("seconds", ""), "s")
     fixtures.append({
         "id": PARTIAL_PERSONA["id"],
         "tier": PARTIAL_PERSONA["tier"],
@@ -440,6 +459,7 @@ def build():
         "sublabel": PARTIAL_PERSONA["sublabel"],
         "description": PARTIAL_PERSONA["description"],
         "paths": {"open_source": path_fixture(PARTIAL_PERSONA, "open_source", est_path, est_assumptions)},
+        "ai_log": trace,
     })
     for case in CASE_STUDIES:
         fixtures.append(build_case(case))

@@ -47,7 +47,12 @@ def gemini_client_from_env(timeout=30):
     def call(prompt):
         body = json.dumps({
             "contents": [{"parts": [{"text": prompt}]}],
-            "generationConfig": {"responseMimeType": "application/json", "temperature": 0.2},
+            # Default thinking makes structured estimates take over 2 minutes; low keeps it near 30 s.
+            "generationConfig": {
+                "responseMimeType": "application/json",
+                "temperature": 0.2,
+                "thinkingConfig": {"thinkingLevel": os.environ.get("GEMINI_THINKING", "low")},
+            },
         }).encode("utf-8")
         request = urllib.request.Request(url, data=body, method="POST", headers={
             "Content-Type": "application/json",
@@ -58,6 +63,10 @@ def gemini_client_from_env(timeout=30):
                 with urllib.request.urlopen(request, timeout=timeout) as response:
                     data = json.loads(response.read().decode("utf-8"))
                 return data["candidates"][0]["content"]["parts"][0]["text"]
+            except TimeoutError:
+                # Response times vary widely; one more try before giving up.
+                if attempt >= 1:
+                    raise
             except urllib.error.HTTPError as error:
                 # Busy or rate-limited: wait and try again. Other errors are raised at once.
                 if error.code not in (429, 503) or attempt == RETRIES:

@@ -1638,16 +1638,16 @@ window.DEMO_FIXTURES = [
           },
           "estimates": {
             "scope_1": [
-              "About 20 vehicles from 500 employees (0.04 per employee), split 80% diesel and 20% petrol, 20,000 km each a year.",
-              "Backup diesel generator assumed for an office of this size: 50 kVA, 500 hours a year at 15 L/h."
+              "Assumed a minimal corporate fleet of 1 mid-range operational car covering 15,000 km annually with conservative fuel efficiency of 7 L/100 km.",
+              "Assumed a standard 250 kVA backup diesel generator running 10 hours per month (120 hours annually) consuming 50 litres of diesel per hour."
             ],
             "scope_2": [
-              "Annual bill of ₹5,600,000 at an illustrative tariff of ₹7.5/kWh gives about 62,222 kWh a month. Check the tariff for Karnataka."
+              "Calculated from the annual bill of INR 5,600,000 using a mid-range commercial tariff of INR 8.0/kWh, yielding 700,000 kWh annually or 58,333 kWh per month."
             ],
             "scope_3": [
-              "One laptop per employee (1), 20% desktops, 0.5 servers per 100 employees. No inventory was given.",
-              "Typical urban India commute split (40% car, 35% bus, 15% bike, 10% work from home), 12 km average, 250 working days. Replace with a staff survey.",
-              "0.3 kg solid waste per employee per office day and 0.25 kg e-waste per employee a year. No waste log was given."
+              "Assumed 1 standard laptop per employee (500 units) and a minimal infrastructure of 5 on-premise servers for 500 employees.",
+              "Assumed an urban tech workforce profile with 500 employees, 15 km average one-way commute, and a conservative split of 45% bus, 20% bike, 15% car, and 20% remote (WFH).",
+              "Estimated monthly waste based on 500 employees: 5 kg/person/month landfill solid waste, 0.08 kg/person/month e-waste, and 600 kg/person/month wastewater."
             ]
           }
         },
@@ -1655,94 +1655,18 @@ window.DEMO_FIXTURES = [
           {
             "id": "scope_1",
             "label": "Scope 1 · Direct fuel",
-            "tons": 127.26,
-            "low": 95.44,
-            "high": 159.07,
+            "tons": 18.89,
+            "low": 14.17,
+            "high": 23.62,
             "confidence": "±25%",
             "drivers": [
               {
-                "name": "Fleet vehicle (est_diesel_01)",
-                "tons": 5.9
-              },
-              {
-                "name": "Fleet vehicle (est_diesel_02)",
-                "tons": 5.9
-              },
-              {
-                "name": "Fleet vehicle (est_diesel_03)",
-                "tons": 5.9
-              },
-              {
-                "name": "Fleet vehicle (est_diesel_04)",
-                "tons": 5.9
-              },
-              {
-                "name": "Fleet vehicle (est_diesel_05)",
-                "tons": 5.9
-              },
-              {
-                "name": "Fleet vehicle (est_diesel_06)",
-                "tons": 5.9
-              },
-              {
-                "name": "Fleet vehicle (est_diesel_07)",
-                "tons": 5.9
-              },
-              {
-                "name": "Fleet vehicle (est_diesel_08)",
-                "tons": 5.9
-              },
-              {
-                "name": "Fleet vehicle (est_diesel_09)",
-                "tons": 5.9
-              },
-              {
-                "name": "Fleet vehicle (est_diesel_10)",
-                "tons": 5.9
-              },
-              {
-                "name": "Fleet vehicle (est_diesel_11)",
-                "tons": 5.9
-              },
-              {
-                "name": "Fleet vehicle (est_diesel_12)",
-                "tons": 5.9
-              },
-              {
-                "name": "Fleet vehicle (est_diesel_13)",
-                "tons": 5.9
-              },
-              {
-                "name": "Fleet vehicle (est_diesel_14)",
-                "tons": 5.9
-              },
-              {
-                "name": "Fleet vehicle (est_diesel_15)",
-                "tons": 5.9
-              },
-              {
-                "name": "Fleet vehicle (est_diesel_16)",
-                "tons": 5.9
-              },
-              {
-                "name": "Fleet vehicle (est_petrol_01)",
-                "tons": 3.2
-              },
-              {
-                "name": "Fleet vehicle (est_petrol_02)",
-                "tons": 3.2
-              },
-              {
-                "name": "Fleet vehicle (est_petrol_03)",
-                "tons": 3.2
-              },
-              {
-                "name": "Fleet vehicle (est_petrol_04)",
-                "tons": 3.2
+                "name": "Fleet vehicle (VEH-001)",
+                "tons": 2.8
               },
               {
                 "name": "DG Set (diesel)",
-                "tons": 20.1
+                "tons": 16.1
               }
             ],
             "formula": "Litres of fuel × kg CO2e per litre (IPCC 2006 defaults, converted)"
@@ -1750,14 +1674,14 @@ window.DEMO_FIXTURES = [
           {
             "id": "scope_2",
             "label": "Scope 2 · Purchased electricity",
-            "tons": 565.23,
-            "low": 423.92,
-            "high": 706.53,
+            "tons": 529.9,
+            "low": 397.42,
+            "high": 662.37,
             "confidence": "±25%",
             "drivers": [
               {
                 "name": "electricity",
-                "tons": 565.2
+                "tons": 529.9
               }
             ],
             "formula": "kWh × CEA combined margin (0.757 kg CO2e/kWh)"
@@ -1765,9 +1689,9 @@ window.DEMO_FIXTURES = [
           {
             "id": "scope_3",
             "label": "Scope 3 · Devices, commute, waste",
-            "tons": 282.57,
-            "low": 141.29,
-            "high": 423.86,
+            "tons": 198.95,
+            "low": 99.47,
+            "high": 298.43,
             "confidence": "±50%",
             "drivers": [
               {
@@ -1776,26 +1700,26 @@ window.DEMO_FIXTURES = [
               },
               {
                 "name": "Hardware (embodied)",
-                "tons": 22.0
+                "tons": 17.5
               },
               {
                 "name": "Commute",
-                "tons": 237.0
+                "tons": 176.2
               },
               {
                 "name": "Waste",
-                "tons": 18.4
+                "tons": 0.0
               }
             ],
             "formula": "Devices, commute and waste × factor. Factors are illustrative assumptions, not verified sources."
           }
         ],
         "total": {
-          "tons": 975.06,
-          "low": 660.65,
-          "high": 1289.47
+          "tons": 747.74,
+          "low": 511.07,
+          "high": 984.41
         },
-        "grade": "C",
+        "grade": "B",
         "employees": 500,
         "grade_bands": [
           {
@@ -1825,16 +1749,6 @@ window.DEMO_FIXTURES = [
           }
         ],
         "actions": [
-          {
-            "scope": "scope_1",
-            "action": "Route optimization",
-            "description": "Review routes and schedules to reduce vehicle distance and fuel use.",
-            "tons": 3.0,
-            "cost_inr": 200000,
-            "payback": "12 months",
-            "roi": 1.5,
-            "placeholder": false
-          },
           {
             "scope": "scope_3",
             "action": "Carpooling and public transport",
@@ -1878,29 +1792,142 @@ window.DEMO_FIXTURES = [
         ],
         "notes": [
           "Reduction savings and costs are planning assumptions from the knowledge base. Verify them before relying on them.",
-          "Scope 3 · Devices, commute, waste: 1 input(s) use placeholder factors and count as zero.",
-          "Demo uses illustrative factors for Scope 3 (9 inputs). Real submissions use verified sources."
+          "Scope 3 · Devices, commute, waste: 4 input(s) use placeholder factors and count as zero.",
+          "Demo uses illustrative factors for Scope 3 (6 inputs). Real submissions use verified sources."
         ],
         "illustrative": [
           "scope_3.cloud.gpu.factor",
           "scope_3.hardware.laptop.embodied_carbon_factor",
-          "scope_3.hardware.desktop.embodied_carbon_factor",
           "scope_3.hardware.server.embodied_carbon_factor",
           "scope_3.commute.car.factor",
           "scope_3.commute.bus.factor",
-          "scope_3.commute.bike.factor",
-          "scope_3.waste.solid waste.landfill.factor",
-          "scope_3.waste.e-waste.recycling.factor"
+          "scope_3.commute.bike.factor"
         ],
         "assumptions": [
-          "About 20 vehicles from 500 employees (0.04 per employee), split 80% diesel and 20% petrol, 20,000 km each a year.",
-          "Backup diesel generator assumed for an office of this size: 50 kVA, 500 hours a year at 15 L/h.",
-          "Annual bill of ₹5,600,000 at an illustrative tariff of ₹7.5/kWh gives about 62,222 kWh a month. Check the tariff for Karnataka.",
-          "One laptop per employee (1), 20% desktops, 0.5 servers per 100 employees. No inventory was given.",
-          "Typical urban India commute split (40% car, 35% bus, 15% bike, 10% work from home), 12 km average, 250 working days. Replace with a staff survey.",
-          "0.3 kg solid waste per employee per office day and 0.25 kg e-waste per employee a year. No waste log was given."
+          "Assumed a minimal corporate fleet of 1 mid-range operational car covering 15,000 km annually with conservative fuel efficiency of 7 L/100 km.",
+          "Assumed a standard 250 kVA backup diesel generator running 10 hours per month (120 hours annually) consuming 50 litres of diesel per hour.",
+          "Calculated from the annual bill of INR 5,600,000 using a mid-range commercial tariff of INR 8.0/kWh, yielding 700,000 kWh annually or 58,333 kWh per month.",
+          "Assumed 1 standard laptop per employee (500 units) and a minimal infrastructure of 5 on-premise servers for 500 employees.",
+          "Assumed an urban tech workforce profile with 500 employees, 15 km average one-way commute, and a conservative split of 45% bus, 20% bike, 15% car, and 20% remote (WFH).",
+          "Estimated monthly waste based on 500 employees: 5 kg/person/month landfill solid waste, 0.08 kg/person/month e-waste, and 600 kg/person/month wastewater."
         ]
       }
+    },
+    "ai_log": {
+      "model": "default",
+      "methodology_version": 1,
+      "missing": {
+        "scope_1": [
+          "vehicles",
+          "dg_set"
+        ],
+        "scope_2": [
+          "energy_meter"
+        ],
+        "scope_3": [
+          "hardware",
+          "commute",
+          "waste"
+        ]
+      },
+      "org": {
+        "employee_count": 500,
+        "state": "Karnataka",
+        "energy_bill_inr": 5600000,
+        "note": "Partial data: headcount and the annual energy bill only. Cloud usage is uploaded separately."
+      },
+      "used": "llm",
+      "prompt_chars": 4123,
+      "raw_response": "{\n  \"scope_1\": {\n    \"vehicles\": {\n      \"value\": [\n        {\n          \"vehicle_id\": \"VEH-001\",\n          \"make\": \"Generic\",\n          \"model\": \"Fleet Car\",\n          \"fuel_type\": \"diesel\",\n          \"annual_distance_km\": 15000,\n          \"fuel_efficiency_l_per_100km\": 7.0\n        }\n      ],\n      \"assumption\": \"Assumed a minimal corporate fleet of 1 mid-range operational car covering 15,000 km annually with conservative fuel efficiency of 7 L/100 km.\"\n    },\n    \"dg_set\": {\n      \"value\": {\n        \"capacity_kva\": 250,\n        \"fuel_type\": \"diesel\",\n        \"hours_per_year\": 120,\n        \"fuel_consumption_per_hour\": 50\n      },\n      \"assumption\": \"Assumed a standard 250 kVA backup diesel generator running 10 hours per month (120 hours annually) consuming 50 litres of diesel per hour.\"\n    }\n  },\n  \"scope_2\": {\n    \"energy_meter\": {\n      \"value\": {\n        \"monthly_kwh\": 58333,\n        \"region_state\": \"Karnataka\"\n      },\n      \"assumption\": \"Calculated from the annual bill of INR 5,600,000 using a mid-range commercial tariff of INR 8.0/kWh, yielding 700,000 kWh annually or 58,333 kWh per month.\"\n    }\n  },\n  \"scope_3\": {\n    \"hardware\": {\n      \"value\": [\n        {\n          \"device_type\": \"laptop\",\n          \"model\": \"Standard Office Laptop\",\n          \"quantity\": 500,\n          \"purchase_year\": 2022,\n          \"expected_lifespan_years\": 4\n        },\n        {\n          \"device_type\": \"server\",\n          \"model\": \"On-premise Rack Server\",\n          \"quantity\": 5,\n          \"purchase_year\": 2021,\n          \"expected_lifespan_years\": 5\n        }\n      ],\n      \"assumption\": \"Assumed 1 standard laptop per employee (500 units) and a minimal infrastructure of 5 on-premise servers for 500 employees.\"\n    },\n    \"commute\": {\n      \"value\": {\n        \"total_employees\": 500,\n        \"mode_split\": {\n          \"car\": 0.15,\n          \"bus\": 0.45,\n          \"bike\": 0.20,\n          \"wfh\": 0.20\n        },\n        \"avg_distance_km\": 15\n      },\n      \"assumption\": \"Assumed an urban tech workforce profile with 500 employees, 15 km average one-way commute, and a conservative split of 45% bus, 20% bike, 15% car, and 20% remote (WFH).\"\n    },\n    \"waste\": {\n      \"value\": [\n        {\n          \"category\": \"solid waste / landfill\",\n          \"mass_kg_per_month\": 2500\n        },\n        {\n          \"category\": \"e-waste / recycling\",\n          \"mass_kg_per_month\": 40\n        },\n        {\n          \"category\": \"wastewater / treatment\",\n          \"mass_kg_per_month\": 300000\n        }\n      ],\n      \"assumption\": \"Estimated monthly waste based on 500 employees: 5 kg/person/month landfill solid waste, 0.08 kg/person/month e-waste, and 600 kg/person/month wastewater.\"\n    }\n  }\n}",
+      "validation": "passed",
+      "seconds": 45.2,
+      "proposal": {
+        "scope_1": {
+          "vehicles": {
+            "value": [
+              {
+                "vehicle_id": "VEH-001",
+                "make": "Generic",
+                "model": "Fleet Car",
+                "fuel_type": "diesel",
+                "annual_distance_km": 15000,
+                "fuel_efficiency_l_per_100km": 7.0
+              }
+            ],
+            "assumption": "Assumed a minimal corporate fleet of 1 mid-range operational car covering 15,000 km annually with conservative fuel efficiency of 7 L/100 km."
+          },
+          "dg_set": {
+            "value": {
+              "capacity_kva": 250,
+              "fuel_type": "diesel",
+              "hours_per_year": 120,
+              "fuel_consumption_per_hour": 50
+            },
+            "assumption": "Assumed a standard 250 kVA backup diesel generator running 10 hours per month (120 hours annually) consuming 50 litres of diesel per hour."
+          }
+        },
+        "scope_2": {
+          "energy_meter": {
+            "value": {
+              "monthly_kwh": 58333,
+              "region_state": "Karnataka"
+            },
+            "assumption": "Calculated from the annual bill of INR 5,600,000 using a mid-range commercial tariff of INR 8.0/kWh, yielding 700,000 kWh annually or 58,333 kWh per month."
+          }
+        },
+        "scope_3": {
+          "hardware": {
+            "value": [
+              {
+                "device_type": "laptop",
+                "model": "Standard Office Laptop",
+                "quantity": 500,
+                "purchase_year": 2022,
+                "expected_lifespan_years": 4
+              },
+              {
+                "device_type": "server",
+                "model": "On-premise Rack Server",
+                "quantity": 5,
+                "purchase_year": 2021,
+                "expected_lifespan_years": 5
+              }
+            ],
+            "assumption": "Assumed 1 standard laptop per employee (500 units) and a minimal infrastructure of 5 on-premise servers for 500 employees."
+          },
+          "commute": {
+            "value": {
+              "total_employees": 500,
+              "mode_split": {
+                "car": 0.15,
+                "bus": 0.45,
+                "bike": 0.2,
+                "wfh": 0.2
+              },
+              "avg_distance_km": 15
+            },
+            "assumption": "Assumed an urban tech workforce profile with 500 employees, 15 km average one-way commute, and a conservative split of 45% bus, 20% bike, 15% car, and 20% remote (WFH)."
+          },
+          "waste": {
+            "value": [
+              {
+                "category": "solid waste / landfill",
+                "mass_kg_per_month": 2500
+              },
+              {
+                "category": "e-waste / recycling",
+                "mass_kg_per_month": 40
+              },
+              {
+                "category": "wastewater / treatment",
+                "mass_kg_per_month": 300000
+              }
+            ],
+            "assumption": "Estimated monthly waste based on 500 employees: 5 kg/person/month landfill solid waste, 0.08 kg/person/month e-waste, and 600 kg/person/month wastewater."
+          }
+        }
+      },
+      "notes": []
     }
   },
   {

@@ -161,7 +161,7 @@ def run_totals_intake(tier_answer, totals_json, output_file=OUTPUT_FILE):
     return send_to_calculator(payload, output_file), estimates
 
 
-def run_estimated_intake(tier_answer, uploaded, org, client=None, output_file=OUTPUT_FILE):
+def run_estimated_intake(tier_answer, uploaded, org, client=None, output_file=OUTPUT_FILE, methodology=None, trace=None):
     """Intake for partial data: fill the gaps with labelled assumptions, then validate as usual.
 
     uploaded: {"scope_1": {...}, "scope_2": {...}, "scope_3": {...}} from the parsers (any may be empty).
@@ -171,7 +171,7 @@ def run_estimated_intake(tier_answer, uploaded, org, client=None, output_file=OU
     Returns (output_path, assumptions, notes). Scopes with any assumption are at most partial.
     """
     tier = tier_selector(tier_answer)
-    merged, assumptions, notes = estimate(uploaded, org, client=client)
+    merged, assumptions, notes = estimate(uploaded, org, client=client, methodology=methodology, trace=trace)
     payload, _ = validate_and_route(tier, merged.get("scope_1"), merged.get("scope_2"), merged.get("scope_3"))
     for scope in assumptions:
         if payload["confidence_metadata"].get(scope) == "full_data":
