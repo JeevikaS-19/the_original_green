@@ -1,0 +1,13 @@
+# Only frontend/ is served. Keep secrets and the Python pipeline out of the upload.
+.env
+*.env
+**/__pycache__
+**/node_modules
+integration/output
+person_*
+shared
+case_study_research
+*.pdf
+*.md
+frontend/tests
+frontend/ui landing page designs.html

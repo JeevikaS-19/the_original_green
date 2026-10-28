@@ -27,7 +27,7 @@
     { name: "Cloud bill", note: "Usage export (e.g. AWS): instance-hours by region", scope: "scope_3", cat: "Cloud", match: /cloud/i, demo: "tracker-demo/aws.html",
       steps: ["Download the usage report as CSV", "Keep instance type, region and usage hours", "GPU hours are calculated; others are flagged"] },
     { name: "Asset register", note: "Device counts by type, for embodied carbon", scope: "scope_3", cat: "Hardware", match: /asset|device/i, demo: "tracker-demo/index.html",
-      steps: ["List devices by type and count", "Add purchase year and expected lifespan", "Embodied carbon is spread over the lifespan"] },
+      steps: ["List devices by type and count", "Add purchase year and expected lifespan", "Each device gets a yearly embodied-carbon factor"] },
     { name: "Commute survey", note: "Distance and travel mode per person", scope: "scope_3", cat: "Commute", match: /commute/i, demo: "tracker-demo/index.html",
       steps: ["Survey staff for mode and distance", "Upload headcount and mode split", "Each mode uses its own factor"] },
     { name: "Waste log", note: "Monthly kg by waste type and disposal route", scope: "scope_3", cat: "Waste", match: /waste/i, demo: "tracker-demo/index.html",
@@ -354,7 +354,7 @@
       var c = r[0];
       return { title: "How " + n0(c.total_employees) + " people travel", chart: miniBars([
           { l: "Car", v: c.car_pct * 100 }, { l: "Bus", v: c.bus_pct * 100 }, { l: "Bike", v: c.bike_pct * 100 }, { l: "Home", v: (c.wfh_pct || 0) * 100 }], "%"),
-        sample: [n0(c.total_employees) + " people", "Average " + c.avg_distance_km + " km each way"] };
+        sample: [n0(c.total_employees) + " people", "Average " + c.avg_distance_km + " km a day, as entered"] };
     }
     if (p.cat === "Waste" && (r = raw.waste)) {
       return { title: "kg a month, by type", chart: miniBars(r.map(function (w) { return { l: w.category, v: w.mass_kg_per_month }; }), "kg"),
@@ -412,6 +412,7 @@
       '<div class="card"><div class="label">Trend</div><div class="value">' + (drop ? '↓ ' + drop.toFixed(1) + '%' : '–') + '</div><div class="sub">' +
         (drop ? 'With your plan, from FY 26-27' : 'One year of data. <a href="#" data-goto="reduction">Build a plan</a>') + '</div></div>';
 
+    renderCaseCompare();
     chart($("trend-chart"), total, sc.after, sc.rows.length > 0);
     $("trend-note").textContent = "Projection: assumes activity stays at today's level. No earlier years on file.";
 
@@ -425,6 +426,21 @@
         '<b>' + (c.tons ? t(c.tons) : '–') + '</b>' + tag(c.kind) +
         '<span class="ftip">ƒ ' + esc(c.formula) + '</span></div>';
     }).join("");
+  }
+
+  // Case studies: what the company disclosed next to what the public data lets us calculate.
+  function renderCaseCompare() {
+    var p = profile(), el = $("case-compare");
+    if (!p.disclosed || !p.comparison) { el.innerHTML = ""; return; }
+    var d = p.disclosed, disclosedTotal = d.scope_1 + d.scope_2_location + d.scope_3;
+    el.innerHTML = '<div class="dcard"><div class="dcard-head"><h2>Disclosed vs calculated</h2><span class="muted small">' + esc(p.source) + '</span></div>' +
+      '<p class="muted small" style="margin-bottom:12px">The company disclosed <b>' + t(disclosedTotal) + '</b> (location-based Scope 2). ' +
+      'The totals above are only what our calculator can rebuild from the public data, so they are lower.</p>' +
+      '<div class="tbl-wrap"><table class="tbl"><thead><tr><th>Scope</th><th>Our calculation</th><th>Disclosed</th><th>Why they differ</th></tr></thead><tbody>' +
+      p.comparison.map(function (r) {
+        return '<tr><td><b>' + esc(r.scope) + '</b></td><td>' + (r.calculated_t === null ? '<span class="tag none">Not calculated</span>' : t(r.calculated_t)) +
+          '</td><td>' + t(r.disclosed_t) + '</td><td class="muted">' + esc(r.note) + '</td></tr>';
+      }).join("") + '</tbody></table></div></div>';
   }
 
   // ---- Connect ----
