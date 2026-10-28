@@ -353,3 +353,15 @@
 .summary { background: var(--paper); }
 .sum-label { font-size: 11px; font-weight: 600; letter-spacing: .12em; text-transform: uppercase; color: var(--stone); margin-bottom: 6px; }
 .sum-text { font-size: 16px; line-height: 1.55; color: var(--ink); max-width: 90ch; }
+
+/* Reduction: ledger on the left, charts on the right */
+.red-layout { display: grid; grid-template-columns: minmax(0, 1.1fr) minmax(0, 0.9fr); gap: 18px; align-items: start; width: 100%; }
+.red-left, .red-right { display: grid; gap: 16px; min-width: 0; align-content: start; }
+.red-left > *, .red-right > * { min-width: 0; }
+.ledger .red-cards { grid-template-columns: repeat(2, 1fr); }
+.red-cards strong { font-variant-numeric: tabular-nums; }
+.ai-decide { display: flex; gap: 8px; margin-top: 10px; }
+.quality.missing li { align-items: flex-start; }
+.quality.missing .mbtns { flex: none; }
+@media (max-width: 1100px) { .red-layout { grid-template-columns: minmax(0, 1fr); } }
+.ledger .result-line { margin-top: 14px; }

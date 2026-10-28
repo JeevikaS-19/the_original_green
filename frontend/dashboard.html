@@ -83,15 +83,17 @@
 
       <!-- Reduction -->
       <section class="view" data-view="reduction">
-        <div class="red-cards" id="scenario-out"></div>
-        <p class="result-line" id="scenario-note"></p>
-        <div class="chart-grid">
-          <div class="dcard"><h2>Emissions: now vs with plan</h2><div class="chart" id="em-chart"></div></div>
-          <div class="dcard"><h2>Cost: investment vs yearly savings</h2><div class="chart" id="cost-chart"></div></div>
-          <div class="dcard"><h2>Payback timeline</h2><div class="chart" id="pay-chart"></div></div>
+        <div class="red-layout">
+          <div class="red-left">
+            <div class="dcard ledger">
+              <div class="dcard-head"><h2>Ledger</h2><span class="muted small">Now, with plan, and the difference</span></div>
+              <div class="red-cards" id="scenario-out"></div>
+              <p class="result-line" id="scenario-note"></p>
+            </div>
+        <div class="dcard">
+          <div class="dcard-head"><h2>Top actions</h2><span class="muted small">Tick to combine. Drag or type to change how far each goes.</span></div>
+          <div class="levers" id="levers"></div>
         </div>
-        <div id="scenario-warn"></div>
-
         <div class="dcard ai" id="ai">
           <div class="dcard-head"><h2>AI Apply</h2><span class="muted small">Optimiser: searches the sliders for the best plan within your budget</span></div>
           <div class="ai-row">
@@ -107,20 +109,25 @@
           </div>
           <div class="ai-out" id="ai-out"></div>
         </div>
-
-        <div class="dcard">
-          <div class="dcard-head"><h2>Top actions</h2><span class="muted small">Tick to combine. Drag or type to change how far each goes.</span></div>
-          <div class="levers" id="levers"></div>
-        </div>
-
+            <div class="dcard" id="missing-card">
+              <div class="dcard-head"><h2>Filled in, not measured</h2><span class="muted small">Estimates the AI or the rules supplied</span></div>
+              <div id="missing-data"></div>
+            </div>
         <div class="dcard">
           <div class="dcard-head"><h2>Your inputs</h2><button class="btn btn-ghost btn-small" id="reset-edits">Reset</button></div>
           <p class="muted small" style="margin-bottom:14px">Change what you measured and every graph follows. This is a what-if view; the saved report doesn't change.</p>
           <div class="edits" id="edits"></div>
         </div>
+          </div>
+          <div class="red-right">
+            <div class="dcard"><h2>Emissions: now vs with plan</h2><div class="chart" id="em-chart"></div></div>
+            <div class="dcard"><h2>Cost: investment vs yearly savings</h2><div class="chart" id="cost-chart"></div></div>
+            <div class="dcard"><h2>Payback timeline</h2><div class="chart" id="pay-chart"></div></div>
+            <div id="scenario-warn"></div>
+          </div>
+        </div>
       </section>
 
-      <!-- Data breakdown -->
       <section class="view" data-view="breakdown">
         <div class="dcard">
           <div class="dcard-head"><h2>Where the numbers come from</h2><span class="muted small" id="mix-note"></span></div>

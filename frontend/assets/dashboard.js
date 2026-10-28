@@ -2,9 +2,9 @@
   "use strict";
 
   var ALL = window.DEMO_FIXTURES || [];
-  var SCALES = ["individual", "small_scale", "large_scale", "case_tcs", "case_infosys"];
+  var SCALES = ["individual", "small_scale", "large_scale", "large_scale_partial", "case_tcs", "case_infosys"];
   var SCALE_LABEL = {
-    individual: "Individual", small_scale: "Small-scale campus", large_scale: "Large-scale enterprise",
+    individual: "Individual", small_scale: "Small-scale campus", large_scale: "Large-scale enterprise", large_scale_partial: "Partial data (AI-estimated)",
     case_tcs: "TCS · FY 2025-26 (case study)", case_infosys: "Infosys · FY 2025-26 (case study)"
   };
   var VIEWS = ["overview", "connect", "scope_1", "scope_2", "scope_3", "reduction", "breakdown", "export"];
@@ -662,6 +662,15 @@
       (sc.noSaving ? 'Some actions have no payback period (a recurring cost), so they add no money saved. ' : '') +
       'Cost and savings scale in proportion from the knowledge base\'s figures for each action. Slider caps are assumptions.</p>';
   }
+  // Estimates filled in by the intake (AI or rules), with the reason for each.
+  function renderMissing() {
+    var list = path().assumptions || [];
+    var el = $("missing-data");
+    if (!list.length) { el.innerHTML = '<p class="muted small">Nothing is estimated on this path. Every figure comes from data you supplied.</p>'; return; }
+    el.innerHTML = '<ul class="quality missing">' + list.map(function (a) {
+      return '<li><span>' + esc(a) + '</span><span class="mbtns"><button class="btn btn-ghost btn-small" data-goto="connect">Upload real data</button></span></li>';
+    }).join("") + '</ul><p class="muted small" style="margin-top:10px">Keep an estimate until a real figure replaces it; each one widens the range.</p>';
+  }
   function renderEdits() {
     var v = inputs(), b = baseInputs();
     var fields = [
@@ -749,6 +758,7 @@
         '<p class="ai-sum">Cuts <b>' + t(sc.cut) + '</b> · costs <b>' + inr(sc.cost) + '</b>' +
         (sc.payback ? ' · pays back in <b>' + Math.round(sc.payback) + ' months</b>' : '') + ' · new grade <b>' + esc(sc.grade) + '</b></p>'
       : '<div class="empty">Nothing fits this budget and priority.</div>';
+    if (sc.rows.length) $("ai-out").insertAdjacentHTML("beforeend", '<div class="ai-decide"><button class="btn btn-small" id="ai-accept">Accept plan</button><button class="btn btn-ghost btn-small" id="ai-reject">Reject</button></div>');
   }
 
   // ---- Data breakdown ----
@@ -824,6 +834,7 @@
     renderHeader();
     renderConnect();
     renderEdits();
+    renderMissing();
     renderLevers(scenario());
     $("ai-out").innerHTML = "";
     live();
@@ -858,6 +869,8 @@
     if ((b = e.target.closest("[data-goto]"))) { e.preventDefault(); go(b.getAttribute("data-goto")); return; }
     if ((b = e.target.closest("[data-path]"))) { state.path = b.getAttribute("data-path"); render(); return; }
     if (e.target.id === "ai-apply") { aiApply(); return; }
+    if (e.target.id === "ai-accept") { $("ai-out").insertAdjacentHTML("beforeend", '<p class="muted small">Plan kept. Edit any lever to change it.</p>'); return; }
+    if (e.target.id === "ai-reject") { delete state.levers[key()]; $("ai-out").innerHTML = ""; renderLevers(scenario()); live(); return; }
     if (e.target.id === "dl-json") { downloadJson(); return; }
     if (e.target.id === "dl-csv") { downloadCsv(); return; }
     if (e.target.id === "dl-pdf") { downloadPdf(); return; }
