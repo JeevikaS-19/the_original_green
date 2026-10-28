@@ -904,9 +904,8 @@
     download(p.id + "-" + state.path + "-breakdown.csv", "text/csv", rows.join("\n") + "\n");
   }
   function downloadPdf() {
-    document.body.classList.add("print-all");
-    window.print();
-    setTimeout(function () { document.body.classList.remove("print-all"); }, 500);
+    var url = "report.html?org=" + encodeURIComponent(state.scale) + "&path=" + encodeURIComponent(state.path) + "&print=1";
+    window.open(url, "_blank");
   }
 
   // ---- Rendering ----

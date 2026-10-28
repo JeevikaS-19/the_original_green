@@ -28,6 +28,7 @@ w.HTMLAnchorElement.prototype.click = function () { downloads.push({ downloaded:
 w.scrollTo = () => {};
 let printed = 0;
 w.print = () => { printed++; };
+const opened = []; w.open = (url) => { opened.push(url); return null; };
 w.matchMedia = () => ({ matches: true }); // reduced motion: AI Apply settles at once
 w.addEventListener("error", (e) => errors.push(e.message));
 // Chart.js is vendored in the page; jsdom has no canvas, so record what each chart is given.
@@ -154,7 +155,7 @@ click($("#dl-csv"));
 click($("#dl-pdf"));
 const anchors = downloads.filter((d) => d && d.downloaded).length;
 check("JSON and CSV download", anchors === 2, "anchor clicks " + anchors);
-check("PDF opens print", printed === 1);
+check("PDF opens the formal report page", opened.length === 1 && opened[0].startsWith("report.html?org=") && opened[0].includes("print=1"), opened.join(" "));
 
 // Individual has no actions: the reduction page explains instead of breaking
 pick("individual");

@@ -1,0 +1,39 @@
+/* Formal emissions report. Screen preview, and an A4 print layout for Save as PDF. */
+:root { --ink: #111; --muted: #5b5f57; --line: #cfd3c4; --moss: #4e5a36; --sage: #f0f2e8; }
+* { box-sizing: border-box; }
+body { margin: 0; font: 13px/1.5 "Inter", "Segoe UI", Arial, sans-serif; color: var(--ink); background: #e9ebe2; }
+.toolbar { display: flex; justify-content: space-between; align-items: center; max-width: 880px; margin: 16px auto 0; padding: 0 4px; }
+.toolbar a { color: var(--ink); font-weight: 600; }
+.toolbar button { height: 36px; padding: 0 18px; border: 0; border-radius: 999px; background: var(--moss); color: #fff; font: 600 14px Inter, sans-serif; cursor: pointer; }
+.sheet { max-width: 880px; margin: 16px auto 48px; background: #fff; padding: 56px 64px; box-shadow: 0 10px 30px rgba(0,0,0,.08); }
+.muted { color: var(--muted); }
+.kicker { font-size: 11px; font-weight: 700; letter-spacing: .14em; text-transform: uppercase; color: var(--moss); margin: 0 0 8px; }
+.cover { border-bottom: 3px solid var(--moss); padding-bottom: 22px; margin-bottom: 26px; }
+.cover h1 { font-size: 26px; letter-spacing: -.01em; margin: 0 0 18px; }
+.meta { border-collapse: collapse; width: 100%; }
+.meta th, .meta td { text-align: left; padding: 6px 0; border-bottom: 1px solid var(--line); font-weight: 500; }
+.meta th { width: 190px; color: var(--muted); }
+.sec { margin: 0 0 26px; break-inside: avoid; }
+.sec h2 { font-size: 15px; margin: 0 0 10px; display: flex; gap: 10px; align-items: baseline; }
+.sec h2 span { font: 700 12px "JetBrains Mono", monospace; color: var(--moss); }
+.ledger { width: 100%; border-collapse: collapse; font-size: 12.5px; }
+.ledger th { text-align: left; font-size: 11px; font-weight: 700; letter-spacing: .06em; text-transform: uppercase; color: var(--muted); padding: 8px 8px; border-top: 1px solid var(--ink); border-bottom: 1px solid var(--ink); }
+.ledger td { padding: 7px 8px; border-bottom: 1px solid var(--line); vertical-align: top; }
+.ledger .num { text-align: right; font-variant-numeric: tabular-nums; white-space: nowrap; }
+.ledger tr.total td { background: var(--sage); font-weight: 600; }
+.tbd { color: #8a5a00; font-style: italic; }
+.note { font-size: 11.5px; color: var(--muted); margin: 10px 0 0; }
+.notes { margin: 0; padding-left: 18px; font-size: 12.5px; }
+.notes li { margin-bottom: 4px; }
+.sign { width: 100%; border-collapse: collapse; font-size: 12.5px; }
+.sign th { text-align: left; font-weight: 600; padding: 14px 8px 4px 0; width: 120px; }
+.sign td.line { border-bottom: 1px solid var(--ink); width: 34%; }
+
+@page { size: A4; margin: 16mm 14mm; }
+@media print {
+  body { background: #fff; }
+  .no-print { display: none !important; }
+  .sheet { max-width: none; margin: 0; padding: 0; box-shadow: none; }
+  .sec { break-inside: avoid; }
+  .ledger tr, .meta tr { break-inside: avoid; }
+}
