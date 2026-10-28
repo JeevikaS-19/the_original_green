@@ -67,4 +67,11 @@ VAN_01,Van,Diesel minivan,2020,diesel,25000,11</pre>
   <div style="display:flex;gap:10px;flex-wrap:wrap"><a class="btn btn-ghost" href="index.html">Another tracker</a><a class="btn" href="../dashboard.html#small_scale">Open the dashboard →</a></div>
 </div>
 
-</main></body></html>
+</main><script>
+(function () {
+  var back = new URLSearchParams(location.search).get("back");
+  if (!back || !/^#[a-z_0-9]+\/(open|closed)\/[a-z_0-9]+$/.test(back)) return;
+  document.querySelectorAll('a[href^="../dashboard.html"]').forEach(function (a) { a.href = "../dashboard.html" + back; });
+})();
+</script>
+</body></html>

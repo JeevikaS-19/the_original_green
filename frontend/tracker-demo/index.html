@@ -24,4 +24,11 @@
   <a class="tracker-card" href="aws.html"><div class="ico">CL</div><h3>Cloud usage bill</h3><p>Instance hours into Scope 3.1.</p><span class="tag illustrative">Illustrative factor</span><span class="go">Open demo →</span></a>
 </div>
 
-</main></body></html>
+</main><script>
+(function () {
+  var back = new URLSearchParams(location.search).get("back");
+  if (!back || !/^#[a-z_0-9]+\/(open|closed)\/[a-z_0-9]+$/.test(back)) return;
+  document.querySelectorAll('a[href^="../dashboard.html"]').forEach(function (a) { a.href = "../dashboard.html" + back; });
+})();
+</script>
+</body></html>

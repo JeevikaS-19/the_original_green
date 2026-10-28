@@ -84,13 +84,23 @@
       <!-- Reduction -->
       <section class="view" data-view="reduction">
         <div class="red-layout">
-          <div class="red-left">
-            <div class="dcard ledger">
-              <div class="dcard-head"><h2>Ledger</h2><span class="muted small">Now, with plan, and the difference</span></div>
-              <div class="tbl-wrap"><table class="tbl ledger-tbl"><tbody id="scenario-out"></tbody></table></div>
-              <p class="result-line" id="scenario-note"></p>
-            </div>
-        <div class="dcard">
+          <div class="dcard">
+            <div class="dcard-head"><h2>Current and with your changes</h2><span class="muted small">Change each measure in Adjust below</span></div>
+            <div class="tbl-wrap"><table class="tbl red-tbl">
+              <thead><tr><th>Measure</th><th class="num">Now</th><th class="num">Change</th><th class="num">With plan</th><th>How to bring it down</th></tr></thead>
+              <tbody id="scenario-out"></tbody>
+            </table></div>
+            <p class="result-line" id="scenario-note"></p>
+          </div>
+          <div class="dcard">
+            <div class="dcard-head"><h2>Now vs with plan</h2><span class="muted small" id="reduction-note"></span></div>
+            <div class="chart" id="reduction-line"></div>
+          </div>
+        </div>
+        <details class="adjust">
+          <summary><span><b>Adjust actions and inputs</b><small>Tick actions, move the sliders, or let AI choose within a budget</small></span></summary>
+          <div class="adjust-body">
+<div class="dcard">
           <div class="dcard-head"><h2>Top actions</h2><span class="muted small">Tick to combine. Drag or type to change how far each goes.</span></div>
           <div class="levers" id="levers"></div>
         </div>
@@ -119,13 +129,8 @@
           <div class="edits" id="edits"></div>
         </div>
           </div>
-          <div class="red-right">
-            <div class="dcard"><h2>Emissions: now vs with plan</h2><div class="chart" id="em-chart"></div></div>
-            <div class="dcard"><h2>Cost: investment vs yearly savings</h2><div class="chart" id="cost-chart"></div></div>
-            <div class="dcard"><h2>Payback timeline</h2><div class="chart" id="pay-chart"></div></div>
-            <div id="scenario-warn"></div>
-          </div>
-        </div>
+        </details>
+        <div id="scenario-warn"></div>
       </section>
 
       <section class="view" data-view="breakdown">

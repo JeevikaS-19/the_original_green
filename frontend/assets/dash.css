@@ -410,3 +410,19 @@
 @media (max-width: 960px) { .cat-wrap { grid-template-columns: 1fr; } }
 .red-left .edits { grid-template-columns: repeat(2, minmax(0, 1fr)); }
 .red-left .edit { min-width: 0; }
+
+/* Reduction: one table and one line chart; the controls sit in a collapsed panel */
+.red-layout { grid-template-columns: minmax(0, 1.25fr) minmax(0, 1fr); }
+.red-tbl th { font-size: 13.5px; text-transform: none; letter-spacing: 0; color: var(--ink); }
+.red-tbl td.muted { font-size: 12.5px; max-width: 42ch; }
+.red-tbl tr.tot th, .red-tbl tr.tot td { font-weight: 700; }
+.adjust { margin-top: 18px; background: var(--white); border: 1px solid var(--line); border-radius: 20px; padding: 18px 22px; box-shadow: var(--shadow-1); }
+.adjust > summary { list-style: none; cursor: pointer; display: flex; align-items: center; justify-content: space-between; }
+.adjust > summary::-webkit-details-marker { display: none; }
+.adjust > summary::after { content: "+"; font-size: 22px; color: var(--moss-deep); }
+.adjust[open] > summary::after { content: "−"; }
+.adjust > summary b { display: block; font-size: 16px; }
+.adjust > summary small { color: var(--g3); font-size: 12.5px; }
+.adjust-body { display: grid; gap: 16px; margin-top: 18px; }
+.adjust-body > .dcard, .adjust-body > .dcard.ai { box-shadow: none; }
+@media (max-width: 1100px) { .red-layout { grid-template-columns: 1fr; } }

@@ -265,15 +265,15 @@
     };
     return Object.assign(o, extra || {});
   }
-  function renderTrend(total, sc) {
+  function renderTrend(total, sc, canvasId, noteId) {
     var years = ["Year 1", "Year 2", "Year 3", "Year 4", "Year 5"];
     var bau = years.map(function () { return Math.round(total * 10) / 10; });
     var plan = years.map(function (_, i) { return Math.round((i === 0 ? total : sc.after) * 10) / 10; });
-    mountChart("trend-chart", { type: "line", data: { labels: years, datasets: [
+    mountChart(canvasId, { type: "line", data: { labels: years, datasets: [
       { label: "No change", data: bau, borderColor: PALETTE.muted, borderDash: [6, 6], pointRadius: 0, tension: 0 },
       { label: "With your plan", data: plan, borderColor: PALETTE.s1, backgroundColor: "rgba(78,90,54,.12)", fill: true, pointRadius: 3, tension: 0 }
     ] }, options: chartOptions({ scales: { x: { grid: { display: false } }, y: { beginAtZero: true, title: { display: true, text: "tCO₂e a year" } } } }) });
-    $("trend-note").textContent = sc.rows.length ? "Plan applied from year 2." : "Tick actions to draw the plan line.";
+    if (noteId) $(noteId).textContent = sc.rows.length ? "Plan applied from year 2." : "Tick actions to draw the plan line.";
   }
   function renderScopeDonut(eff) {
     mountChart("scope-donut", { type: "doughnut", data: { labels: eff.scopes.map(function (s) { return SCOPE_NAME[s.id]; }),
@@ -480,7 +480,7 @@
         '<span class="tip">ƒ ' + esc(s.formula) + '</span></button>';
     }).join("");
     renderCaseCompare();
-    renderTrend(total, sc);
+    renderTrend(total, sc, "trend-chart", "trend-note");
     renderSummary(sc);
     renderCallouts(sc);
 
@@ -549,7 +549,7 @@
         '<div class="tc-tags"><span class="chip-s">' + SCOPE_NAME[p.scope] + '</span>' + tag(kind) +
           (hit ? '<span class="muted small">' + esc(sourced.tracker) + ' · ' + esc(sourced.format) + ' · ' + (platformRows(p) || 0) + (platformRows(p) === 1 ? ' row' : ' rows') + '</span>' : '') + '</div>' +
         body +
-        '<div class="tc-actions">' + actions + (hit ? '<a class="btn btn-ghost btn-small" href="' + p.demo + '">Open setup</a>' : '<a class="btn btn-ghost btn-small" href="' + p.demo + '">Set up</a>') + '</div></article>';
+        '<div class="tc-actions">' + actions + (hit ? '<a class="btn btn-ghost btn-small" href="' + demoLink(p) + '">Open setup</a>' : '<a class="btn btn-ghost btn-small" href="' + demoLink(p) + '">Set up</a>') + '</div></article>';
     }).join("");
     $("connect-list").innerHTML = html;
     $("connect-head").innerHTML = '<div class="dcard ch"><div><h2>' + connected + ' of ' + PLATFORMS.length + ' trackers connected</h2>' +
@@ -557,6 +557,12 @@
       '<div class="ch-bar"><i style="width:' + (connected / PLATFORMS.length * 100).toFixed(0) + '%"></i></div></div>';
     var n = document.querySelector('[data-n="connect"]');
     if (n) n.textContent = connected + "/" + PLATFORMS.length;
+  }
+  function currentHash() {
+    return "#" + state.scale + "/" + (state.path === "closed_source" ? "closed" : "open") + "/" + state.view;
+  }
+  function demoLink(p) {
+    return p.demo + "?back=" + encodeURIComponent(currentHash());
   }
   function platformRows(p) {
     var raw = profile().raw || {};
@@ -640,38 +646,29 @@
       document.querySelector('[data-lever="' + d.i + '"]').classList.toggle("on", !!s.on);
     });
   }
+  function scopeNotes(id) {
+    var list = path().actions.filter(function (a) { return a.scope === id; }).slice(0, 2);
+    return list.length ? list.map(function (a) { return a.action + (/^N\/A/.test(a.payback) ? " (recurring cost)" : " (pays back in " + a.payback + ")"); }).join("; ") : "No measure in the knowledge base for this scope.";
+  }
   function renderReduction(sc) {
     var now = sc.eff.total.tons;
-    $("scenario-out").innerHTML =
-      '<tr><th>Current total</th><td class="num">' + t(now) + '</td><td class="muted">Grade ' + esc(sc.eff.grade) + '</td></tr>' +
-      '<tr><th>With plan</th><td class="num">' + t(sc.after) + '</td><td class="muted">' + (sc.cut ? '↓ ' + (sc.cut / now * 100).toFixed(1) + '%' : 'No actions ticked') + '</td></tr>' +
-      '<tr><th>Emissions cut</th><td class="num">' + (sc.cut ? '−' + t(sc.cut) : '–') + '</td><td class="muted">' + (sc.saving ? inr(sc.saving) + ' saved a year' : 'no money saved') + '</td></tr>' +
-      '<tr><th>Investment</th><td class="num">' + inr(sc.cost) + '</td><td class="muted">one-off</td></tr>' +
-      '<tr><th>Payback</th><td class="num">' + (sc.payback ? Math.round(sc.payback) + ' months' : '–') + '</td><td class="muted">' + (sc.payback ? (sc.payback / 12).toFixed(1) + ' years' : 'no money payback') + '</td></tr>' +
-      '<tr class="tot"><th>New grade</th><td class="num">' + esc(sc.grade) + '</td><td class="muted">from ' + esc(sc.eff.grade) + '</td></tr>';
+    var rows = sc.eff.scopes.map(function (s) {
+      var cut = sc.scopeCut[s.id] || 0;
+      return '<tr><th>' + SCOPE_NAME[s.id] + '</th><td class="num">' + t(s.tons) + '</td><td class="num">' + (cut ? '−' + t(cut) : '–') +
+        '</td><td class="num">' + t(Math.max(0, s.tons - cut)) + '</td><td class="muted">' + esc(scopeNotes(s.id)) + '</td></tr>';
+    }).join("");
+    rows += '<tr class="tot"><th>Total</th><td class="num">' + t(now) + '</td><td class="num">' + (sc.cut ? '−' + t(sc.cut) : '–') +
+      '</td><td class="num">' + t(sc.after) + '</td><td class="muted">' + (sc.cut ? 'Cuts ' + (sc.cut / now * 100).toFixed(1) + '% of the total' : 'Tick actions in Adjust to see a cut') + '</td></tr>';
+    rows += '<tr><th>Investment</th><td class="num">–</td><td class="num">–</td><td class="num">' + inr(sc.cost) + '</td><td class="muted">' +
+      (sc.payback ? 'Pays back in ' + Math.round(sc.payback) + ' months from ' + inr(sc.saving) + ' saved a year' : (sc.cost ? 'No money payback on these actions' : 'One-off cost of the ticked actions')) + '</td></tr>';
+    rows += '<tr><th>Grade</th><td class="num">' + esc(sc.eff.grade) + '</td><td class="num">→</td><td class="num">' + esc(sc.grade) + '</td><td class="muted">Per-employee bands, see the methodology</td></tr>';
+    $("scenario-out").innerHTML = rows;
+
     var names = sc.rows.map(function (r) { return "#" + (r.d.i + 1); });
     $("scenario-note").innerHTML = names.length
       ? 'If you do <b>' + names.join(" + ") + '</b>: cut <b>' + t(sc.cut) + '</b>, cost <b>' + inr(sc.cost) + '</b>, new grade <b>' + esc(sc.grade) + '</b>'
-      : 'Tick actions below, or use AI Apply, to build a plan.';
-
-    var scopes = sc.eff.scopes;
-    var shade = [PALETTE.s1, PALETTE.s2, PALETTE.s3];
-    mountChart("em-chart", { type: "bar", data: { labels: ["Now", "With plan"], datasets: scopes.map(function (s, i) {
-        return { label: SCOPE_NAME[s.id], backgroundColor: shade[i], data: [s.tons, Math.max(0, s.tons - sc.scopeCut[s.id])] };
-      }).concat([{ label: "Cut", backgroundColor: PALETTE.cut, data: [0, sc.cut] }]) },
-      options: chartOptions({ scales: { x: { stacked: true, grid: { display: false } }, y: { stacked: true, beginAtZero: true, title: { display: true, text: "tCO₂e a year" } } } }) });
-
-    var costSets = sc.rows.map(function (r, i) {
-      return { label: "#" + (r.d.i + 1) + " " + r.d.a.action, backgroundColor: ["#4e5a36", "#8a7062", "#b9c4a0", "#c9a66b", "#8a8f80"][i % 5], data: [r.cost, r.saving] };
-    });
-    mountChart("cost-chart", { type: "bar", data: { labels: ["Investment", "Yearly savings"], datasets: costSets.length ? costSets : [{ label: "No actions ticked", backgroundColor: PALETTE.muted, data: [0, 0] }] },
-      options: chartOptions({ scales: { x: { stacked: true, grid: { display: false } }, y: { stacked: true, beginAtZero: true, suggestedMax: sc.rows.length ? undefined : 100000, ticks: { callback: function (v) { return "₹" + n0(v); } } } } }) });
-
-    var years = [], cum = [];
-    for (var y = 0; y <= 10; y++) { years.push("Yr " + y); cum.push(Math.round(-sc.cost + sc.saving * y)); }
-    mountChart("pay-chart", { type: "line", data: { labels: years, datasets: [{ label: "Savings minus investment, cumulative", data: cum, borderColor: PALETTE.s1, backgroundColor: "rgba(78,90,54,.12)", fill: true, pointRadius: 2, tension: 0 }] },
-      options: chartOptions({ scales: { x: { grid: { display: false } }, y: { suggestedMin: sc.rows.length ? undefined : -100000, suggestedMax: sc.rows.length ? undefined : 100000, ticks: { callback: function (v) { return "₹" + n0(v); } } } } }) });
-    if (!sc.rows.length) $("pay-chart").insertAdjacentHTML("beforeend", '<p class="muted small">Tick an action to see when it pays back.</p>');
+      : 'No plan yet: tick actions in Adjust, or use AI Apply.';
+    renderTrend(now, sc, "reduction-line", "reduction-note");
 
     $("scenario-warn").innerHTML = '<p class="muted small fine-print">' +
       (sc.rows.length > 1 ? 'Actions on the same emissions apply one after another, so they don\'t double count; other overlaps are possible, so treat the cut as an upper bound. ' : '') +
