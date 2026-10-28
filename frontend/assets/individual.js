@@ -48,6 +48,7 @@
     return 25;
   }
   function gradeFor(t) {
+    if (t <= 0) return "–";
     var bands = M.grading.bands.individual;
     for (var i = 0; i < bands.length; i++) if (bands[i][0] === null || t < bands[i][0]) return bands[i][1];
     return "F";
@@ -115,7 +116,13 @@
       '<div class="ind-cta"><a class="btn" href="dashboard.html#individual/open/reduction">See reduction plan</a></div>';
   }
 
-  function refresh() { renderRows(); renderResult(); }
+  function refresh() {
+    renderRows(); renderResult();
+    var n = current().length;
+    $("guide-count").textContent = mode === "demo" ? "This is a sample. Press Your tracker to start your own."
+      : n ? "You have " + n + " activit" + (n === 1 ? "y" : "ies") + " saved. Add more, or check your footprint below."
+      : "You have no activities yet. Start with step 1.";
+  }
 
   function setEditing(id) {
     editing = id;

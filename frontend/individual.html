@@ -21,36 +21,73 @@
       <p class="kicker">Individual tracker</p>
       <h1>Your footprint, from your own activities</h1>
       <div class="mode" role="group" aria-label="Mode">
-        <button type="button" data-mode="demo" aria-pressed="true">Demo</button>
+        <button type="button" data-mode="demo" aria-pressed="true">Sample</button>
         <button type="button" data-mode="live" aria-pressed="false">Your tracker</button>
       </div>
       <p class="muted" id="mode-note"></p>
     </section>
 
-    <section class="dcard">
-      <div class="dcard-head"><h2 id="table-title">Activities</h2><span class="muted small" id="saved-note"></span></div>
-      <div class="tbl-wrap"><table class="tbl ind-tbl">
-        <thead><tr><th>Scope</th><th>Activity</th><th class="num">Amount</th><th>Unit</th><th class="num">tCO₂e a year</th><th>Source</th><th></th></tr></thead>
-        <tbody id="rows"></tbody>
-      </table></div>
-      <form id="add" class="ind-add" autocomplete="off">
-        <label>Activity
-          <select name="kind" id="kind"></select>
-        </label>
-        <label>Amount<input type="number" name="qty" min="0" step="any" required></label>
-        <label>Source
-          <select name="source">
-            <option value="Own record">Own record</option>
-            <option value="Estimate">Estimate</option>
-          </select>
-        </label>
-        <button class="btn" type="submit" id="submit">Add activity</button>
-        <button class="btn btn-ghost" type="button" id="cancel" hidden>Cancel</button>
-      </form>
-      <p class="hint" id="add-hint"></p>
-    </section>
+    <div class="ind-body">
+      <div class="ind-main">
+        <section class="dcard">
+          <div class="dcard-head"><h2 id="table-title">Activities</h2><span class="muted small" id="saved-note"></span></div>
+          <div class="tbl-wrap"><table class="tbl ind-tbl">
+            <thead><tr><th>Scope</th><th>Activity</th><th class="num">Amount</th><th>Unit</th><th class="num">tCO₂e a year</th><th>Source</th><th></th></tr></thead>
+            <tbody id="rows"></tbody>
+          </table></div>
+          <form id="add" class="ind-add" autocomplete="off">
+            <label>Activity
+              <select name="kind" id="kind"></select>
+            </label>
+            <label>Amount<input type="number" name="qty" min="0" step="any" required></label>
+            <label>Source
+              <select name="source">
+                <option value="Own record">Own record</option>
+                <option value="Estimate">Estimate</option>
+              </select>
+            </label>
+            <button class="btn" type="submit" id="submit">Add activity</button>
+            <button class="btn btn-ghost" type="button" id="cancel" hidden>Cancel</button>
+          </form>
+          <p class="hint" id="add-hint"></p>
+        </section>
 
-    <section class="ind-result" id="result" aria-live="polite"></section>
+        <section class="ind-result" id="result" aria-live="polite"></section>
+      </div>
+
+      <aside class="ind-guide" aria-label="How to set up your tracker">
+        <h2>Set up in four steps</h2>
+        <ol class="steps">
+          <li><b>Choose an activity</b><span>Pick one from the list: car, electricity, commute, laptop, waste.</span></li>
+          <li><b>Enter the amount</b><span>The unit is shown next to the box. Use the number from your own record.</span></li>
+          <li><b>Press Add activity</b><span>It is saved in this browser. Edit or delete it any time.</span></li>
+          <li><b>Check your footprint</b><span>The total, grade and scope breakdown update straight away.</span></li>
+        </ol>
+        <p class="count" id="guide-count"></p>
+
+        <h3>What to enter</h3>
+        <table class="guide-tbl">
+          <thead><tr><th>Activity</th><th>Enter</th><th>Where to find it</th></tr></thead>
+          <tbody>
+            <tr><td>Car, petrol</td><td>km a year</td><td>Odometer, or your fuel log</td></tr>
+            <tr><td>Electricity at home</td><td>kWh a month</td><td>Your monthly electricity bill</td></tr>
+            <tr><td>Commute by car</td><td>km one way, a day</td><td>Home to work distance</td></tr>
+            <tr><td>Laptop in use</td><td>number of laptops</td><td>Count the devices you use</td></tr>
+            <tr><td>Solid waste</td><td>kg a month</td><td>Your bin or pickup record. Estimate if unsure</td></tr>
+            <tr><td>E-waste</td><td>kg a year</td><td>Devices you gave for recycling</td></tr>
+          </tbody>
+        </table>
+
+        <h3>What you see next</h3>
+        <ul class="next">
+          <li>Your total for the year, with the range it could fall in</li>
+          <li>A grade per person, with the bands it is based on</li>
+          <li>Each scope, and the formula behind it</li>
+          <li>A reduction plan, from the dashboard</li>
+        </ul>
+        <a class="btn btn-ghost btn-small" href="dashboard.html#individual/open/reduction">See the reduction plan</a>
+      </aside>
+    </div>
   </main>
   <script src="assets/individual.js"></script>
 </body>
