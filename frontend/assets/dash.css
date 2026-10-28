@@ -321,3 +321,30 @@
 .dash .view.active > *:nth-child(5) { animation-delay: .24s; }
 @media (prefers-reduced-motion: reduce) { .dash *, .dash *::before, .dash *::after { animation: none !important; transition: none !important; } }
 @media (max-width: 960px) { .scope-tiles { grid-template-columns: 1fr; } }
+
+/* Sidebar: collapsible scope groups with categories */
+.scope-sel { display: block; }
+.sg { border-radius: 12px; }
+.sg-head { display: flex; align-items: center; gap: 2px; }
+.sg-caret { width: 24px; height: 28px; border: 0; background: transparent; color: var(--g3); cursor: pointer; font-size: 18px; transition: transform .25s var(--ease); flex: none; }
+.sg.open > .sg-head .sg-caret { transform: rotate(90deg); }
+.sg-name { flex: 1; display: flex; justify-content: space-between; align-items: center; border: 0; background: transparent; padding: 7px 8px; border-radius: 10px; font: 600 13.5px Inter, sans-serif; color: var(--ink); cursor: pointer; text-align: left; }
+.sg-name small { font: 500 11px "JetBrains Mono", monospace; color: var(--g3); }
+.sg-name:hover { background: var(--paper); }
+.sg-name[aria-pressed="true"] { background: var(--cream); }
+.sg-name.empty { color: var(--g3); }
+.sg-items { display: none; list-style: none; padding: 2px 0 6px 26px; margin: 0; }
+.sg.open .sg-items { display: grid; gap: 1px; }
+.sg-item { width: 100%; display: flex; justify-content: space-between; gap: 8px; border: 0; background: transparent; padding: 6px 8px; border-radius: 8px; font: 500 12.5px Inter, sans-serif; color: #444; cursor: pointer; text-align: left; }
+.sg-item small { font: 500 11px "JetBrains Mono", monospace; color: var(--g3); }
+.sg-item:hover { background: var(--paper); color: var(--ink); }
+.sg-item.off { opacity: .5; }
+.driver.hl { background: var(--cream); border-radius: 10px; padding-left: 10px; padding-right: 10px; }
+.scope-sel .sg-caret, .scope-sel .sg-name, .scope-sel .sg-item {
+  border: 0; box-shadow: none; border-radius: 8px; font-weight: 500; min-height: 0; height: auto;
+}
+.scope-sel .sg-name { font-weight: 600; font-size: 13.5px; padding: 6px 8px; }
+.scope-sel .sg-name small, .scope-sel .sg-item small { display: inline; font-size: 11px; }
+.scope-sel .sg-item { font-size: 12.5px; padding: 5px 8px; }
+.sg-items { gap: 0; }
+.snav { padding: 18px 12px; gap: 8px; }

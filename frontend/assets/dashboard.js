@@ -367,13 +367,23 @@
   }
 
   // ---- Sidebar ----
+  var GHG_CODE = { Fleet: "1.1 Mobile", "DG set": "1.2 Stationary", Electricity: "2.1 Purchased power", Cloud: "3.1 Purchased services", Hardware: "3.2 Capital goods", Commute: "3.7 Commuting", Waste: "3.5 Waste" };
+  var openGroups = { scope_1: true, scope_2: true, scope_3: true };
   function renderSidebar(sc) {
-    document.querySelectorAll("#scope-sel button").forEach(function (b) {
-      var id = b.getAttribute("data-view"), s = sc.eff.scopes.filter(function (x) { return x.id === id; })[0];
-      b.classList.toggle("empty", !s.tons);
-      b.setAttribute("aria-pressed", String(state.view === id));
-      b.innerHTML = SCOPE_NAME[id] + '<small>' + (s.tons ? n0(s.tons) + ' t' : 'No data') + '</small>';
-    });
+    var cats = categories(sc.eff);
+    $("scope-sel").innerHTML = ["scope_1", "scope_2", "scope_3"].map(function (id) {
+      var s = sc.eff.scopes.filter(function (x) { return x.id === id; })[0];
+      var items = cats.filter(function (c) { return c.scope === id && c.name !== SCOPE_NAME[id]; });
+      var open = openGroups[id] !== false;
+      return '<div class="sg' + (open ? ' open' : '') + '">' +
+        '<div class="sg-head"><button class="sg-caret" aria-expanded="' + open + '" aria-label="Toggle ' + SCOPE_NAME[id] + '" data-toggle="' + id + '">›</button>' +
+        '<button class="sg-name' + (s.tons ? '' : ' empty') + '" data-view="' + id + '" aria-pressed="' + (state.view === id) + '">' + SCOPE_NAME[id] +
+        '<small>' + (s.tons ? n0(s.tons) + ' t' : 'No data') + '</small></button></div>' +
+        '<ul class="sg-items">' + items.map(function (c) {
+          return '<li><button class="sg-item' + (c.tons ? '' : ' off') + '" data-view="' + id + '" data-cat="' + esc(c.name) + '" title="' + esc(GHG_CODE[c.name] || c.name) + '">' +
+            esc(c.name) + '<small>' + (c.tons ? n0(c.tons) + ' t' : '–') + '</small></button></li>';
+        }).join("") + '</ul></div>';
+    }).join("");
     document.querySelectorAll("#view-nav a, .side-dl").forEach(function (a) {
       if (a.getAttribute("data-view") === state.view) a.setAttribute("aria-current", "page");
       else a.removeAttribute("aria-current");
@@ -526,7 +536,7 @@
           }).join("") : '<div class="empty">No tracker feeds this scope.</div>') +
         '</div></div>' +
         '<div class="dcard" id="scope-panel"><h2>Categories</h2>' + cats.map(function (c) {
-          return '<div class="driver' + (c.tons ? '' : ' off') + '"><span>' + esc(c.name) + ' ' + tag(c.kind) + '</span><span class="num">' + (c.tons ? t(c.tons) : '–') +
+          return '<div class="driver' + (c.tons ? '' : ' off') + (state.cat === c.name ? ' hl' : '') + '"><span>' + esc(c.name) + ' ' + tag(c.kind) + '</span><span class="num">' + (c.tons ? t(c.tons) : '–') +
             '</span><div class="bar"><i style="width:' + (s.tons ? c.tons / s.tons * 100 : 0).toFixed(1) + '%"></i></div></div>';
         }).join("") + '</div>' +
       '</div>' +
@@ -793,7 +803,8 @@
 
   document.addEventListener("click", function (e) {
     var b;
-    if ((b = e.target.closest("a[data-view], button[data-view]"))) { e.preventDefault(); go(b.getAttribute("data-view")); return; }
+    if ((b = e.target.closest("[data-toggle]"))) { var g = b.getAttribute("data-toggle"); openGroups[g] = openGroups[g] === false; renderSidebar(scenario()); return; }
+    if ((b = e.target.closest("a[data-view], button[data-view]"))) { e.preventDefault(); state.cat = b.getAttribute("data-cat") || null; go(b.getAttribute("data-view")); return; }
     if ((b = e.target.closest("[data-goto]"))) { e.preventDefault(); go(b.getAttribute("data-goto")); return; }
     if ((b = e.target.closest("[data-path]"))) { state.path = b.getAttribute("data-path"); render(); return; }
     if (e.target.id === "ai-apply") { aiApply(); return; }
