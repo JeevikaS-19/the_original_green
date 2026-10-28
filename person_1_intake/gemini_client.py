@@ -1,12 +1,15 @@
 """Gemini client for the estimation step. Reads the key from the environment, never from a file.
 
-Set GEMINI_API_KEY in your environment (for example: setx GEMINI_API_KEY "your-key").
+Set GEMINI_API_KEY in a .env file at the repo root (git-ignored), or in your environment.
 Optional: GEMINI_MODEL (default below). Nothing here runs unless a caller asks for it.
 """
 
 import json
 import os
 import urllib.request
+from pathlib import Path
+
+ENV_FILE = Path(__file__).resolve().parents[1] / ".env"  # repo root; git-ignored
 
 DEFAULT_MODEL = "gemini-2.5-flash"  # change with GEMINI_MODEL if your account uses another model
 ENDPOINT = "https://generativelanguage.googleapis.com/v1beta/models/{model}:generateContent"
@@ -16,8 +19,21 @@ class GeminiNotConfigured(RuntimeError):
     """GEMINI_API_KEY is not set in the environment."""
 
 
+def load_env_file(path=ENV_FILE):
+    """Read KEY=VALUE lines into os.environ. Existing environment variables win."""
+    if not Path(path).exists():
+        return
+    for line in Path(path).read_text(encoding="utf-8").splitlines():
+        line = line.strip()
+        if not line or line.startswith("#") or "=" not in line:
+            continue
+        name, value = line.split("=", 1)
+        os.environ.setdefault(name.strip(), value.strip().strip('"').strip("'"))
+
+
 def gemini_client_from_env(timeout=30):
     """Return a callable prompt -> text, or raise GeminiNotConfigured if no key is set."""
+    load_env_file()
     key = os.environ.get("GEMINI_API_KEY")
     if not key:
         raise GeminiNotConfigured("GEMINI_API_KEY is not set in the environment")
