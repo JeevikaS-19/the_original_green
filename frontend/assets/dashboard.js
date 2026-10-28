@@ -459,6 +459,45 @@
     return '<p class="sum-label">' + esc(label) + '</p><p class="sum-text">' + esc(text) + '</p>';
   }
 
+  // ---- Overview callouts: each one uses this profile's own numbers ----
+  function renderCallouts(sc) {
+    var eff = sc.eff, total = eff.total.tons || 0, cats = categories(eff);
+    var s2 = eff.scopes.filter(function (x) { return x.id === "scope_2"; })[0];
+    var elec = cats.filter(function (c) { return c.name === "Electricity"; })[0];
+    var H = eff.total.high - eff.total.tons;
+    var mix = { measured: 0, estimated: 0, illustrative: 0 };
+    cats.forEach(function (c) { var k = c.kind === "totals" ? "estimated" : c.kind; if (mix[k] !== undefined) mix[k] += c.tons; });
+    var ranked = path().actions.filter(function (a) { return a.tons > 0; }).map(function (a) {
+      return { name: a.action, perT: a.cost_inr / a.tons, tons: a.tons };
+    }).sort(function (a, b) { return a.perT - b.perT; });
+    var used = cats.filter(function (c) { return c.tons > 0; });
+    var cards = [];
+    cards.push({ title: "Every number shows its formula", body: elec && elec.tons
+        ? "Electricity: " + n0(inputs().kwh) + " kWh a year × 0.757 kg CO₂e per kWh = " + t(elec.tons) + ". The factor is the CEA grid figure, shown on the scope page."
+        : "Each category shows its formula on hover, with the factor and its status.",
+      link: "Scope 2 factors", goto: "scope_2" });
+    cards.push({ title: "Confidence is shown per scope", body: eff.scopes.map(function (x) { return SCOPE_NAME[x.id] + " ±" + (x.confidence || "").replace(/[^\d]/g, "") + "%"; }).join(" · ") +
+        ". Total range " + t(eff.total.low) + " to " + t(eff.total.high) + ".",
+      link: "Upload data to narrow it", goto: "connect" });
+    cards.push({ title: "Measured, estimated, illustrative", body: "Measured " + t(mix.measured) + " · Estimated " + t(mix.estimated) + " · Illustrative " + t(mix.illustrative) + ". The band is ±" + (total ? (H / total * 100).toFixed(0) : 0) + "% overall.",
+      link: "See the breakdown", goto: "breakdown" });
+    cards.push({ title: "Methods differ by category", body: used.slice(0, 3).map(function (c) { return c.name + ": " + (CAT_FORMULA[c.name] || c.formula); }).join(" ") || "No categories calculated yet.",
+      link: "Open Scope 1", goto: "scope_1" });
+    cards.push({ title: "Actions ranked by cost per tonne", body: ranked.length
+        ? ranked.slice(0, 2).map(function (r) { return r.name + ": " + inr(r.perT) + " per tonne a year"; }).join(" · ") + ". Cost per tonne is the knowledge base's cost ÷ tonnes saved."
+        : "No actions apply to this profile yet.",
+      link: "See all actions", goto: "reduction" });
+    cards.push({ title: "Plan against your budget", body: sc.rows.length
+        ? "Your plan cuts " + t(sc.cut) + " for " + inr(sc.cost) + (sc.payback ? ", paying back in about " + Math.round(sc.payback) + " months." : ".")
+        : "Tick actions, or let AI Apply choose within a budget. Nothing is ticked yet.",
+      link: "Open the plan", goto: "reduction" });
+    cards.push({ title: "Your inputs drive every chart", body: "Change fuel, electricity, renewable share or Scope 3 activity on the Reduction page. Totals, grade and charts update together. Saved reports do not change.",
+      link: "Try an input", goto: "reduction" });
+    $("callouts").innerHTML = cards.map(function (c) {
+      return '<div class="callout"><h3>' + esc(c.title) + '</h3><p>' + esc(c.body) + '</p><a href="#" data-goto="' + c.goto + '">' + esc(c.link) + ' →</a></div>';
+    }).join("");
+  }
+
   // ---- Overview ----
   function renderOverview(sc) {
     var eff = sc.eff, total = eff.total.tons || 0;
@@ -488,6 +527,7 @@
     renderCaseCompare();
     renderTrend(total, sc);
     renderSummary(sc);
+    renderCallouts(sc);
 
     $("split-bar").innerHTML = eff.scopes.map(function (s) {
       return '<i class="' + SCOPE_CLASS[s.id] + '" style="width:' + (total ? s.tons / total * 100 : 0).toFixed(1) + '%" title="' + SCOPE_NAME[s.id] + '"></i>';

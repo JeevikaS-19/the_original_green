@@ -367,3 +367,11 @@
 .ledger .result-line { margin-top: 14px; }
 .tc-actions { display: flex; gap: 8px; flex-wrap: wrap; margin-top: auto; }
 .tc-actions .btn { margin-top: 0; }
+
+/* Overview callouts */
+.callouts { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 12px; }
+.callout { background: var(--white); border: 1px solid var(--line); border-radius: 18px; padding: 18px; display: grid; gap: 8px; align-content: start; box-shadow: var(--shadow-1); }
+.callout h3 { font-size: 14px; letter-spacing: -.01em; }
+.callout p { font-size: 13px; color: var(--muted); line-height: 1.5; }
+.callout a { font-size: 13px; font-weight: 600; color: var(--ink); text-decoration: none; margin-top: auto; }
+.callout a:hover { color: var(--stone); }
