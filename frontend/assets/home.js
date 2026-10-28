@@ -3,6 +3,7 @@
 
   var reduce = window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
   var canObserve = "IntersectionObserver" in window;
+  var $ = function (id) { return document.getElementById(id); };
 
   // ---- Reveal on scroll ----
   var reveals = document.querySelectorAll(".reveal");
@@ -12,74 +13,85 @@
         if (!e.isIntersecting) return;
         e.target.classList.add("in");
         io.unobserve(e.target);
-        if (e.target.id === "hero-mock") fillBars();
       });
     }, { threshold: 0.15 });
     reveals.forEach(function (el) { io.observe(el); });
   } else {
     reveals.forEach(function (el) { el.classList.add("in"); });
-    fillBars();
   }
 
-  function fillBars() {
-    document.querySelectorAll(".mock-stack span[data-w]").forEach(function (b) {
-      b.style.width = b.getAttribute("data-w") + "%";
+  // ---- Hero phones: the spotlight moves Individual → Small → Large ----
+  var phones = document.querySelectorAll(".phone");
+  var phoneI = 1;
+  function showPhone(i) {
+    phoneI = (i + phones.length) % phones.length;
+    phones.forEach(function (p, n) { p.classList.toggle("on", n === phoneI); });
+  }
+  showPhone(1);
+  var phoneTimer = reduce ? null : setInterval(function () { showPhone(phoneI + 1); }, 3200);
+  phones.forEach(function (p, n) {
+    p.addEventListener("mouseenter", function () { clearInterval(phoneTimer); showPhone(n); });
+  });
+
+  // ---- Comparison rows open on tap (hover is CSS) ----
+  document.querySelectorAll(".crow:not(.chead)").forEach(function (row) {
+    row.addEventListener("click", function () { row.classList.toggle("open"); });
+    row.addEventListener("keydown", function (e) {
+      if (e.key === "Enter" || e.key === " ") { e.preventDefault(); row.classList.toggle("open"); }
     });
+  });
+
+  // ---- Case study carousel: tabs, arrow keys and swipe ----
+  var tabs = document.querySelectorAll("#case-tabs button");
+  var track = $("case-track");
+  var ind = $("tab-ind");
+  var caseI = 0;
+  function showCase(i) {
+    caseI = (i + tabs.length) % tabs.length;
+    track.style.transform = "translateX(" + (-100 * caseI) + "%)";
+    tabs.forEach(function (t, n) {
+      t.setAttribute("aria-selected", String(n === caseI));
+      t.tabIndex = n === caseI ? 0 : -1;
+    });
+    var t = tabs[caseI];
+    ind.style.width = t.offsetWidth + "px";
+    ind.style.transform = "translateX(" + t.offsetLeft + "px)";
   }
+  tabs.forEach(function (t, n) {
+    t.addEventListener("click", function () { showCase(n); });
+    t.addEventListener("keydown", function (e) {
+      if (e.key === "ArrowRight") { showCase(caseI + 1); tabs[caseI].focus(); }
+      if (e.key === "ArrowLeft") { showCase(caseI - 1); tabs[caseI].focus(); }
+    });
+  });
+  var startX = null;
+  $("case-view").addEventListener("pointerdown", function (e) { startX = e.clientX; });
+  $("case-view").addEventListener("pointerup", function (e) {
+    if (startX === null) return;
+    var dx = e.clientX - startX;
+    if (Math.abs(dx) > 50) showCase(caseI + (dx < 0 ? 1 : -1));
+    startX = null;
+  });
+  showCase(0);
+  window.addEventListener("resize", function () { showCase(caseI); });
 
-  // ---- Scroll-driven effects, one rAF per frame ----
-  var nav = document.getElementById("nav");
-  var bar = document.getElementById("progress");
-  var mock = document.getElementById("hero-mock");
-  var hs = document.getElementById("gap");
-  var track = document.getElementById("hs-track");
-  var hsI = document.getElementById("hs-i");
-  var steps = document.getElementById("steps");
-  var fill = document.getElementById("steps-fill");
-  var stepEls = document.querySelectorAll(".step");
+  // ---- Scroll: nav, progress bar and the layer in focus ----
+  var nav = $("nav"), bar = $("progress");
+  var layers = document.querySelectorAll(".layer");
   var ticking = false;
-
-  function clamp(v) { return Math.max(0, Math.min(1, v)); }
-
   function update() {
     ticking = false;
     var y = window.scrollY, vh = window.innerHeight;
     nav.classList.toggle("scrolled", y > 12);
     var max = document.documentElement.scrollHeight - vh;
     bar.style.width = (max > 0 ? (y / max) * 100 : 0) + "%";
-    if (reduce) return;
-
-    // Hero mock flattens out as it scrolls up
-    if (mock) {
-      var p = clamp(1 - mock.getBoundingClientRect().top / vh);
-      mock.style.setProperty("--tilt", (14 * (1 - p)).toFixed(2) + "deg");
-      mock.style.setProperty("--sc", (0.94 + 0.06 * p).toFixed(3));
-    }
-
-    // Pinned section: vertical scroll drives the horizontal track
-    if (hs && track) {
-      var r = hs.getBoundingClientRect();
-      var hp = clamp(-r.top / (r.height - vh));
-      var dist = track.scrollWidth - window.innerWidth;
-      track.style.transform = "translate3d(" + (-hp * Math.max(0, dist)) + "px,0,0)";
-      var n = track.children.length;
-      hsI.textContent = "0" + Math.min(n, 1 + Math.floor(hp * n * 0.999));
-    }
-
-    // Steps: the line fills and each step lights as it passes the middle
-    if (steps) {
-      var sr = steps.getBoundingClientRect();
-      fill.style.height = (clamp((vh * 0.55 - sr.top) / sr.height) * 100) + "%";
-      stepEls.forEach(function (s) {
-        s.classList.toggle("on", s.getBoundingClientRect().top < vh * 0.6);
-      });
-    }
+    layers.forEach(function (l) {
+      var r = l.getBoundingClientRect();
+      if (reduce || r.top < vh * 0.7) l.classList.add("on");
+    });
   }
-
-  function onScroll() {
+  window.addEventListener("scroll", function () {
     if (!ticking) { ticking = true; requestAnimationFrame(update); }
-  }
-  window.addEventListener("scroll", onScroll, { passive: true });
-  window.addEventListener("resize", onScroll);
+  }, { passive: true });
   update();
 })();

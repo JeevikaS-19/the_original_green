@@ -3,12 +3,12 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Carbon Aggregation · Unified carbon accounting</title>
-  <meta name="description" content="One footprint from every source. Scope 1, 2 and 3 from the trackers you already use, with the method shown.">
+  <title>The Original Green · Unified carbon accounting</title>
+  <meta name="description" content="Unified carbon accounting with transparent methodology. Scope 1, 2 and 3 from the trackers you already use.">
   <script>document.documentElement.classList.add("js");</script>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;650;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;650;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="assets/home.css">
 </head>
 <body>
@@ -16,204 +16,275 @@
 
   <header class="nav" id="nav">
     <div class="wrap nav-inner">
-      <a class="logo" href="#top"><span class="logo-mark" aria-hidden="true"></span>Carbon Aggregation</a>
+      <a class="logo" href="#top"><span class="logo-mark" aria-hidden="true"></span>The Original Green</a>
       <nav class="nav-links" aria-label="Main">
-        <a href="#network">Platform</a>
-        <a href="#gap">The gap</a>
-        <a href="#scopes">Scopes</a>
-        <a href="#compare">Why us</a>
-        <a href="tracker-demo/index.html">Trackers</a>
+        <a href="#problem">Problem</a>
+        <a href="#compare">Solution</a>
+        <a href="#cases">Case studies</a>
+        <a href="#how">How it works</a>
       </nav>
-      <a class="btn btn-sm" href="dashboard.html#small_scale">Launch app</a>
+      <a class="btn btn-sm" href="dashboard.html#small_scale/open/overview">Open dashboard</a>
     </div>
   </header>
 
   <main id="top">
-    <!-- Hero -->
+    <!-- 1. Hero -->
     <section class="hero">
       <div class="wrap hero-center">
         <p class="chip reveal">Team Original Green · HackFest 2026</p>
-        <h1 class="h1 reveal d1"><span class="soft">One footprint.</span><br>Every source, shown.</h1>
-        <p class="lede reveal d2">Read the trackers you already use. See Scope 1, 2 and 3 with the method behind every number.</p>
+        <div class="title-stage reveal" aria-hidden="true">
+          <div class="ball">
+            <i style="--i:0"></i><i style="--i:1"></i><i style="--i:2"></i><i style="--i:3"></i><i style="--i:4"></i><i style="--i:5"></i>
+            <i style="--i:6"></i><i style="--i:7"></i><i style="--i:8"></i><i style="--i:9"></i><i style="--i:10"></i><i style="--i:11"></i>
+          </div>
+        </div>
+        <h1 class="h1 spin-title reveal d1">
+          <span class="word">The</span> <span class="word">Original</span> <span class="word shimmer">Green</span>
+        </h1>
+        <p class="lede reveal d2">Unified carbon accounting with transparent methodology.</p>
+
+        <div class="phones reveal d2" id="phones">
+          <figure class="phone" data-i="0">
+            <div class="screen">
+              <div class="ps-top"><span>Individual</span><b>Sample persona</b></div>
+              <div class="ps-big">5.5<small> t</small></div>
+              <div class="ps-sub">Ravi · developer, one car</div>
+              <div class="ps-bar"><i style="width:30%" class="s1"></i><i style="width:55%" class="s2"></i><i style="width:15%" class="s3"></i></div>
+              <ul class="ps-list"><li><span>Scope 1</span><b>1.6 t</b></li><li><span>Scope 2</span><b>3.0 t</b></li><li><span>Scope 3</span><b>0.8 t</b></li></ul>
+              <div class="ps-chip">Grade C · illustrative</div>
+            </div>
+            <figcaption>Individual</figcaption>
+          </figure>
+          <figure class="phone" data-i="1">
+            <div class="screen">
+              <div class="ps-top"><span>Small-scale</span><b>Demo campus</b></div>
+              <div class="ps-big">228.6<small> t</small></div>
+              <div class="ps-sub">Campus · 200 staff · ±17%</div>
+              <div class="ps-bar"><i style="width:63%" class="s1"></i><i style="width:19%" class="s2"></i><i style="width:18%" class="s3"></i></div>
+              <ul class="ps-list"><li><span>Scope 1</span><b>143.0 t</b></li><li><span>Scope 2</span><b>44.0 t</b></li><li><span>Scope 3</span><b>41.7 t</b></li></ul>
+              <div class="ps-chip dark">Top: route optimisation</div>
+            </div>
+            <figcaption>Small-scale</figcaption>
+          </figure>
+          <figure class="phone" data-i="2">
+            <div class="screen">
+              <div class="ps-top"><span>Large-scale</span><b>TCS FY 25-26</b></div>
+              <div class="ps-big">9.15<small> lakh t</small></div>
+              <div class="ps-sub">Disclosed, location-based</div>
+              <div class="ps-bar"><i style="width:2.5%" class="s1"></i><i style="width:34.8%" class="s2"></i><i style="width:62.7%" class="s3"></i></div>
+              <ul class="ps-list"><li><span>Scope 1</span><b>22,631 t</b></li><li><span>Scope 2</span><b>3,18,184 t</b></li><li><span>Scope 3</span><b>5,73,872 t</b></li></ul>
+              <div class="ps-chip">Source: integrated report</div>
+            </div>
+            <figcaption>Large-scale</figcaption>
+          </figure>
+        </div>
+
         <div class="hero-actions reveal d3">
-          <a class="btn" href="dashboard.html#small_scale">Open the dashboard <span class="arrow">→</span></a>
-          <a class="btn btn-ghost" href="#network">See how it works</a>
+          <a class="btn" href="#how">See how it works <span class="arrow">↓</span></a>
+          <a class="btn btn-ghost" href="dashboard.html#small_scale/open/overview">Open dashboard</a>
         </div>
       </div>
+    </section>
 
+    <!-- 2. Problem -->
+    <section class="section" id="problem">
       <div class="wrap">
-        <div class="mock reveal d2" id="hero-mock" aria-label="Sample report, demo data">
-          <div class="mock-top">
-            <div class="mock-dots" aria-hidden="true"><i></i><i></i><i></i></div>
-            <span class="mock-title">Campus · 200 staff · FY 2025-26</span>
-            <span class="badge measured">Live demo</span>
-          </div>
-          <div class="mock-grid">
-            <div class="m-total">
-              <span class="muted">Annual footprint</span>
-              <strong>228.6<small> t CO₂e</small></strong>
-              <div class="mock-stack" aria-hidden="true"><span class="s1" data-w="63"></span><span class="s2" data-w="19"></span><span class="s3" data-w="18"></span></div>
-              <div class="mock-legend"><span><i class="s1"></i>Scope 1 · 143.0 t</span><span><i class="s2"></i>Scope 2 · 44.0 t</span><span><i class="s3"></i>Scope 3 · 41.7 t</span></div>
-            </div>
-            <div class="m-side">
-              <div class="m-kpi"><span>Grade</span><strong>C</strong></div>
-              <div class="m-kpi"><span>Range</span><strong>±17%</strong></div>
-              <div class="m-kpi dark"><span>Top action</span><strong>Route optimisation</strong><em>3.0 t · ₹2.0 L</em></div>
-            </div>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <!-- Sources marquee -->
-    <section class="marquee" aria-label="Sources we read">
-      <div class="marquee-track">
-        <span>Fleet logs</span><span>Smart meters</span><span>Cloud bills</span><span>Asset registers</span><span>Commute surveys</span><span>Waste logs</span><span>DG run-hours</span><span>BRSR reports</span>
-        <span aria-hidden="true">Fleet logs</span><span aria-hidden="true">Smart meters</span><span aria-hidden="true">Cloud bills</span><span aria-hidden="true">Asset registers</span><span aria-hidden="true">Commute surveys</span><span aria-hidden="true">Waste logs</span><span aria-hidden="true">DG run-hours</span><span aria-hidden="true">BRSR reports</span>
-      </div>
-    </section>
-
-    <!-- Network: one core, many sources -->
-    <section class="section" id="network">
-      <div class="wrap">
-        <h2 class="h2 reveal"><span class="soft">One platform.</span><br>Every source connected.</h2>
-        <div class="net reveal" aria-label="Sources connected to the core">
-          <svg viewBox="0 0 1000 520" preserveAspectRatio="xMidYMid meet" aria-hidden="true">
-            <defs>
-              <pattern id="grid" width="40" height="40" patternUnits="userSpaceOnUse"><path d="M40 0H0V40" fill="none" stroke="#ececec" stroke-width="1"/></pattern>
-              <radialGradient id="glow"><stop offset="0" stop-color="#eaeac6" stop-opacity=".9"/><stop offset="1" stop-color="#eaeac6" stop-opacity="0"/></radialGradient>
-            </defs>
-            <rect width="1000" height="520" fill="url(#grid)"/>
-            <circle cx="500" cy="260" r="190" fill="url(#glow)"/>
-            <g class="orbit-ring"><circle cx="500" cy="260" r="130" fill="none" stroke="#c8c8c8" stroke-dasharray="3 7"/></g>
-            <g class="wires">
-              <path id="w1" d="M500 260 L150 120"/><path id="w2" d="M500 260 L120 330"/><path id="w3" d="M500 260 L330 470"/>
-              <path id="w4" d="M500 260 L850 100"/><path id="w5" d="M500 260 L890 330"/><path id="w6" d="M500 260 L680 470"/>
-            </g>
-            <g class="pulses">
-              <circle r="4"><animateMotion dur="3s" repeatCount="indefinite" keyPoints="1;0" keyTimes="0;1"><mpath href="#w1"/></animateMotion></circle>
-              <circle r="4"><animateMotion dur="3.6s" begin=".6s" repeatCount="indefinite" keyPoints="1;0" keyTimes="0;1"><mpath href="#w2"/></animateMotion></circle>
-              <circle r="4"><animateMotion dur="3.2s" begin="1.2s" repeatCount="indefinite" keyPoints="1;0" keyTimes="0;1"><mpath href="#w3"/></animateMotion></circle>
-              <circle r="4"><animateMotion dur="3.4s" begin=".3s" repeatCount="indefinite" keyPoints="1;0" keyTimes="0;1"><mpath href="#w4"/></animateMotion></circle>
-              <circle r="4"><animateMotion dur="3s" begin="1s" repeatCount="indefinite" keyPoints="1;0" keyTimes="0;1"><mpath href="#w5"/></animateMotion></circle>
-              <circle r="4"><animateMotion dur="3.8s" begin="1.6s" repeatCount="indefinite" keyPoints="1;0" keyTimes="0;1"><mpath href="#w6"/></animateMotion></circle>
-            </g>
-            <g class="node"><circle cx="150" cy="120" r="9"/><text x="150" y="98">FLEET</text></g>
-            <g class="node"><circle cx="120" cy="330" r="9"/><text x="120" y="358">ENERGY</text></g>
-            <g class="node"><circle cx="330" cy="470" r="9"/><text x="330" y="500">CLOUD</text></g>
-            <g class="node"><circle cx="850" cy="100" r="9"/><text x="850" y="78">HARDWARE</text></g>
-            <g class="node"><circle cx="890" cy="330" r="9"/><text x="890" y="358">COMMUTE</text></g>
-            <g class="node"><circle cx="680" cy="470" r="9"/><text x="680" y="500">WASTE</text></g>
-            <g class="core">
-              <path d="M455 215h16M455 215v16M545 215h-16M545 215v16M455 305h16M455 305v-16M545 305h-16M545 305v-16" fill="none" stroke="#080808" stroke-width="1.5"/>
-              <circle cx="500" cy="260" r="20" fill="#080808"/><circle cx="500" cy="260" r="7" fill="#eaeac6"/>
-              <text x="500" y="200" class="core-label">CARBON CORE</text>
-              <text x="500" y="332" class="core-sub">One footprint · method shown</text>
-            </g>
-          </svg>
-        </div>
-        <div class="tri">
-          <div class="reveal"><span class="num">01</span><h3>Read</h3><p>Exports from your trackers. Nothing re-typed.</p></div>
-          <div class="reveal d1"><span class="num">02</span><h3>Calculate</h3><p>Every scope, its factor, its range.</p></div>
-          <div class="reveal d2"><span class="num">03</span><h3>Act</h3><p>Actions ranked by tonnes per rupee.</p></div>
-        </div>
-      </div>
-    </section>
-
-    <!-- The gap: horizontal scroll carousel -->
-    <section class="hscroll" id="gap">
-      <div class="hs-sticky">
-        <div class="wrap hs-head">
-          <h2 class="h2"><span class="soft">The gap.</span><br>Why footprints are incomplete.</h2>
-          <div class="hs-count"><span id="hs-i">01</span> / 04</div>
-        </div>
-        <div class="hs-track" id="hs-track">
-          <article class="hs-card">
-            <span class="hs-n">01</span>
+        <h2 class="h2 reveal"><span class="soft">Why it matters.</span><br>Most footprints are incomplete.</h2>
+        <div class="problems">
+          <article class="pcard reveal" tabindex="0">
+            <span class="picon"><svg viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7" rx="2"/><rect x="14" y="3" width="7" height="7" rx="2"/><rect x="3" y="14" width="7" height="7" rx="2"/><rect x="14" y="14" width="7" height="7" rx="2" stroke-dasharray="3 3"/></svg></span>
             <h3>Fragmented data</h3>
-            <p>Fleet, power, cloud and HR live in different tools. Scope 3 never gets joined up.</p>
-            <div class="hs-viz v-frag"><i></i><i></i><i></i><i></i></div>
+            <p>A campus logs its fleet and meters, while commute and devices sit in other tools or nowhere.</p>
+            <div class="pstat"><strong>3+</strong><span>separate tools per footprint</span></div>
+            <p class="why"><b>Why it matters:</b> you can't reduce what you can't see.</p>
           </article>
-          <article class="hs-card">
-            <span class="hs-n">02</span>
+          <article class="pcard dark reveal d1" tabindex="0">
+            <span class="picon"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 3v9l6 4"/></svg></span>
+            <h3>Scope 3 is invisible</h3>
+            <p>Indirect emissions are the largest share, and the hardest to measure.</p>
+            <div class="pstat"><strong>57–63%</strong><span>Scope 3 share at Infosys and TCS, FY 2025-26</span></div>
+            <p class="why"><b>Why it matters:</b> the biggest lever is the one left out.</p>
+          </article>
+          <article class="pcard reveal d2" tabindex="0">
+            <span class="picon"><svg viewBox="0 0 24 24"><rect x="4" y="4" width="16" height="16" rx="3"/><path d="M9 10a3 3 0 1 1 4 2.8V14M12 17h.01"/></svg></span>
             <h3>Black-box estimates</h3>
-            <p>Tools estimate, but never say how sure they are.</p>
-            <div class="hs-viz v-range"><span class="pt"></span><span class="band"></span></div>
+            <p>Tools give one number, with no method and no sense of how sure it is.</p>
+            <div class="pstat"><strong>±?</strong><span>no range shown</span></div>
+            <p class="why"><b>Why it matters:</b> a number you can't check can't be trusted.</p>
           </article>
-          <article class="hs-card">
-            <span class="hs-n">03</span>
+          <article class="pcard reveal d3" tabindex="0">
+            <span class="picon"><svg viewBox="0 0 24 24"><path d="M4 7h16M4 12h10M4 17h6"/></svg></span>
             <h3>Every category differs</h3>
-            <p>Cloud, devices, commute and waste each need their own method.</p>
-            <div class="hs-viz v-cats"><b>km</b><b>kWh</b><b>hours</b><b>kg</b></div>
-          </article>
-          <article class="hs-card dark">
-            <span class="hs-n">04</span>
-            <h3>Scope 3 is the big one</h3>
-            <p>TCS's FY 2025-26 Scope 3 is 573,872 tCO₂e, against 22,631 t for Scope 1.</p>
-            <div class="hs-viz v-bars"><span style="--h:8%"></span><span style="--h:20%"></span><span style="--h:100%"></span></div>
+            <p>Hardware, commute, cloud and waste each need their own unit and method.</p>
+            <div class="pstat"><strong>4</strong><span>units: devices, km, hours, kg</span></div>
+            <p class="why"><b>Why it matters:</b> one generic factor gets each one wrong.</p>
           </article>
         </div>
+        <p class="fine reveal">Shares use disclosed location-based Scope 2. Sources: TCS and Infosys FY 2025-26 integrated reports.</p>
       </div>
     </section>
 
-    <!-- Scopes orbit -->
-    <section class="section alt" id="scopes">
-      <div class="wrap orbit-wrap">
-        <div>
-          <h2 class="h2 reveal"><span class="soft">Three scopes.</span><br>One number you can trust.</h2>
-          <p class="lede reveal d1">Each scope carries its own range, and each number says whether it is measured, estimated or illustrative.</p>
-          <div class="legend-list reveal d2">
-            <div><span class="badge measured">Measured</span><span>From your trackers</span></div>
-            <div><span class="badge estimated">Estimated</span><span>Filled in, reason shown</span></div>
-            <div><span class="badge illustrative">Illustrative</span><span>Demo factor, not a source</span></div>
-          </div>
-        </div>
-        <div class="orbit reveal" aria-label="Scopes around the total">
-          <div class="o-ring r1"></div><div class="o-ring r2"></div>
-          <div class="o-spin">
-            <div class="o-sat" style="--a:0deg"><div class="o-in"><strong>143.0 t</strong><span>Scope 1 · fuel</span></div></div>
-            <div class="o-sat" style="--a:120deg"><div class="o-in"><strong>44.0 t</strong><span>Scope 2 · power</span></div></div>
-            <div class="o-sat" style="--a:240deg"><div class="o-in"><strong>41.7 t</strong><span>Scope 3 · rest</span></div></div>
-          </div>
-          <div class="o-core"><span>Total</span><strong>228.6 t</strong><em>±17%</em></div>
-        </div>
-      </div>
-    </section>
-
-    <!-- Comparison, Synex style -->
-    <section class="section" id="compare">
+    <!-- 3. Comparison -->
+    <section class="section alt" id="compare">
       <div class="wrap">
-        <h2 class="h2 center reveal"><span class="soft">Built for the full footprint.</span><br>Not single-source tracking.</h2>
-        <div class="vs reveal">
-          <div class="vs-rows">
-            <div class="vs-head">Capability</div>
-            <div>Reads every tracker export</div>
-            <div>Scope 3 by category</div>
-            <div>A range on every scope</div>
-            <div>Every number tagged with its source</div>
-            <div>Actions ranked by tonnes per rupee</div>
+        <h2 class="h2 center reveal"><span class="soft">The solution.</span><br>Every scope, with the method shown.</h2>
+        <div class="ctable reveal" id="ctable" role="table" aria-label="Existing tools compared with The Original Green">
+          <div class="crow chead" role="row">
+            <span role="columnheader">Capability</span><span role="columnheader">Existing tools</span><span role="columnheader" class="us"><span class="logo-mark sm"></span>The Original Green</span>
           </div>
-          <div class="vs-col us">
-            <div class="vs-head"><span class="logo-mark sm"></span>Carbon Aggregation</div>
-            <div>✓</div><div>✓</div><div>✓</div><div>✓</div><div>✓</div>
+          <div class="crow" role="row" tabindex="0">
+            <span role="cell">Scope 1 · direct fuel</span><span role="cell" class="them">Fleet or fuel tracker only</span><span role="cell" class="us">Fleet, DG sets and LPG together</span>
+            <div class="how"><b>How we do it</b><code>litres × 2.68 kg CO₂e (diesel, IPCC 2006)</code></div>
           </div>
-          <div class="vs-col them">
-            <div class="vs-head">Single-source tracker</div>
-            <div>One source</div><div>Absent</div><div>Absent</div><div>Absent</div><div>General advice</div>
+          <div class="crow" role="row" tabindex="0">
+            <span role="cell">Scope 2 · electricity</span><span role="cell" class="them">Bill totals</span><span role="cell" class="us">Meter exports, month by month</span>
+            <div class="how"><b>How we do it</b><code>kWh × 0.757 kg CO₂e (CEA combined margin, FY 2023-24)</code></div>
+          </div>
+          <div class="crow" role="row" tabindex="0">
+            <span role="cell">Scope 3 · value chain</span><span role="cell" class="them">Usually absent</span><span role="cell" class="us">Devices, commute, cloud and waste</span>
+            <div class="how"><b>How we do it</b><code>activity × category factor, labelled illustrative until verified</code></div>
+          </div>
+          <div class="crow" role="row" tabindex="0">
+            <span role="cell">Confidence</span><span role="cell" class="them">One number</span><span role="cell" class="us">A range on every scope</span>
+            <div class="how"><b>How we do it</b><code>full ±10% · partial ±25% · overview ±40% · missing ±50%</code></div>
+          </div>
+          <div class="crow" role="row" tabindex="0">
+            <span role="cell">Sources</span><span role="cell" class="them">Hidden</span><span role="cell" class="us">Every number tagged</span>
+            <div class="how"><b>How we do it</b><code>measured · estimated · illustrative, with the factor and its source</code></div>
+          </div>
+          <div class="crow" role="row" tabindex="0">
+            <span role="cell">Missing data</span><span role="cell" class="them">Silently skipped</span><span role="cell" class="us">Filled and flagged</span>
+            <div class="how"><b>How we do it</b><code>rule-based or AI estimate → marked estimated → range widens</code></div>
           </div>
         </div>
+        <p class="fine center reveal">Hover or tap a row to see how we do it.</p>
       </div>
     </section>
 
-    <!-- Layers: scroll-filled steps -->
-    <section class="section alt" id="layers">
-      <div class="wrap steps-wrap">
-        <h2 class="h2 reveal"><span class="soft">From file</span><br>to action.</h2>
-        <div class="steps" id="steps">
-          <div class="steps-line"><i id="steps-fill"></i></div>
-          <div class="step"><span>Layer 1 · Input</span><h3>Trackers are read as exports</h3><p>Gaps are proposed and labelled. Each estimate widens the range.</p></div>
-          <div class="step"><span>Layer 2 · Calculate</span><h3>Every scope gets its formula</h3><p><code>58,100 kWh × 0.757 = 44.0 t</code></p></div>
-          <div class="step"><span>Layer 3 · Reduce</span><h3>Actions ranked by value</h3><p><code>3.0 t ÷ ₹2.0 L = 1.50 t per lakh</code></p></div>
+    <!-- 4. Case studies -->
+    <section class="section" id="cases">
+      <div class="wrap">
+        <h2 class="h2 reveal"><span class="soft">Case studies.</span><br>Real disclosures, real gaps.</h2>
+        <div class="ctabs reveal" role="tablist" aria-label="Case studies" id="case-tabs">
+          <span class="tab-ind" id="tab-ind" aria-hidden="true"></span>
+          <button role="tab" aria-selected="true" data-case="0">Infosys</button>
+          <button role="tab" aria-selected="false" data-case="1">TCS</button>
+          <button role="tab" aria-selected="false" data-case="2">Individual</button>
+        </div>
+        <div class="case-view reveal" id="case-view">
+          <div class="case-track" id="case-track">
+            <article class="case">
+              <div class="case-main">
+                <span class="badge measured">Disclosed · FY 2025-26</span>
+                <h3>Infosys</h3>
+                <dl class="case-meta"><div><dt>Headquarters</dt><dd>Bengaluru</dd></div><div><dt>Footprint</dt><dd>290 locations, 59 countries</dd></div></dl>
+                <div class="case-scopes">
+                  <div><span>Scope 1</span><strong>11,483 t</strong></div>
+                  <div><span>Scope 2 · location</span><strong>1,45,604 t</strong></div>
+                  <div class="big"><span>Scope 3</span><strong>2,07,374 t</strong></div>
+                </div>
+              </div>
+              <div class="case-issue">
+                <span class="ki">Key issue</span>
+                <p>The fuel split behind Scope 1 is not disclosed, so it can't be rebuilt from litres. Scope 3 is a single total across eight categories.</p>
+                <a href="dashboard.html#case_infosys/open/overview">See it in the dashboard →</a>
+              </div>
+            </article>
+            <article class="case">
+              <div class="case-main">
+                <span class="badge measured">Disclosed · FY 2025-26</span>
+                <h3>TCS</h3>
+                <dl class="case-meta"><div><dt>Headquarters</dt><dd>Mumbai</dd></div><div><dt>Employees</dt><dd>5,80,000+</dd></div></dl>
+                <div class="case-scopes">
+                  <div><span>Scope 1</span><strong>22,631 t</strong></div>
+                  <div><span>Scope 2 · location</span><strong>3,18,184 t</strong></div>
+                  <div class="big"><span>Scope 3</span><strong>5,73,872 t</strong></div>
+                </div>
+              </div>
+              <div class="case-issue">
+                <span class="ki">Key issue</span>
+                <p>Most of Scope 1 is refrigerant leaks (14,769 t), which fuel-only tools miss. Commuting alone is 3,02,962 t of Scope 3.</p>
+                <a href="dashboard.html#case_tcs/open/overview">See it in the dashboard →</a>
+              </div>
+            </article>
+            <article class="case">
+              <div class="case-main">
+                <span class="badge illustrative">Sample persona · fictional</span>
+                <h3>Ravi, individual</h3>
+                <dl class="case-meta"><div><dt>Profile</dt><dd>Software developer</dd></div><div><dt>Travel</dt><dd>One car</dd></div></dl>
+                <div class="case-scopes">
+                  <div><span>Scope 1</span><strong>1.6 t</strong></div>
+                  <div><span>Scope 2</span><strong>3.0 t</strong></div>
+                  <div class="big"><span>Scope 3</span><strong>0.8 t</strong></div>
+                </div>
+              </div>
+              <div class="case-issue">
+                <span class="ki">Key issue</span>
+                <p>No commute survey or device list, just a car and a power bill. Scope 3 uses illustrative factors, so its range is ±50%.</p>
+                <a href="dashboard.html#individual/open/overview">See it in the dashboard →</a>
+              </div>
+            </article>
+          </div>
+        </div>
+        <p class="fine reveal">Company figures are disclosed values from FY 2025-26 integrated reports. Neither company uses this platform.</p>
+      </div>
+    </section>
+
+    <!-- 5. Architecture -->
+    <section class="section alt" id="how">
+      <div class="wrap">
+        <h2 class="h2 center reveal"><span class="soft">How it works.</span><br>Three layers.</h2>
+        <div class="flow reveal" id="flow">
+          <div class="fnode l1"><span>01</span><b>Input</b><em>Tracker data</em></div>
+          <div class="fwire"><i></i></div>
+          <div class="fnode l2"><span>02</span><b>Estimate</b><em>Calculate</em></div>
+          <div class="fwire"><i></i></div>
+          <div class="fnode l3"><span>03</span><b>Reduce</b><em>Actions</em></div>
+        </div>
+
+        <div class="layers">
+          <article class="layer l1">
+            <div class="layer-text">
+              <span class="lk">Layer 1 · Input &amp; categorisation</span>
+              <h3>Files in. Scopes out.</h3>
+              <ul><li>Tracker exports are read as they are</li><li>Each row is sorted into Scope 1, 2 or 3</li><li>Missing data is estimated, by rules or Gemini</li><li>Every estimate widens the range</li></ul>
+              <p class="out">Output: structured data tagged measured, estimated or illustrative</p>
+            </div>
+            <div class="layer-viz viz-input" aria-hidden="true">
+              <div class="files"><span>fleet.csv</span><span>meter.csv</span><span>cloud.csv</span></div>
+              <div class="sorter"><i></i></div>
+              <div class="bins"><span>S1</span><span>S2</span><span>S3</span></div>
+            </div>
+          </article>
+          <article class="layer l2">
+            <div class="layer-text">
+              <span class="lk">Layer 2 · Unified calculation</span>
+              <h3>One formula per category.</h3>
+              <ul><li>Scope 1: litres × fuel factor</li><li>Scope 2: kWh × grid factor</li><li>Scope 3: activity × category factor</li><li>Uncertainty carried through: ±10% measured to ±50% missing</li></ul>
+              <p class="out">Output: a report with a range and a source on every number</p>
+            </div>
+            <div class="layer-viz viz-calc" aria-hidden="true">
+              <code>58,100 kWh × 0.757</code>
+              <strong>= 44.0 t</strong>
+              <div class="cband"><i></i><b></b></div>
+              <span class="cl">39.6 t ← ±10% → 48.4 t</span>
+            </div>
+          </article>
+          <article class="layer l3">
+            <div class="layer-text">
+              <span class="lk">Layer 3 · Reduction &amp; decisions</span>
+              <h3>Ranked by tonnes per rupee.</h3>
+              <ul><li>Each action: tonnes saved, cost and payback</li><li>Ranked by cost-efficiency</li><li>Stack actions into a scenario, with an overlap warning</li></ul>
+              <p class="out">Output: top actions and a scenario with the new total and grade</p>
+            </div>
+            <div class="layer-viz viz-rank" aria-hidden="true">
+              <div class="rk" style="--w:100%"><span>Route optimisation</span><b>1.50</b></div>
+              <div class="rk" style="--w:67%"><span>Carpooling and transit</span><b>1.00</b></div>
+              <div class="rk" style="--w:50%"><span>Renewable power</span><b>0.75</b></div>
+              <div class="rk" style="--w:33%"><span>Rooftop solar</span><b>0.50</b></div>
+              <em>t saved per ₹ lakh · demo campus</em>
+            </div>
+          </article>
         </div>
       </div>
     </section>
@@ -223,8 +294,8 @@
         <div class="cta reveal">
           <h2 class="h2">See your footprint,<br>with the method shown.</h2>
           <div class="hero-actions">
-            <a class="btn" href="dashboard.html#small_scale">Open the dashboard <span class="arrow">→</span></a>
-            <a class="btn btn-ghost" href="tracker-demo/index.html">Connect a tracker</a>
+            <a class="btn" href="dashboard.html#small_scale/open/overview">Open dashboard <span class="arrow">→</span></a>
+            <a class="btn btn-ghost" href="#problem">Learn more <span class="arrow">↓</span></a>
           </div>
         </div>
       </div>
@@ -233,7 +304,7 @@
 
   <footer class="footer">
     <div class="wrap footer-inner">
-      <span>Carbon Aggregation · team Original Green (T3-02)</span>
+      <span>The Original Green · team T3-02</span>
       <span>Demo data. Illustrative factors are not verified sources.</span>
     </div>
   </footer>
