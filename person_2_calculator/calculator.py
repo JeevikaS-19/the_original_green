@@ -396,4 +396,5 @@ def calculate_all_scopes(intake_data):
         },
         "unverified_inputs": unverified,
         "illustrative_inputs": illustrative,
+        "assumptions": intake_data.get("assumptions", {}),
     }

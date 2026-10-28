@@ -105,3 +105,8 @@ def test_all_scopes_collects_illustrative_inputs_at_top_level():
     }
     result = calculate_all_scopes(intake)
     assert "scope_3.commute.car.factor" in result["illustrative_inputs"]
+
+
+def test_intake_assumptions_pass_through_to_the_calc_output():
+    intake = {"scopes": {}, "confidence_metadata": {}, "assumptions": {"scope_1": ["About 20 vehicles."]}}
+    assert calculate_all_scopes(intake)["assumptions"] == {"scope_1": ["About 20 vehicles."]}
