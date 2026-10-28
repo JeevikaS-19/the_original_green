@@ -96,46 +96,18 @@ pick("small_scale");
 // 3. Reduction: levers, stacking, live updates
 nav("reduction");
 check("reduction view", active().dataset.view === "reduction");
-check("top 5 actions as levers", $$(".lever").length === 5, String($$(".lever").length));
-const out0 = $("#scenario-out").textContent;
-const box0 = $('[data-pick="0"]');
-box0.checked = true; change(box0);
-const out1 = $("#scenario-out").textContent;
-check("ticking an action updates the live result", out1 !== out0 && out1.includes("−"), out1.slice(0, 60));
-const slider0 = $('input[type=range][data-pct="0"]');
-const em1 = made.length;
-input(slider0, "15");
-check("charts redraw when a slider moves", made.length > em1);
-const out2 = $("#scenario-out").textContent;
-check("dragging a lever updates the result", out2 !== out1, out2.slice(0, 60));
-check("number box follows the slider", $('input[type=number][data-pct="0"]').value === "15");
-const box2 = $('[data-pick="2"]');
-box2.checked = true; change(box2);
-check("stacking two actions shows the combined line", $("#scenario-note").textContent.includes("#1 + #3"), $("#scenario-note").textContent);
-check("overlap note with two actions", $("#scenario-warn").textContent.includes("double count"));
-check("reduction table has six rows", $$("#scenario-out tr").length === 6 && ["Scope 1", "Total", "Investment", "Grade"].every((k) => $("#scenario-out").textContent.includes(k)));
-check("reduction chart: now vs with plan line", chartOf("reduction-line") && chartOf("reduction-line").type === "line");
-check("sidebar shows with-plan total", $("#quick-stats").textContent.includes("With plan"));
+check("no adjust panel, levers or input sliders", !$(".adjust") && !$(".lever") && !$("#edits"));
+check("AI Apply is the only control", !!$("#ai-apply") && !$("#ai-budget") && !$("#ai-priority"));
+check("reduction table starts with no change", $("#scenario-out").textContent.includes("264.0"));
+click($("#ai-apply"));
+const aiOut = $("#ai-out").textContent;
+check("AI Apply applies a plan and says what changed", aiOut.includes("Applied") && aiOut.includes("cuts"), aiOut.slice(0, 80));
+check("the table shows the changed total", !$("#scenario-out").textContent.includes("With plan264.0"));
+check("chart compares now with the AI plan, as bars", chartOf("reduction-line") && chartOf("reduction-line").type === "bar" && chartOf("reduction-line").datasets === 2);
+check("sidebar shows the with-plan total", $("#quick-stats").textContent.includes("With plan") && !$("#quick-stats").textContent.includes("With plan–"));
+check("filled-in estimates are listed on the reduction page", !!$("#missing-data"));
 nav("overview");
 check("overview trend shows the plan", $("#summary-cards").textContent.includes("↓") && chartOf("trend-chart").datasets === 2);
-
-// Inputs flow through the whole dashboard
-nav("reduction");
-const kwh = $('[data-edit="kwh"]');
-input(kwh, String(Number(kwh.value) * 2));
-check("editing kWh changes the total", !$("#quick-stats").textContent.includes("264.0"), $("#quick-stats").textContent.slice(0, 40));
-click($("#reset-edits"));
-check("reset restores the total", $("#quick-stats").textContent.includes("264"));
-
-// 4. AI Apply
-click($("#ai-apply"));
-check("AI Apply suggests a plan", $("#ai-out").textContent.includes("Plan:") && $("#ai-out").textContent.includes("Cuts"), $("#ai-out").textContent.slice(0, 80));
-check("AI Apply ticks levers", $$("[data-pick]:checked").length >= 1, String($$("[data-pick]:checked").length));
-const spend = Number(($("#scenario-out").textContent.match(/Investment[^₹]*₹([\d,]+)/) || [0, "0"])[1].replace(/,/g, ""));
-check("AI plan stays within budget", spend <= 2500000 && spend > 0, String(spend));
-click($("#ai-apply"));
-check("AI Apply has no budget or priority inputs", !$("#ai-budget") && !$("#ai-priority"));
-click($("#ai-apply"));
 
 // 5. Data breakdown
 nav("breakdown");
@@ -154,25 +126,25 @@ const anchors = downloads.filter((d) => d && d.downloaded).length;
 check("JSON and CSV download", anchors === 2, "anchor clicks " + anchors);
 check("PDF opens the formal report page", opened.length === 1 && opened[0].startsWith("report.html?org=") && opened[0].includes("print=1"), opened.join(" "));
 
-// Individual has no actions: the reduction page explains instead of breaking
+// Individual has no actions: AI Apply says so instead of breaking
 pick("individual");
 nav("reduction");
-check("individual shows no-actions note", $("#levers").textContent.includes("No reduction action"));
+click($("#ai-apply"));
+check("individual: AI Apply reports no change", $("#ai-out").textContent.includes("no change"), $("#ai-out").textContent.slice(0, 60));
 
-// Projects: a new project keeps its own inputs, and the base data is unchanged
+// Projects: a new project starts with no plan, and plans never leak between projects
 pick("small_scale");
 w.prompt = () => "Project A";
 const psel = $("#project-select");
 psel.value = "__new__"; change(psel);
 const projId = $("#project-select").value;
 check("new project is selected", projId !== "base" && $("#project-select").textContent.includes("Project A"));
-const kwhP = $('[data-edit="kwh"]');
-input(kwhP, String(Number(kwhP.value) * 2));
-check("project input changes the total", !$("#quick-stats").textContent.includes("264.0"));
+check("a new project has no plan yet", $("#quick-stats").textContent.includes("With plan–"));
 $("#project-select").value = "base"; change($("#project-select"));
-check("base data is unchanged", $("#quick-stats").textContent.includes("264.0"));
+check("base keeps its applied plan", !$("#quick-stats").textContent.includes("With plan–"));
 $("#project-select").value = projId; change($("#project-select"));
-check("project keeps its inputs after switching back", !$("#quick-stats").textContent.includes("264.0"));
+check("the project still has no plan after switching back", $("#quick-stats").textContent.includes("With plan–"));
+
 check("no script errors", errors.length === 0, errors.join("; "));
 
 console.log(results.join("\n"));

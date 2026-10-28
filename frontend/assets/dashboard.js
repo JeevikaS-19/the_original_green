@@ -114,7 +114,7 @@
     });
     saveProjects();
     $("import-note").textContent = "Applied: " + (applied.join(", ") || "nothing") + (rejected.length ? ". Not applied: " + rejected.join(", ") + "." : ".");
-    renderEdits(); renderLevers(scenario()); live();
+    live();
   }
   var reduce = window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 
@@ -717,32 +717,6 @@
   }
 
   // ---- Reduction ----
-  function renderLevers(sc) {
-    $("levers").innerHTML = sc.defs.length ? sc.defs.map(function (d) {
-      var s = sc.st[d.i], sv = annualSaving(d.a);
-      return '<div class="lever' + (d.enabled ? '' : ' off') + (s.on ? ' on' : '') + '" data-lever="' + d.i + '">' +
-        '<label class="lv-pick"><input type="checkbox" data-pick="' + d.i + '"' + (s.on ? ' checked' : '') + (d.enabled ? '' : ' disabled') + '>' +
-        '<i class="dot ' + ACT_CLASS[d.i] + '"></i>' +
-        '<span><b>#' + (d.i + 1) + ' ' + esc(d.a.action) + '</b><small>' + esc(SCOPE_NAME[d.a.scope] || d.a.scope) + ' · ' + Number(d.a.roi).toFixed(2) + ' t per ₹ lakh' +
-        (sv === null ? ' · no direct saving' : ' · payback ' + esc(d.a.payback)) + '</small></span></label>' +
-        (d.enabled
-          ? '<div class="lv-ctl"><span class="lv-label">' + esc(d.def.label) + '</span>' +
-            '<input type="range" min="0" max="' + d.def.max + '" step="0.1" value="' + Math.round(s.pct * 10) / 10 + '" data-pct="' + d.i + '" aria-label="' + esc(d.def.label) + '">' +
-            '<span class="lv-num"><input type="number" min="0" max="' + d.def.max + '" step="0.1" value="' + Math.round(s.pct * 10) / 10 + '" data-pct="' + d.i + '" aria-label="' + esc(d.def.label) + ', percent">%</span>' +
-            '<span class="lv-res" data-res="' + d.i + '"></span></div>'
-          : '<div class="lv-ctl"><span class="muted small">No data for the emissions this action targets.</span></div>') +
-        '</div>';
-    }).join("") : '<div class="empty">No reduction action applies here yet. The knowledge base has no actions for individuals.</div>';
-  }
-  function updateLeverResults(sc) {
-    sc.defs.forEach(function (d) {
-      var el = document.querySelector('[data-res="' + d.i + '"]');
-      if (!el) return;
-      var s = sc.st[d.i], scale = d.base ? s.pct / d.base : 0;
-      el.textContent = "−" + t(d.pool * s.pct / 100) + " · " + inr(d.a.cost_inr * scale);
-      document.querySelector('[data-lever="' + d.i + '"]').classList.toggle("on", !!s.on);
-    });
-  }
   function scopeNotes(id) {
     var list = path().actions.filter(function (a) { return a.scope === id; }).slice(0, 2);
     return list.length ? list.map(function (a) { return a.action + (/^N\/A/.test(a.payback) ? " (recurring cost)" : " (pays back in " + a.payback + ")"); }).join("; ") : "No measure in the knowledge base for this scope.";
@@ -755,17 +729,17 @@
         '</td><td class="num">' + t(Math.max(0, s.tons - cut)) + '</td><td class="muted">' + esc(scopeNotes(s.id)) + '</td></tr>';
     }).join("");
     rows += '<tr class="tot"><th>Total</th><td class="num">' + t(now) + '</td><td class="num">' + (sc.cut ? '−' + t(sc.cut) : '–') +
-      '</td><td class="num">' + t(sc.after) + '</td><td class="muted">' + (sc.cut ? 'Cuts ' + (sc.cut / now * 100).toFixed(1) + '% of the total' : 'Tick actions in Adjust to see a cut') + '</td></tr>';
+      '</td><td class="num">' + t(sc.after) + '</td><td class="muted">' + (sc.cut ? 'Cuts ' + (sc.cut / now * 100).toFixed(1) + '% of the total' : 'Press AI Apply to see a cut') + '</td></tr>';
     rows += '<tr><th>Investment</th><td class="num">–</td><td class="num">–</td><td class="num">' + inr(sc.cost) + '</td><td class="muted">' +
-      (sc.payback ? 'Pays back in ' + Math.round(sc.payback) + ' months from ' + inr(sc.saving) + ' saved a year' : (sc.cost ? 'No money payback on these actions' : 'One-off cost of the ticked actions')) + '</td></tr>';
+      (sc.payback ? 'Pays back in ' + Math.round(sc.payback) + ' months from ' + inr(sc.saving) + ' saved a year' : (sc.cost ? 'No money payback on these actions' : 'One-off cost of the plan')) + '</td></tr>';
     rows += '<tr><th>Grade</th><td class="num">' + esc(sc.eff.grade) + '</td><td class="num">→</td><td class="num">' + esc(sc.grade) + '</td><td class="muted">Per-employee bands, see the methodology</td></tr>';
     $("scenario-out").innerHTML = rows;
 
     var names = sc.rows.map(function (r) { return "#" + (r.d.i + 1); });
     $("scenario-note").innerHTML = names.length
       ? 'If you do <b>' + names.join(" + ") + '</b>: cut <b>' + t(sc.cut) + '</b>, cost <b>' + inr(sc.cost) + '</b>, new grade <b>' + esc(sc.grade) + '</b>'
-      : 'No plan yet: tick actions in Adjust, or use AI Apply.';
-    renderTrend(now, sc, "reduction-line", "reduction-note");
+      : 'No plan yet. Press AI Apply.';
+    renderNowPlan(sc);
 
     $("scenario-warn").innerHTML = '<p class="muted small fine-print">' +
       (sc.rows.length > 1 ? 'Actions on the same emissions apply one after another, so they don\'t double count; other overlaps are possible, so treat the cut as an upper bound. ' : '') +
@@ -781,22 +755,6 @@
       return '<li><span>' + esc(a) + '</span><span class="mbtns"><button class="btn btn-ghost btn-small" data-goto="connect">Upload real data</button></span></li>';
     }).join("") + '</ul><p class="muted small" style="margin-top:10px">Keep an estimate until a real figure replaces it; each one widens the range.</p>';
   }
-  function renderEdits() {
-    var v = inputs(), b = baseInputs();
-    var fields = [
-      { k: "litres", label: "Fuel burned (Scope 1)", unit: "litres a year, diesel-equivalent", step: 100, on: b.litres > 0 },
-      { k: "kwh", label: "Electricity used (Scope 2)", unit: "kWh a year", step: 100, on: b.kwh > 0 },
-      { k: "renewable", label: "Renewable share (Scope 2)", unit: "% of electricity, market-based view", step: 5, max: 100, on: b.kwh > 0 },
-      { k: "s3pct", label: "Scope 3 activity", unit: "% of today: staff, devices, travel, waste", step: 5, on: baseScope("scope_3").tons > 0 }
-    ];
-    $("edits").innerHTML = fields.map(function (f) {
-      return '<label class="edit' + (f.on ? '' : ' off') + '"><span>' + f.label + '</span>' +
-        '<input type="number" min="0"' + (f.max ? ' max="' + f.max + '"' : '') + ' step="' + f.step + '" data-edit="' + f.k + '" value="' + v[f.k] + '"' + (f.on ? '' : ' disabled') + '>' +
-        '<em>' + (f.on ? f.unit : 'No tracker data') + '</em></label>';
-    }).join("");
-  }
-
-  // ---- AI Apply: search the levers for the best plan within the budget ----
   function optimise(sc, budget, priority) {
     var cands = sc.defs.filter(function (d) { return d.enabled; }).map(function (d) {
       var costPer = d.a.cost_inr / d.base, tonsPer = d.pool / 100, sv = annualSaving(d.a);
@@ -834,7 +792,7 @@
     return plan;
   }
   // One button: the screen floods while the AI works, the plan is applied, then the water drains to it.
-  var AI_BUDGET = 2500000;
+  var AI_BUDGET = 2500000; // planning budget, not shown to the user
   var aiBusy = false;
   function runAi() {
     if (aiBusy) return;
@@ -846,7 +804,6 @@
       var sc = scenario();
       var target = optimise(sc, AI_BUDGET, "balanced");
       sc.defs.forEach(function (d) { sc.st[d.i].on = target[d.i].on; sc.st[d.i].pct = target[d.i].on ? target[d.i].pct : sc.st[d.i].pct; });
-      renderLevers(scenario());
       live();
       var after = scenario();
       var now = after.eff.total.tons, ratio = now ? after.after / now : 1;
@@ -869,10 +826,23 @@
   function showAiResult() {
     var sc = scenario();
     $("ai-out").innerHTML = sc.rows.length
-      ? '<b>Plan:</b> ' + sc.rows.map(function (r) { return esc(r.d.a.action) + ' at ' + pct(r.pct); }).join(", ") +
-        '. Cuts <b>' + t(sc.cut) + '</b>, costs <b>' + inr(sc.cost) + '</b>' +
+      ? 'Applied: cuts <b>' + t(sc.cut) + '</b>, costs <b>' + inr(sc.cost) + '</b>' +
         (sc.payback ? ', pays back in <b>' + Math.round(sc.payback) + ' months</b>' : '') + '. New grade <b>' + esc(sc.grade) + '</b>.'
-      : 'No plan fits the AI\'s budget.';
+      : 'The AI found no change to apply for this data.';
+  }
+
+  // Now vs the AI plan, per scope.
+  function renderNowPlan(sc) {
+    var scopes = sc.eff.scopes;
+    var planned = scopes.map(function (s) { return Math.max(0, s.tons - (sc.scopeCut[s.id] || 0)); });
+    mountChart("reduction-line", { type: "bar", data: {
+      labels: scopes.map(function (s) { return SCOPE_NAME[s.id]; }),
+      datasets: [
+        { label: "Now", data: scopes.map(function (s) { return Math.round(s.tons * 10) / 10; }), backgroundColor: PALETTE.muted },
+        { label: "AI plan", data: planned.map(function (v) { return Math.round(v * 10) / 10; }), backgroundColor: PALETTE.s1 }
+      ] },
+      options: chartOptions({ scales: { x: { grid: { display: false } }, y: { beginAtZero: true, title: { display: true, text: "tCO₂e a year" } } } }) });
+    $("reduction-note").textContent = sc.rows.length ? "Cut " + t(sc.cut) + " a year" : "Press AI Apply to see the plan";
   }
 
   // ---- Data breakdown ----
@@ -948,16 +918,13 @@
     renderOverview(sc);
     ["scope_1", "scope_2", "scope_3"].forEach(function (id) { renderScopeView(id, sc); });
     renderReduction(sc);
-    updateLeverResults(sc);
     renderBreakdown(sc);
   }
   function render() {
     renderHeader();
     renderProjects();
     renderConnect();
-    renderEdits();
     renderMissing();
-    renderLevers(scenario());
     $("ai-out").innerHTML = "";
     live();
     window.history.replaceState(null, "", "#" + state.scale + "/" + (state.path === "closed_source" ? "closed" : "open") + "/" + state.view);
@@ -996,11 +963,6 @@
     if (e.target.id === "dl-json") { downloadJson(); return; }
     if (e.target.id === "dl-csv") { downloadCsv(); return; }
     if (e.target.id === "dl-pdf") { downloadPdf(); return; }
-    if (e.target.id === "reset-edits") {
-      state.edits[key()] = baseInputs();
-      delete state.levers[key()];
-      renderEdits(); renderLevers(scenario()); live();
-    }
   });
   document.addEventListener("change", function (e) {
     if (e.target.id === "org-select") { state.scale = e.target.value; render(); return; }
@@ -1017,36 +979,7 @@
       reader.readAsText(e.target.files[0]);
       return;
     }
-    if (e.target.matches("[data-pick]")) {
-      var sc = scenario();
-      sc.st[e.target.getAttribute("data-pick")].on = e.target.checked;
-      live();
-    }
   });
-  document.addEventListener("input", function (e) {
-    var k = e.target.getAttribute && e.target.getAttribute("data-edit");
-    if (k) {
-      var v = Math.max(0, Number(e.target.value) || 0);
-      if (k === "renewable") v = Math.min(100, v);
-      inputs()[k] = v;
-      // Pools change with the inputs, so the levers are rebuilt around them.
-      renderLevers(scenario());
-      live();
-      return;
-    }
-    var i = e.target.getAttribute && e.target.getAttribute("data-pct");
-    if (i !== null && i !== undefined) {
-      var sc = scenario(), max = Number(e.target.max) || 100;
-      var val = Math.max(0, Math.min(max, Number(e.target.value) || 0));
-      sc.st[i].pct = val;
-      sc.st[i].on = true;
-      document.querySelectorAll('[data-pct="' + i + '"]').forEach(function (inp) { if (inp !== e.target) inp.value = val; });
-      var cb = document.querySelector('[data-pick="' + i + '"]');
-      if (cb) cb.checked = true;
-      live();
-    }
-  });
-
   if (!ALL.length) {
     $("main").innerHTML = '<p class="muted">Demo data did not load. Check that data/demo_fixtures.js is present.</p>';
     return;

@@ -93,15 +93,20 @@
       <section class="view" data-view="reduction">
         <div class="red-layout">
           <div class="dcard">
-            <div class="dcard-head"><h2>Current and with your changes</h2><span class="muted small">Change each measure in Adjust below</span></div>
+            <div class="dcard-head"><h2>Current and with your changes</h2><span class="muted small">Press AI Apply to set the plan</span></div>
             <div class="tbl-wrap"><table class="tbl red-tbl">
               <thead><tr><th>Measure</th><th class="num">Now</th><th class="num">Change</th><th class="num">With plan</th><th>How to bring it down</th></tr></thead>
               <tbody id="scenario-out"></tbody>
             </table></div>
             <p class="result-line" id="scenario-note"></p>
+            <div class="import">
+            <label class="btn btn-ghost btn-small">Upload CSV<input type="file" id="csv-input" accept=".csv,text/csv" hidden></label>
+            <span class="muted small">A CSV with two columns, field and value. Fields: litres, kwh, renewable, s3pct. Saved to the selected project.</span>
+            <p class="muted small" id="import-note"></p>
+          </div>
           </div>
           <div class="dcard">
-            <div class="dcard-head"><h2>Now vs with plan</h2><span class="muted small" id="reduction-note"></span></div>
+            <div class="dcard-head"><h2>Now vs AI plan</h2><span class="muted small" id="reduction-note"></span></div>
             <div class="chart" id="reduction-line"></div>
           </div>
         </div>
@@ -112,29 +117,10 @@
           </div>
           <p class="ai-out" id="ai-out" aria-live="polite"></p>
         </div>
-        <details class="adjust">
-          <summary><span><b>Adjust actions and inputs</b><small>Tick actions and move the sliders to test your own plan</small></span></summary>
-          <div class="adjust-body">
-<div class="dcard">
-          <div class="dcard-head"><h2>Top actions</h2><span class="muted small">Tick to combine. Drag or type to change how far each goes.</span></div>
-          <div class="levers" id="levers"></div>
-        </div>
-            <div class="dcard" id="missing-card">
+        <div class="dcard" id="missing-card">
               <div class="dcard-head"><h2>Filled in, not measured</h2><span class="muted small">Estimates the AI or the rules supplied</span></div>
               <div id="missing-data"></div>
             </div>
-        <div class="dcard">
-          <div class="dcard-head"><h2>Your inputs</h2><button class="btn btn-ghost btn-small" id="reset-edits">Reset</button></div>
-          <p class="muted small" style="margin-bottom:14px">Change what you measured and every graph follows. This is a what-if view; the saved report doesn't change.</p>
-          <div class="edits" id="edits"></div>
-          <div class="import">
-            <label class="btn btn-ghost btn-small">Upload CSV<input type="file" id="csv-input" accept=".csv,text/csv" hidden></label>
-            <span class="muted small">A CSV with two columns, field and value. Fields: litres, kwh, renewable, s3pct. Saved to the selected project.</span>
-            <p class="muted small" id="import-note"></p>
-          </div>
-        </div>
-          </div>
-        </details>
         <div id="scenario-warn"></div>
       </section>
 
