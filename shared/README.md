@@ -19,6 +19,14 @@ Everything in this folder is read by more than one person. Do not edit it on you
 3. To change a contract, open a PR that touches only `shared/contracts/` and tell the other two people in chat before merging.
 4. The example values in the contracts are illustrative, not calibrated.
 
+## Decisions in force
+
+- **Confidence vocabulary.** Intake writes `full_data`, `partial_data`, `overview_only`. The calculator reads `full`, `partial`, `missing`. `integration/intake_to_calc.py` maps between them: `overview_only` becomes `missing`, the widest band.
+- **Downgrade on placeholders.** If any input in a scope used a placeholder or missing factor, the calculator lowers that scope's confidence one level (full → partial → missing). A placeholder contributes zero, so the total can understate.
+- **`data_path`.** The intake output adds `data_path` per scope (`open_source` or `closed_source`). Consumers may ignore it.
+- **`unverified_inputs`.** The calc output lists every input path that is missing or uses a placeholder factor, both per scope and at the top level. The report surfaces them as warnings.
+- **Zero total is not a grade.** Person 3 shows `N/A` when nothing could be calculated, never `A`.
+
 ## Who hands what to whom
 
 | Stage | Reads | Writes |

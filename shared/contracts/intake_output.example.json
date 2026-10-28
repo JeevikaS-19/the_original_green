@@ -53,5 +53,10 @@
     "scope_1": "full_data",
     "scope_2": "full_data",
     "scope_3": "partial_data"
+  },
+  "data_path": {
+    "scope_1": "open_source",
+    "scope_2": "open_source",
+    "scope_3": "open_source"
   }
 }

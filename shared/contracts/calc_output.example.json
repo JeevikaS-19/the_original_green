@@ -44,5 +44,9 @@
   "total": {
     "co2e_kg": 121000,
     "co2e_tons": 121
-  }
+  },
+  "unverified_inputs": [
+    "scope_3.cloud",
+    "scope_3.hardware.laptop.embodied_carbon_factor"
+  ]
 }

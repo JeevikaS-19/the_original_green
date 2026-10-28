@@ -180,7 +180,7 @@ def calculate_scope_3(cloud, hardware, commute, waste, conversion_factors):
     commute_total = 0.0
     commute_details = {}
     commute = commute or {}
-    days = _number(commute.get("commuting_days_per_year"), 260)
+    days = _number(commute.get("commuting_days_per_year"), COMMUTING_DAYS_PER_YEAR)
     distance = _number(commute.get("avg_distance_km")) * days
     commute_factors = conversion_factors.get("commute", {})
     for mode, share in (commute.get("mode_split") or {}).items():
@@ -202,7 +202,7 @@ def calculate_scope_3(cloud, hardware, commute, waste, conversion_factors):
     waste_factors = conversion_factors.get("waste", {})
     for item in waste or []:
         category = str(item.get("category", "")).strip().lower()
-        disposal = str(item.get("disposal_method", "landfill" if category == "solid waste" else "recycling")).strip().lower()
+        disposal = str(item.get("disposal_method", DEFAULT_DISPOSAL.get(category, ""))).strip().lower()
         factor = waste_factors.get((category, disposal))
         factor_value = _factor_value(factor)
         mass = _number(item.get("annual_mass_kg"))
@@ -226,6 +226,24 @@ def calculate_scope_3(cloud, hardware, commute, waste, conversion_factors):
         "categories": categories,
         "unverified_inputs": unverified,
     }
+
+
+COMMUTING_DAYS_PER_YEAR = 250  # spec: 250 working days
+# Disposal route used when the input does not name one. Must match the keys in factors.WASTE_FACTORS.
+DEFAULT_DISPOSAL = {"solid waste": "landfill", "e-waste": "recycling", "wastewater": "treatment"}
+UNVERIFIED_DOWNGRADE = {"full": "partial", "partial": "missing", "missing": "missing"}
+
+
+def effective_completeness(label, scope_result):
+    """Lower the confidence one level when any input used a placeholder or missing factor.
+
+    A placeholder factor contributes zero, so the reported total can understate
+    the true value. The label should not claim more certainty than that allows.
+    """
+    if not scope_result.get("unverified_inputs"):
+        return label
+    base = str(label).lower().replace("_data", "")
+    return UNVERIFIED_DOWNGRADE.get(base, "missing")
 
 
 def uncertainty_pct(data_completeness):
@@ -304,10 +322,15 @@ def calculate_all_scopes(intake_data):
         scopes.get("scope_3", {}).get("waste"),
         conversion_factors,
     )
-    scope_1 = adjust_confidence(scope_1, metadata.get("scope_1", "partial"))
-    scope_2 = adjust_confidence(scope_2, metadata.get("scope_2", "partial"))
-    scope_3 = adjust_confidence(scope_3, metadata.get("scope_3", "partial"))
+    scope_1 = adjust_confidence(scope_1, effective_completeness(metadata.get("scope_1", "partial"), scope_1))
+    scope_2 = adjust_confidence(scope_2, effective_completeness(metadata.get("scope_2", "partial"), scope_2))
+    scope_3 = adjust_confidence(scope_3, effective_completeness(metadata.get("scope_3", "partial"), scope_3))
     total_kg = sum(_number(scope.get("total_co2e_kg")) for scope in (scope_1, scope_2, scope_3))
+    unverified = list_unverified(intake_data)
+    for scope in (scope_1, scope_2, scope_3):
+        for item in scope.get("unverified_inputs", []):
+            if item not in unverified:
+                unverified.append(item)
     return {
         "timestamp": intake_data.get("timestamp", datetime.now(timezone.utc).isoformat()),
         "tier": intake_data.get("tier"),
@@ -320,5 +343,5 @@ def calculate_all_scopes(intake_data):
             "co2e_kg": _round(total_kg),
             "co2e_tons": _tons(total_kg),
         },
-        "unverified_inputs": list_unverified(intake_data),
+        "unverified_inputs": unverified,
     }
