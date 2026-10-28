@@ -18,13 +18,12 @@ sys.path.insert(0, str(HERE.parent))  # repo root, so person_3_reporting imports
 from calculator import calculate_all_scopes  # noqa: E402
 
 # Person 1 writes full_data / partial_data / overview_only.
-# Person 2 reads full / partial / missing. overview_only (budget only) maps to
-# "missing", the widest band, because Person 2 has no overview band.
-# Decision to confirm with Person 2.
+# Person 2 reads full / partial / overview / missing.
+# overview_only is totals-only input (the closed-source path): ±40%.
 CONFIDENCE_MAP = {
     "full_data": "full",
     "partial_data": "partial",
-    "overview_only": "missing",
+    "overview_only": "overview",
     "missing": "missing",
 }
 
