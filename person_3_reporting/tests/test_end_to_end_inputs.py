@@ -68,3 +68,10 @@ def test_input_payload_is_not_mutated():
     before = copy.deepcopy(payload)
     generate_report(payload)
     assert payload == before
+
+
+def test_illustrative_inputs_are_labelled_in_the_report():
+    payload = calc_payload("tier_2")
+    payload["illustrative_inputs"] = ["scope_3.commute.car.factor", "scope_3.waste.e-waste.recycling.factor"]
+    warnings = generate_report(payload)["report"]["warnings"]
+    assert any("illustrative factors for 2 input(s)" in warning for warning in warnings)

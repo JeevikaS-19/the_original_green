@@ -291,6 +291,12 @@ def normalize_calc_results(raw: Any) -> dict[str, Any]:
     missing_paths = [str(path) for path in raw.get("unverified_inputs") or []]
     if missing_paths:
         warnings.append(f"Missing or unverified inputs: {', '.join(missing_paths)}.")
+    illustrative_paths = [str(path) for path in raw.get("illustrative_inputs") or []]
+    if illustrative_paths:
+        warnings.append(
+            "Demo uses illustrative factors for "
+            f"{len(illustrative_paths)} input(s). Real submissions use verified sources."
+        )
 
     activity = raw.get("activity_summary")
     if not isinstance(activity, dict):
