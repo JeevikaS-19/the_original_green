@@ -858,6 +858,12 @@
     }).join("");
     $("mix-note").textContent = "Overall confidence ±" + (total ? (H / total * 100).toFixed(1) : 0) + "%";
 
+    var assumed = path().assumptions || [];
+    $("assumption-table").innerHTML = assumed.length
+      ? '<div class="tbl-wrap"><table class="tbl"><thead><tr><th>#</th><th>Assumption and reasoning</th></tr></thead><tbody>' +
+        assumed.map(function (a, i) { return '<tr class="flag"><td class="num">' + (i + 1) + '</td><td>' + esc(a) + '</td></tr>'; }).join("") +
+        '</tbody></table></div>'
+      : '<p class="muted small">Nothing is assumed on this path. Every figure comes from data you supplied.</p>';
     $("breakdown-table").innerHTML = '<div class="tbl-wrap"><table class="tbl"><thead><tr><th>Scope</th><th>Category</th><th>tCO₂e</th><th>Status</th><th>If you measure it</th></tr></thead><tbody>' +
       cats.map(function (c) {
         var impact = "–";
@@ -865,7 +871,8 @@
           var nh = H - c.tons * (c.band - 0.1);
           impact = 'Confidence ±' + (H / total * 100).toFixed(1) + '% → ±' + (nh / total * 100).toFixed(1) + '%';
         } else if (!c.tons) impact = '<a href="#" data-goto="connect">Upload data</a>';
-        return '<tr' + (c.tons ? '' : ' class="off"') + '><td>' + SCOPE_NAME[c.scope] + '</td><td>' + esc(c.name) + '</td><td><b>' + (c.tons ? t(c.tons) : '–') + '</b></td><td>' +
+        var rowClass = !c.tons ? ' class="off"' : (c.kind === "measured" ? '' : ' class="flag"');
+        return '<tr' + rowClass + '><td>' + SCOPE_NAME[c.scope] + '</td><td>' + esc(c.name) + '</td><td><b>' + (c.tons ? t(c.tons) : '–') + '</b></td><td>' +
           tag(c.kind) + '</td><td class="muted">' + impact + '</td></tr>';
       }).join("") + '</tbody></table></div>';
 

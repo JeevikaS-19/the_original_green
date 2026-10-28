@@ -435,3 +435,7 @@
 .dash .view.active { animation: none; }
 @keyframes lift { from { transform: translateY(10px); } to { transform: none; } }
 .dash .view.active > * { animation: lift .5s var(--ease) both; }
+
+/* Highlights: rows that rest on an estimate, illustrative factor or totals only */
+.tbl tr.flag td { background: #fbf6e9; }
+.tbl tr.flag td:first-child { box-shadow: inset 3px 0 0 var(--ochre); }
