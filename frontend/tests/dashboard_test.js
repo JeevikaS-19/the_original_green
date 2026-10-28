@@ -128,18 +128,14 @@ click($("#reset-edits"));
 check("reset restores the total", $("#quick-stats").textContent.includes("264"));
 
 // 4. AI Apply
-$("#ai-budget").value = "2500000";
 click($("#ai-apply"));
-check("AI Apply suggests a plan", $("#ai-out").textContent.includes("Suggested plan") && $("#ai-out").textContent.includes("Cuts"), $("#ai-out").textContent.slice(0, 80));
+check("AI Apply suggests a plan", $("#ai-out").textContent.includes("Plan:") && $("#ai-out").textContent.includes("Cuts"), $("#ai-out").textContent.slice(0, 80));
 check("AI Apply ticks levers", $$("[data-pick]:checked").length >= 1, String($$("[data-pick]:checked").length));
 const spend = Number(($("#scenario-out").textContent.match(/Investment[^₹]*₹([\d,]+)/) || [0, "0"])[1].replace(/,/g, ""));
 check("AI plan stays within budget", spend <= 2500000 && spend > 0, String(spend));
-$("#ai-priority").value = "cost";
 click($("#ai-apply"));
-check("lowest-spend priority only picks paying actions", $("#ai-out").textContent.includes("pays back"), $("#ai-out").textContent.slice(0, 120));
-$("#ai-budget").value = "0";
+check("AI Apply has no budget or priority inputs", !$("#ai-budget") && !$("#ai-priority"));
 click($("#ai-apply"));
-check("zero budget explains nothing fits", $("#ai-out").textContent.includes("Nothing fits"));
 
 // 5. Data breakdown
 nav("breakdown");

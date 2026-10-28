@@ -833,42 +833,46 @@
     });
     return plan;
   }
-  var anim = null;
-  function aiApply() {
-    var sc = scenario();
-    var budget = Math.max(0, Number($("ai-budget").value) || 0);
-    var target = optimise(sc, budget, $("ai-priority").value);
-    var from = {};
-    sc.defs.forEach(function (d) { from[d.i] = sc.st[d.i].pct; sc.st[d.i].on = target[d.i].on; });
-    var start = null, dur = reduce ? 0 : 900;
-    if (anim) cancelAnimationFrame(anim);
-    function frame(ts) {
-      if (start === null) start = ts;
-      var k = dur ? Math.min(1, (ts - start) / dur) : 1;
-      var e = 1 - Math.pow(1 - k, 3);
-      sc.defs.forEach(function (d) {
-        var to = target[d.i].on ? target[d.i].pct : from[d.i];
-        sc.st[d.i].pct = k === 1 ? to : from[d.i] + (to - from[d.i]) * e;
-        document.querySelectorAll('[data-pct="' + d.i + '"]').forEach(function (inp) { inp.value = Math.round(sc.st[d.i].pct * 10) / 10; });
-        var cb = document.querySelector('[data-pick="' + d.i + '"]');
-        if (cb) cb.checked = sc.st[d.i].on;
-      });
+  // One button: the screen floods while the AI works, the plan is applied, then the water drains to it.
+  var AI_BUDGET = 2500000;
+  var aiBusy = false;
+  function runAi() {
+    if (aiBusy) return;
+    aiBusy = true;
+    var btn = $("ai-apply");
+    btn.disabled = true;
+    var finish = function () { aiBusy = false; btn.disabled = false; };
+    var apply = function () {
+      var sc = scenario();
+      var target = optimise(sc, AI_BUDGET, "balanced");
+      sc.defs.forEach(function (d) { sc.st[d.i].on = target[d.i].on; sc.st[d.i].pct = target[d.i].on ? target[d.i].pct : sc.st[d.i].pct; });
+      renderLevers(scenario());
       live();
-      if (k < 1) anim = requestAnimationFrame(frame);
-      else { anim = null; showAiResult(); }
+      var after = scenario();
+      var now = after.eff.total.tons, ratio = now ? after.after / now : 1;
+      showAiResult();
+      var sub = after.rows.length
+        ? "Grade " + after.grade + ". The water drains to " + Math.round(ratio * 100) + "% of today's level."
+        : "Nothing fits the AI's budget, so the water stays where it is.";
+      if (window.Flood) window.Flood.go(ratio, reduce ? 0 : 3500, "Plan applied", t(after.after) + " a year", sub);
+      setTimeout(finish, reduce || !window.Flood ? 0 : 3600);
+    };
+    if (window.Flood) {
+      window.Flood.reset();
+      window.Flood.go(1, reduce ? 0 : 2500, "AI is working", "Reading your inputs", "The whole screen is today's emissions.");
+      setTimeout(apply, reduce ? 0 : 2600);
+    } else {
+      apply();
+      finish();
     }
-    if (dur) anim = requestAnimationFrame(frame); else frame(0);
   }
   function showAiResult() {
     var sc = scenario();
     $("ai-out").innerHTML = sc.rows.length
-      ? '<p class="ai-say"><b>Suggested plan:</b> ' + sc.rows.map(function (r) {
-          return esc(r.d.a.action) + ' → ' + pct(r.pct) + ' ' + esc(r.d.def.label.toLowerCase());
-        }).join(", ") + '.</p>' +
-        '<p class="ai-sum">Cuts <b>' + t(sc.cut) + '</b> · costs <b>' + inr(sc.cost) + '</b>' +
-        (sc.payback ? ' · pays back in <b>' + Math.round(sc.payback) + ' months</b>' : '') + ' · new grade <b>' + esc(sc.grade) + '</b></p>'
-      : '<div class="empty">Nothing fits this budget and priority.</div>';
-    if (sc.rows.length) $("ai-out").insertAdjacentHTML("beforeend", '<div class="ai-decide"><button class="btn btn-small" id="ai-accept">Accept plan</button><button class="btn btn-ghost btn-small" id="ai-reject">Reject</button></div>');
+      ? '<b>Plan:</b> ' + sc.rows.map(function (r) { return esc(r.d.a.action) + ' at ' + pct(r.pct); }).join(", ") +
+        '. Cuts <b>' + t(sc.cut) + '</b>, costs <b>' + inr(sc.cost) + '</b>' +
+        (sc.payback ? ', pays back in <b>' + Math.round(sc.payback) + ' months</b>' : '') + '. New grade <b>' + esc(sc.grade) + '</b>.'
+      : 'No plan fits the AI\'s budget.';
   }
 
   // ---- Data breakdown ----
@@ -986,24 +990,9 @@
     if ((b = e.target.closest("a[data-view], button[data-view]"))) { e.preventDefault(); state.cat = b.getAttribute("data-cat") || null; go(b.getAttribute("data-view")); return; }
     if ((b = e.target.closest("[data-goto]"))) { e.preventDefault(); go(b.getAttribute("data-goto")); return; }
     if ((b = e.target.closest("[data-path]"))) { state.path = b.getAttribute("data-path"); render(); return; }
-    if (e.target.id === "ai-apply") { aiApply(); return; }
+    if (e.target.id === "ai-apply") { runAi(); return; }
     if ((b = e.target.closest("[data-disc]"))) { setDisconnected(b.getAttribute("data-disc"), true); renderConnect(); live(); return; }
     if ((b = e.target.closest("[data-reconn]"))) { setDisconnected(b.getAttribute("data-reconn"), false); renderConnect(); live(); return; }
-    if (e.target.id === "flood-today" && window.Flood) {
-      var fsc = scenario();
-      window.Flood.reset();
-      window.Flood.go(1, 2600, "Today", t(fsc.eff.total.tons) + " a year", "The whole screen is today's total.");
-      return;
-    }
-    if (e.target.id === "flood-plan" && window.Flood) {
-      var psc = scenario(), now = psc.eff.total.tons, ratio = now ? psc.after / now : 1;
-      if (!window.Flood.isOn()) window.Flood.setLevel(1);
-      window.Flood.go(ratio, 7000, "With your plan", t(psc.after) + " a year",
-        psc.rows.length ? "The water drains to " + Math.round(ratio * 100) + "% of today's level." : "Tick actions in Adjust below. With no plan, the water stays where it is.");
-      return;
-    }
-    if (e.target.id === "ai-accept") { $("ai-out").insertAdjacentHTML("beforeend", '<p class="muted small">Plan kept. Edit any lever to change it.</p>'); return; }
-    if (e.target.id === "ai-reject") { delete state.levers[key()]; $("ai-out").innerHTML = ""; renderLevers(scenario()); live(); return; }
     if (e.target.id === "dl-json") { downloadJson(); return; }
     if (e.target.id === "dl-csv") { downloadCsv(); return; }
     if (e.target.id === "dl-pdf") { downloadPdf(); return; }

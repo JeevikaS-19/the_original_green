@@ -454,3 +454,12 @@
 .flood-value { font-size: 34px; font-weight: 650; letter-spacing: -.03em; margin: 4px 0; font-variant-numeric: tabular-nums; }
 .flood-sub { font-size: 13px; color: var(--muted); }
 .flood-close { position: absolute; right: 24px; top: 24px; height: 38px; padding: 0 18px; border: 0; border-radius: 999px; background: var(--ink); color: var(--paper); font: 600 14px Inter, sans-serif; cursor: pointer; }
+
+/* One-button AI Apply */
+.ai-one { display: grid; gap: 14px; background: var(--sage); border-color: var(--sage-line); box-shadow: none; }
+.ai-one-main { display: flex; align-items: center; gap: 22px; flex-wrap: wrap; }
+.ai-one-main p { margin: 0; max-width: 60ch; }
+.ai-btn { height: 52px; padding: 0 34px; font-size: 16px; background: var(--moss-deep) !important; color: var(--paper) !important; }
+.ai-btn:disabled { opacity: .6; cursor: progress; }
+.ai-out { font-size: 14px; color: var(--ink); margin: 0; }
+.ai-out:empty { display: none; }
