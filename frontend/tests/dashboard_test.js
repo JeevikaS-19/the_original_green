@@ -48,7 +48,7 @@ check("named The Original Green", doc.title.includes("The Original Green") && $(
 check("initial title shows Small scale", $("#profile-title").textContent.includes("Small scale"), $("#profile-title").textContent);
 check("overview total 264.0 (commute×2)", $("#summary-cards").textContent.includes("264"));
 check("summary has Total, Grade, Confidence, Measured data", ["Total", "Grade", "Confidence", "Measured data"].every((k) => $("#summary-cards").textContent.includes(k)));
-check("trend chart drawn", !!$("#trend-chart svg"));
+check("overview compares now vs plan", $("#trend-chart").textContent.includes("Now") && $("#trend-chart").textContent.includes("With plan"));
 check("categories listed with formula tips", $$("#cat-list .cat").length >= 6 && $$("#cat-list .ftip").length >= 6, String($$("#cat-list .cat").length));
 check("sidebar is navigation only (no org picker inside)", !$("#snav #org-select") && !$("#snav .tcard"));
 nav("connect");
@@ -106,7 +106,7 @@ check("cost chart has investment and savings", $("#cost-chart").textContent.incl
 check("payback chart marks breakeven", $("#pay-chart").textContent.includes("Breakeven"), $("#pay-chart").textContent.slice(0, 60));
 check("sidebar shows with-plan total", $("#quick-stats").textContent.includes("With plan"));
 nav("overview");
-check("overview trend shows the plan", $("#summary-cards").textContent.includes("↓") && $$("#trend-chart path.plan").length === 1);
+check("overview trend shows the plan", $("#summary-cards").textContent.includes("↓") && $("#trend-chart").textContent.includes("With plan"));
 
 // Inputs flow through the whole dashboard
 nav("reduction");

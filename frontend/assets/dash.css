@@ -348,3 +348,8 @@
 .scope-sel .sg-item { font-size: 12.5px; padding: 5px 8px; }
 .sg-items { gap: 0; }
 .snav { padding: 18px 12px; gap: 8px; }
+
+/* Written summary */
+.summary { background: var(--paper); }
+.sum-label { font-size: 11px; font-weight: 600; letter-spacing: .12em; text-transform: uppercase; color: var(--stone); margin-bottom: 6px; }
+.sum-text { font-size: 16px; line-height: 1.55; color: var(--ink); max-width: 90ch; }

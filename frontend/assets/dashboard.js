@@ -409,6 +409,56 @@
     document.querySelectorAll(".view").forEach(function (v) { v.classList.toggle("active", v.getAttribute("data-view") === state.view); });
   }
 
+  // Chart type follows the data's shape. One year of data cannot show a trend,
+  // so it is compared now vs with plan; a line needs at least three years.
+  function chartKind(years) { return years >= 3 ? "line" : "compare"; }
+  function renderTrend(total, sc) {
+    var el = $("trend-chart");
+    if (chartKind(1) === "line") { chart(el, total, sc.after, sc.rows.length > 0); return; }
+    var scopes = sc.eff.scopes;
+    stacks(el, [
+      { label: "Now", text: t(total), parts: scopes.map(function (s) { return { v: s.tons, cls: SCOPE_CLASS[s.id], name: SCOPE_NAME[s.id], text: t(s.tons) }; }) },
+      { label: "With plan", text: t(sc.after), parts: scopes.map(function (s) {
+        var v = Math.max(0, s.tons - sc.scopeCut[s.id]);
+        return { v: v, cls: SCOPE_CLASS[s.id], name: SCOPE_NAME[s.id], text: t(v) };
+      }) }
+    ], total, [{ cls: "c1", name: "Scope 1" }, { cls: "c2", name: "Scope 2" }, { cls: "c3", name: "Scope 3" }]);
+    $("trend-note").textContent = sc.rows.length ? "Tick actions on Reduction to change the second bar." : "One year of data, so no trend line yet.";
+  }
+
+  // ---- Written summary: a plain sentence from the numbers, replaced by Gemini when it answers ----
+  var summaryCache = {};
+  function plainSummary(sc) {
+    var eff = sc.eff, total = eff.total.tons, biggest = eff.scopes.slice().sort(function (a, b) { return b.tons - a.tons; })[0];
+    var s = profile().label + " emits " + t(total) + " a year" + (eff.grade !== "N/A" ? ", grade " + eff.grade : "") + ". " +
+      SCOPE_NAME[biggest.id] + " is the largest part at " + t(biggest.tons) + " (" + (total ? Math.round(biggest.tons / total * 100) : 0) + "%).";
+    if (sc.rows.length) s += " The selected actions would cut " + t(sc.cut) + (sc.payback ? ", paying back in about " + Math.round(sc.payback) + " months." : ".");
+    return s;
+  }
+  function renderSummary(sc) {
+    var el = $("ai-summary"), k = key() + "|" + sc.eff.total.tons.toFixed(2) + "|" + sc.cut.toFixed(2);
+    if (summaryCache[k]) { el.innerHTML = summaryText(summaryCache[k], "AI summary"); return; }
+    el.innerHTML = summaryText(plainSummary(sc), "Summary from the numbers");
+    if (!window.fetch) return;
+    var eff = sc.eff;
+    fetch("/api/ai", {
+      method: "POST", headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ task: "summarise", input: { report: {
+        organisation: profile().label, total_t: Math.round(eff.total.tons * 10) / 10, grade: eff.grade,
+        scopes: eff.scopes.map(function (x) { return { scope: SCOPE_NAME[x.id], t: Math.round(x.tons * 10) / 10 }; }),
+        plan_cut_t: Math.round(sc.cut * 10) / 10, plan_cost_inr: Math.round(sc.cost)
+      } } })
+    }).then(function (r) { return r.ok ? r.json() : null; }).then(function (j) {
+      if (j && j.result && typeof j.result.summary === "string") {
+        summaryCache[k] = j.result.summary.slice(0, 600);
+        if (k === key() + "|" + sc.eff.total.tons.toFixed(2) + "|" + sc.cut.toFixed(2)) el.innerHTML = summaryText(summaryCache[k], "AI summary");
+      }
+    }).catch(function () { /* keep the plain summary */ });
+  }
+  function summaryText(text, label) {
+    return '<p class="sum-label">' + esc(label) + '</p><p class="sum-text">' + esc(text) + '</p>';
+  }
+
   // ---- Overview ----
   function renderOverview(sc) {
     var eff = sc.eff, total = eff.total.tons || 0;
@@ -436,8 +486,8 @@
         '<span class="tip">ƒ ' + esc(s.formula) + '</span></button>';
     }).join("");
     renderCaseCompare();
-    chart($("trend-chart"), total, sc.after, sc.rows.length > 0);
-    $("trend-note").textContent = "Projection: assumes activity stays at today's level. No earlier years on file.";
+    renderTrend(total, sc);
+    renderSummary(sc);
 
     $("split-bar").innerHTML = eff.scopes.map(function (s) {
       return '<i class="' + SCOPE_CLASS[s.id] + '" style="width:' + (total ? s.tons / total * 100 : 0).toFixed(1) + '%" title="' + SCOPE_NAME[s.id] + '"></i>';
