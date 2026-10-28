@@ -404,6 +404,8 @@
     var eff = sc.eff, total = eff.total.tons || 0;
     var half = total ? (eff.total.high - eff.total.low) / 2 / total * 100 : 0;
     var hi = eff.total.high || 1;
+    var mShare = total ? categories(eff).filter(function (c) { return c.kind === "measured"; }).reduce(function (a, c) { return a + c.tons; }, 0) / total * 100 : 0;
+    var measured = mShare.toFixed(0);
     var drop = total && sc.cut ? sc.cut / total * 100 : 0;
     $("summary-cards").innerHTML =
       '<div class="card dark"><div class="label">Total footprint' + (isEdited() ? ' <span class="edited">What-if</span>' : '') + '</div><div class="value">' + t(total) +
@@ -412,9 +414,17 @@
         '%"></div><div class="mid" style="left:' + (total / hi * 100).toFixed(1) + '%"></div></div></div>' +
       '<div class="card"><div class="label">Grade</div><div class="value">' + esc(eff.grade) + '</div><div class="sub">' + (eff.grade === "N/A" ? "Headcount not disclosed" : "t CO₂e per " + (profile().id === "individual" ? "person" : "employee")) + '</div></div>' +
       '<div class="card"><div class="label">Confidence</div><div class="value">±' + half.toFixed(0) + '%</div><div class="sub">Sum of each scope\'s range</div></div>' +
-      '<div class="card"><div class="label">Trend</div><div class="value">' + (drop ? '↓ ' + drop.toFixed(1) + '%' : '–') + '</div><div class="sub">' +
-        (drop ? 'With your plan, from FY 26-27' : 'One year of data. <a href="#" data-goto="reduction">Build a plan</a>') + '</div></div>';
+      '<div class="card"><div class="label">Measured data</div><div class="value">' + measured + '%</div><div class="sub">' +
+        (drop ? '↓ ' + drop.toFixed(1) + '% with your plan' : 'Share from trackers, not estimates') + '</div></div>';
 
+    $("scope-tiles").innerHTML = eff.scopes.map(function (s) {
+      var share = total ? Math.round(s.tons / total * 100) : 0;
+      return '<button class="tile' + (s.tons ? '' : ' empty') + '" data-view="' + s.id + '">' +
+        '<span class="nm"><i class="' + SCOPE_CLASS[s.id] + '"></i>' + SCOPE_NAME[s.id] + '</span>' +
+        '<strong>' + (s.tons ? t(s.tons) : '–') + '</strong>' +
+        '<span class="go">' + (s.tons ? share + '% of total · open →' : 'No data · connect a tracker') + '</span>' +
+        '<span class="tip">ƒ ' + esc(s.formula) + '</span></button>';
+    }).join("");
     renderCaseCompare();
     chart($("trend-chart"), total, sc.after, sc.rows.length > 0);
     $("trend-note").textContent = "Projection: assumes activity stays at today's level. No earlier years on file.";

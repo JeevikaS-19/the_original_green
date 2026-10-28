@@ -47,7 +47,7 @@ const active = () => $(".view.active");
 check("named The Original Green", doc.title.includes("The Original Green") && $(".logo").textContent.includes("The Original Green"));
 check("initial title shows Small scale", $("#profile-title").textContent.includes("Small scale"), $("#profile-title").textContent);
 check("overview total 264.0 (commute×2)", $("#summary-cards").textContent.includes("264"));
-check("summary has Total, Grade, Confidence, Trend", ["Total", "Grade", "Confidence", "Trend"].every((k) => $("#summary-cards").textContent.includes(k)));
+check("summary has Total, Grade, Confidence, Measured data", ["Total", "Grade", "Confidence", "Measured data"].every((k) => $("#summary-cards").textContent.includes(k)));
 check("trend chart drawn", !!$("#trend-chart svg"));
 check("categories listed with formula tips", $$("#cat-list .cat").length >= 6 && $$("#cat-list .ftip").length >= 6, String($$("#cat-list .cat").length));
 check("sidebar is navigation only (no org picker inside)", !$("#snav #org-select") && !$("#snav .tcard"));
