@@ -42,6 +42,7 @@
         <h1 id="profile-title">–</h1>
       </div>
       <div class="dctl">
+        <select id="project-select" class="org-select" aria-label="Project"></select>
         <select id="org-select" class="org-select" aria-label="Organisation"></select>
         <div class="seg2" role="group" aria-label="Data available">
           <button data-path="open_source">Detailed</button>
@@ -127,6 +128,11 @@
           <div class="dcard-head"><h2>Your inputs</h2><button class="btn btn-ghost btn-small" id="reset-edits">Reset</button></div>
           <p class="muted small" style="margin-bottom:14px">Change what you measured and every graph follows. This is a what-if view; the saved report doesn't change.</p>
           <div class="edits" id="edits"></div>
+          <div class="import">
+            <label class="btn btn-ghost btn-small">Upload CSV<input type="file" id="csv-input" accept=".csv,text/csv" hidden></label>
+            <span class="muted small">A CSV with two columns, field and value. Fields: litres, kwh, renewable, s3pct. Saved to the selected project.</span>
+            <p class="muted small" id="import-note"></p>
+          </div>
         </div>
           </div>
         </details>

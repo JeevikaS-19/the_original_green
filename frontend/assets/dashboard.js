@@ -59,6 +59,63 @@
   var ACT_CLASS = ["a1", "a2", "a3", "a4", "a5"];
 
   var state = { scale: "small_scale", path: "open_source", view: "overview", edits: {}, levers: {} };
+
+  // ---- Projects: named sets of inputs and plans, kept in this browser ----
+  var PROJ_KEY = "og-projects-v1";
+  var projects = loadProjects();
+  function loadProjects() {
+    var fresh = { active: "base", list: [{ id: "base", name: "Base data", edits: {}, levers: {} }] };
+    try {
+      var saved = JSON.parse(localStorage.getItem(PROJ_KEY) || "null");
+      return saved && saved.list && saved.list.length ? saved : fresh;
+    } catch (e) { return fresh; }
+  }
+  function saveProjects() {
+    var p = projects.list.filter(function (x) { return x.id === projects.active; })[0];
+    if (p) { p.edits = JSON.parse(JSON.stringify(state.edits)); p.levers = JSON.parse(JSON.stringify(state.levers)); }
+    try { localStorage.setItem(PROJ_KEY, JSON.stringify(projects)); } catch (e) { /* storage unavailable: session only */ }
+  }
+  function switchProject(id) {
+    saveProjects();
+    var p = projects.list.filter(function (x) { return x.id === id; })[0];
+    if (!p) return;
+    projects.active = id;
+    state.edits = JSON.parse(JSON.stringify(p.edits || {}));
+    state.levers = JSON.parse(JSON.stringify(p.levers || {}));
+    saveProjects();
+    render();
+  }
+  function createProject(name) {
+    var id = "p" + Date.now().toString(36);
+    saveProjects();
+    projects.list.push({ id: id, name: name, edits: {}, levers: {} });
+    projects.active = id;
+    state.edits = {}; state.levers = {};
+    saveProjects();
+    render();
+  }
+  function renderProjects() {
+    var sel = $("project-select");
+    sel.innerHTML = projects.list.map(function (p) {
+      return '<option value="' + esc(p.id) + '">' + esc(p.name) + '</option>';
+    }).join("") + '<option value="__new__">+ New project…</option>';
+    sel.value = projects.active;
+  }
+  function importCsv(text) {
+    var fields = { litres: "litres", kwh: "kwh", renewable: "renewable", s3pct: "s3pct" };
+    var applied = [], rejected = [];
+    text.split(/\r?\n/).forEach(function (line) {
+      var parts = line.split(",").map(function (v) { return v.trim(); });
+      if (parts.length < 2 || parts[0].toLowerCase() === "field") return;
+      var f = fields[parts[0].toLowerCase()], v = Number(parts[1]);
+      if (!f || !isFinite(v) || v < 0 || (f === "renewable" && v > 100)) { rejected.push(parts[0]); return; }
+      inputs()[f] = v;
+      applied.push(f);
+    });
+    saveProjects();
+    $("import-note").textContent = "Applied: " + (applied.join(", ") || "nothing") + (rejected.length ? ". Not applied: " + rejected.join(", ") + "." : ".");
+    renderEdits(); renderLevers(scenario()); live();
+  }
   var reduce = window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 
   var $ = function (id) { return document.getElementById(id); };
@@ -835,6 +892,7 @@
 
   // ---- Rendering ----
   function live() {
+    saveProjects();
     var sc = scenario();
     renderSidebar(sc);
     renderOverview(sc);
@@ -845,6 +903,7 @@
   }
   function render() {
     renderHeader();
+    renderProjects();
     renderConnect();
     renderEdits();
     renderMissing();
@@ -897,6 +956,19 @@
   });
   document.addEventListener("change", function (e) {
     if (e.target.id === "org-select") { state.scale = e.target.value; render(); return; }
+    if (e.target.id === "project-select") {
+      if (e.target.value === "__new__") {
+        var name = window.prompt("Name for the new project", "Project " + (projects.list.length + 1));
+        if (name && name.trim()) createProject(name.trim().slice(0, 60)); else render();
+      } else switchProject(e.target.value);
+      return;
+    }
+    if (e.target.id === "csv-input" && e.target.files && e.target.files[0]) {
+      var reader = new FileReader();
+      reader.onload = function () { importCsv(String(reader.result)); e.target.value = ""; };
+      reader.readAsText(e.target.files[0]);
+      return;
+    }
     if (e.target.matches("[data-pick]")) {
       var sc = scenario();
       sc.st[e.target.getAttribute("data-pick")].on = e.target.checked;

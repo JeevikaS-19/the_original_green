@@ -161,6 +161,20 @@ pick("individual");
 nav("reduction");
 check("individual shows no-actions note", $("#levers").textContent.includes("No reduction action"));
 
+// Projects: a new project keeps its own inputs, and the base data is unchanged
+pick("small_scale");
+w.prompt = () => "Project A";
+const psel = $("#project-select");
+psel.value = "__new__"; change(psel);
+const projId = $("#project-select").value;
+check("new project is selected", projId !== "base" && $("#project-select").textContent.includes("Project A"));
+const kwhP = $('[data-edit="kwh"]');
+input(kwhP, String(Number(kwhP.value) * 2));
+check("project input changes the total", !$("#quick-stats").textContent.includes("264.0"));
+$("#project-select").value = "base"; change($("#project-select"));
+check("base data is unchanged", $("#quick-stats").textContent.includes("264.0"));
+$("#project-select").value = projId; change($("#project-select"));
+check("project keeps its inputs after switching back", !$("#quick-stats").textContent.includes("264.0"));
 check("no script errors", errors.length === 0, errors.join("; "));
 
 console.log(results.join("\n"));

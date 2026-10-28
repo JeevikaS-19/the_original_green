@@ -426,3 +426,7 @@
 .adjust-body { display: grid; gap: 16px; margin-top: 18px; }
 .adjust-body > .dcard, .adjust-body > .dcard.ai { box-shadow: none; }
 @media (max-width: 1100px) { .red-layout { grid-template-columns: 1fr; } }
+
+.import { display: flex; flex-wrap: wrap; align-items: center; gap: 10px; margin-top: 14px; }
+.import .btn { cursor: pointer; }
+#project-select { width: auto; min-width: 180px; }
