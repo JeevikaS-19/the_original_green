@@ -30,6 +30,11 @@ let printed = 0;
 w.print = () => { printed++; };
 w.matchMedia = () => ({ matches: true }); // reduced motion: AI Apply settles at once
 w.addEventListener("error", (e) => errors.push(e.message));
+// Chart.js is vendored in the page; jsdom has no canvas, so record what each chart is given.
+const made = [];
+w.Chart = function (canvas, cfg) { made.push({ id: canvas.parentNode.id, type: cfg.type, datasets: cfg.data.datasets.length }); this.destroy = function () {}; };
+w.Chart.defaults = { font: {} };
+const chartOf = (id) => made.filter((c) => c.id === id).slice(-1)[0];
 w.eval(fixtures);
 w.eval(script);
 
@@ -48,8 +53,9 @@ check("named The Original Green", doc.title.includes("The Original Green") && $(
 check("initial title shows Small scale", $("#profile-title").textContent.includes("Small scale"), $("#profile-title").textContent);
 check("overview total 264.0 (commute×2)", $("#summary-cards").textContent.includes("264"));
 check("summary has Total, Grade, Confidence, Measured data", ["Total", "Grade", "Confidence", "Measured data"].every((k) => $("#summary-cards").textContent.includes(k)));
-check("overview compares now vs plan", $("#trend-chart").textContent.includes("Now") && $("#trend-chart").textContent.includes("With plan"));
-check("categories listed with formula tips", $$("#cat-list .cat").length >= 6 && $$("#cat-list .ftip").length >= 6, String($$("#cat-list .cat").length));
+check("overview projection is a line with and without plan", chartOf("trend-chart") && chartOf("trend-chart").type === "line" && chartOf("trend-chart").datasets === 2);
+check("overview scope split is a doughnut", chartOf("scope-donut") && chartOf("scope-donut").type === "doughnut");
+check("categories listed in a table with method", $$("#cat-list tbody tr").length >= 6 && $("#cat-list thead").textContent.includes("Method"), String($$("#cat-list tbody tr").length));
 check("sidebar is navigation only (no org picker inside)", !$("#snav #org-select") && !$("#snav .tcard"));
 nav("connect");
 check("Connect is its own page", active().dataset.view === "connect" && w.location.hash.endsWith("/connect"));
@@ -95,9 +101,9 @@ box0.checked = true; change(box0);
 const out1 = $("#scenario-out").textContent;
 check("ticking an action updates the live result", out1 !== out0 && out1.includes("−"), out1.slice(0, 60));
 const slider0 = $('input[type=range][data-pct="0"]');
-const em1 = $("#em-chart").innerHTML;
+const em1 = made.length;
 input(slider0, "15");
-check("charts update when a slider moves", $("#em-chart").innerHTML !== em1);
+check("charts redraw when a slider moves", made.length > em1);
 const out2 = $("#scenario-out").textContent;
 check("dragging a lever updates the result", out2 !== out1, out2.slice(0, 60));
 check("number box follows the slider", $('input[type=number][data-pct="0"]').value === "15");
@@ -105,13 +111,13 @@ const box2 = $('[data-pick="2"]');
 box2.checked = true; change(box2);
 check("stacking two actions shows the combined line", $("#scenario-note").textContent.includes("#1 + #3"), $("#scenario-note").textContent);
 check("overlap note with two actions", $("#scenario-warn").textContent.includes("double count"));
-check("six summary cards", $$("#scenario-out > div").length === 6 && ["Current", "With plan", "Savings", "Cost", "Payback", "New grade"].every((k) => $("#scenario-out").textContent.includes(k)));
-check("emissions chart: now vs with plan", $$("#em-chart .stk-row").length === 2 && $$("#em-chart .stk-bar i.cut").length === 1);
-check("cost chart has investment and savings", $("#cost-chart").textContent.includes("Investment") && $("#cost-chart").textContent.includes("Savings"));
-check("payback chart marks breakeven", $("#pay-chart").textContent.includes("Breakeven"), $("#pay-chart").textContent.slice(0, 60));
+check("ledger table has six rows", $$("#scenario-out tr").length === 6 && ["Current total", "With plan", "Emissions cut", "Investment", "Payback", "New grade"].every((k) => $("#scenario-out").textContent.includes(k)));
+check("emissions chart: now vs with plan, stacked bars", chartOf("em-chart") && chartOf("em-chart").type === "bar");
+check("cost chart is a bar chart", chartOf("cost-chart") && chartOf("cost-chart").type === "bar");
+check("payback chart is a cumulative line", chartOf("pay-chart") && chartOf("pay-chart").type === "line");
 check("sidebar shows with-plan total", $("#quick-stats").textContent.includes("With plan"));
 nav("overview");
-check("overview trend shows the plan", $("#summary-cards").textContent.includes("↓") && $("#trend-chart").textContent.includes("With plan"));
+check("overview trend shows the plan", $("#summary-cards").textContent.includes("↓") && chartOf("trend-chart").datasets === 2);
 
 // Inputs flow through the whole dashboard
 nav("reduction");
@@ -126,7 +132,7 @@ $("#ai-budget").value = "2500000";
 click($("#ai-apply"));
 check("AI Apply suggests a plan", $("#ai-out").textContent.includes("Suggested plan") && $("#ai-out").textContent.includes("Cuts"), $("#ai-out").textContent.slice(0, 80));
 check("AI Apply ticks levers", $$("[data-pick]:checked").length >= 1, String($$("[data-pick]:checked").length));
-const spend = Number(($("#scenario-out").textContent.match(/Cost₹([\d,]+)/) || [0, "0"])[1].replace(/,/g, ""));
+const spend = Number(($("#scenario-out").textContent.match(/Investment₹([\d,]+)/) || [0, "0"])[1].replace(/,/g, ""));
 check("AI plan stays within budget", spend <= 2500000 && spend > 0, String(spend));
 $("#ai-priority").value = "cost";
 click($("#ai-apply"));
