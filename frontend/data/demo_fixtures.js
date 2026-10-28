@@ -89,33 +89,37 @@ window.DEMO_FIXTURES = [
           {
             "id": "scope_3",
             "label": "Scope 3 · Devices, commute, waste",
-            "tons": 0.0,
-            "low": 0.0,
-            "high": 0.0,
+            "tons": 0.82,
+            "low": 0.41,
+            "high": 1.24,
             "confidence": "±50%",
             "drivers": [
+              {
+                "name": "3.1 cloud",
+                "tons": 0.0
+              },
               {
                 "name": "Hardware (embodied)",
                 "tons": 0.0
               },
               {
                 "name": "Commute",
-                "tons": 0.0
+                "tons": 0.7
               },
               {
                 "name": "Waste",
-                "tons": 0.0
+                "tons": 0.1
               }
             ],
             "formula": "Devices, commute and waste × factor. Factors are placeholders, so these show zero."
           }
         ],
         "total": {
-          "tons": 4.63,
-          "low": 4.17,
-          "high": 5.1
+          "tons": 5.46,
+          "low": 4.58,
+          "high": 6.34
         },
-        "grade": "B",
+        "grade": "C",
         "grade_bands": [
           {
             "grade": "A",
@@ -146,7 +150,15 @@ window.DEMO_FIXTURES = [
         "actions": [],
         "notes": [
           "Reduction savings and costs are planning assumptions from the knowledge base. Verify them before relying on them.",
-          "Scope 3 · Devices, commute, waste: 6 input(s) use placeholder factors and count as zero."
+          "Scope 3 · Devices, commute, waste: 1 input(s) use placeholder factors and count as zero.",
+          "Demo uses illustrative factors for Scope 3 (5 inputs). Real submissions use verified sources."
+        ],
+        "illustrative": [
+          "scope_3.hardware.laptop.embodied_carbon_factor",
+          "scope_3.commute.car.factor",
+          "scope_3.commute.bus.factor",
+          "scope_3.commute.bike.factor",
+          "scope_3.waste.solid waste.landfill.factor"
         ]
       },
       "closed_source": {
@@ -220,6 +232,10 @@ window.DEMO_FIXTURES = [
             "confidence": "±50%",
             "drivers": [
               {
+                "name": "3.1 cloud",
+                "tons": 0.0
+              },
+              {
                 "name": "Hardware (embodied)",
                 "tons": 0.0
               },
@@ -273,7 +289,8 @@ window.DEMO_FIXTURES = [
           "Reduction savings and costs are planning assumptions from the knowledge base. Verify them before relying on them.",
           "Scope 3 · Devices, commute, waste: 1 input(s) use placeholder factors and count as zero.",
           "Totals only: Scope 3 is not available, and the ±40% range is a rough estimate."
-        ]
+        ],
+        "illustrative": []
       }
     }
   },
@@ -390,31 +407,35 @@ window.DEMO_FIXTURES = [
           {
             "id": "scope_3",
             "label": "Scope 3 · Devices, commute, waste",
-            "tons": 0.0,
-            "low": 0.0,
-            "high": 0.0,
+            "tons": 41.65,
+            "low": 20.83,
+            "high": 62.48,
             "confidence": "±50%",
             "drivers": [
               {
-                "name": "Hardware (embodied)",
+                "name": "3.1 cloud",
                 "tons": 0.0
+              },
+              {
+                "name": "Hardware (embodied)",
+                "tons": 2.1
               },
               {
                 "name": "Commute",
-                "tons": 0.0
+                "tons": 35.4
               },
               {
                 "name": "Waste",
-                "tons": 0.0
+                "tons": 4.2
               }
             ],
             "formula": "Devices, commute and waste × factor. Factors are placeholders, so these show zero."
           }
         ],
         "total": {
-          "tons": 186.96,
-          "low": 168.26,
-          "high": 205.66
+          "tons": 228.61,
+          "low": 189.09,
+          "high": 268.13
         },
         "grade": "C",
         "grade_bands": [
@@ -456,6 +477,16 @@ window.DEMO_FIXTURES = [
             "placeholder": false
           },
           {
+            "scope": "scope_3",
+            "action": "Carpooling and public transport",
+            "description": "Support lower-carbon commuting through carpooling and public transit.",
+            "tons": 5.0,
+            "cost_inr": 500000,
+            "payback": "24 months",
+            "roi": 1.0,
+            "placeholder": false
+          },
+          {
             "scope": "scope_2",
             "action": "Renewable energy procurement",
             "description": "Procure renewable electricity through a suitable contract or instrument.",
@@ -484,21 +515,22 @@ window.DEMO_FIXTURES = [
             "payback": "36 months",
             "roi": 0.4,
             "placeholder": false
-          },
-          {
-            "scope": "scope_1",
-            "action": "CNG buses",
-            "description": "Replace suitable diesel buses with CNG buses.",
-            "tons": 8.0,
-            "cost_inr": 3000000,
-            "payback": "48 months",
-            "roi": 0.267,
-            "placeholder": false
           }
         ],
         "notes": [
           "Reduction savings and costs are planning assumptions from the knowledge base. Verify them before relying on them.",
-          "Scope 3 · Devices, commute, waste: 9 input(s) use placeholder factors and count as zero."
+          "Scope 3 · Devices, commute, waste: 1 input(s) use placeholder factors and count as zero.",
+          "Demo uses illustrative factors for Scope 3 (8 inputs). Real submissions use verified sources."
+        ],
+        "illustrative": [
+          "scope_3.hardware.laptop.embodied_carbon_factor",
+          "scope_3.hardware.desktop.embodied_carbon_factor",
+          "scope_3.commute.car.factor",
+          "scope_3.commute.bus.factor",
+          "scope_3.commute.bike.factor",
+          "scope_3.waste.solid waste.landfill.factor",
+          "scope_3.waste.e-waste.recycling.factor",
+          "scope_3.waste.wastewater.treatment.factor"
         ]
       },
       "closed_source": {
@@ -571,6 +603,10 @@ window.DEMO_FIXTURES = [
             "high": 0.0,
             "confidence": "±50%",
             "drivers": [
+              {
+                "name": "3.1 cloud",
+                "tons": 0.0
+              },
               {
                 "name": "Hardware (embodied)",
                 "tons": 0.0
@@ -666,7 +702,8 @@ window.DEMO_FIXTURES = [
           "Reduction savings and costs are planning assumptions from the knowledge base. Verify them before relying on them.",
           "Scope 3 · Devices, commute, waste: 1 input(s) use placeholder factors and count as zero.",
           "Totals only: Scope 3 is not available, and the ±40% range is a rough estimate."
-        ]
+        ],
+        "illustrative": []
       }
     }
   },
@@ -727,14 +764,12 @@ window.DEMO_FIXTURES = [
           "confidence_metadata": {
             "scope_1": "full_data",
             "scope_2": "full_data",
-            "scope_3": "partial_data"
+            "scope_3": "full_data"
           },
           "estimates": {
             "scope_1": [],
             "scope_2": [],
-            "scope_3": [
-              "cloud not given, Scope 3.1 not calculated"
-            ]
+            "scope_3": []
           }
         },
         "scopes": [
@@ -803,31 +838,35 @@ window.DEMO_FIXTURES = [
           {
             "id": "scope_3",
             "label": "Scope 3 · Devices, commute, waste",
-            "tons": 0.0,
-            "low": 0.0,
-            "high": 0.0,
-            "confidence": "±50%",
+            "tons": 229.27,
+            "low": 171.95,
+            "high": 286.59,
+            "confidence": "±25%",
             "drivers": [
               {
+                "name": "3.1 cloud",
+                "tons": 5.2
+              },
+              {
                 "name": "Hardware (embodied)",
-                "tons": 0.0
+                "tons": 34.3
               },
               {
                 "name": "Commute",
-                "tons": 0.0
+                "tons": 159.8
               },
               {
                 "name": "Waste",
-                "tons": 0.0
+                "tons": 30.0
               }
             ],
             "formula": "Devices, commute and waste × factor. Factors are placeholders, so these show zero."
           }
         ],
         "total": {
-          "tons": 674.9,
-          "low": 607.41,
-          "high": 742.39
+          "tons": 904.17,
+          "low": 779.36,
+          "high": 1028.98
         },
         "grade": "B",
         "grade_bands": [
@@ -869,6 +908,16 @@ window.DEMO_FIXTURES = [
             "placeholder": false
           },
           {
+            "scope": "scope_3",
+            "action": "Carpooling and public transport",
+            "description": "Support lower-carbon commuting through carpooling and public transit.",
+            "tons": 5.0,
+            "cost_inr": 500000,
+            "payback": "24 months",
+            "roi": 1.0,
+            "placeholder": false
+          },
+          {
             "scope": "scope_2",
             "action": "Renewable energy procurement",
             "description": "Procure renewable electricity through a suitable contract or instrument.",
@@ -897,21 +946,23 @@ window.DEMO_FIXTURES = [
             "payback": "36 months",
             "roi": 0.4,
             "placeholder": false
-          },
-          {
-            "scope": "scope_1",
-            "action": "CNG buses",
-            "description": "Replace suitable diesel buses with CNG buses.",
-            "tons": 8.0,
-            "cost_inr": 3000000,
-            "payback": "48 months",
-            "roi": 0.267,
-            "placeholder": false
           }
         ],
         "notes": [
           "Reduction savings and costs are planning assumptions from the knowledge base. Verify them before relying on them.",
-          "Scope 3 · Devices, commute, waste: 8 input(s) use placeholder factors and count as zero."
+          "Scope 3 · Devices, commute, waste: 1 input(s) use placeholder factors and count as zero.",
+          "Demo uses illustrative factors for Scope 3 (9 inputs). Real submissions use verified sources."
+        ],
+        "illustrative": [
+          "scope_3.cloud.gpu.factor",
+          "scope_3.hardware.laptop.embodied_carbon_factor",
+          "scope_3.hardware.gpu.embodied_carbon_factor",
+          "scope_3.hardware.server.embodied_carbon_factor",
+          "scope_3.commute.car.factor",
+          "scope_3.commute.bus.factor",
+          "scope_3.commute.bike.factor",
+          "scope_3.waste.solid waste.landfill.factor",
+          "scope_3.waste.e-waste.recycling.factor"
         ]
       },
       "closed_source": {
@@ -988,6 +1039,10 @@ window.DEMO_FIXTURES = [
             "high": 0.0,
             "confidence": "±50%",
             "drivers": [
+              {
+                "name": "3.1 cloud",
+                "tons": 0.0
+              },
               {
                 "name": "Hardware (embodied)",
                 "tons": 0.0
@@ -1083,7 +1138,8 @@ window.DEMO_FIXTURES = [
           "Reduction savings and costs are planning assumptions from the knowledge base. Verify them before relying on them.",
           "Scope 3 · Devices, commute, waste: 1 input(s) use placeholder factors and count as zero.",
           "Totals only: Scope 3 is not available, and the ±40% range is a rough estimate."
-        ]
+        ],
+        "illustrative": []
       }
     }
   }

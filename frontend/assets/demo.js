@@ -399,7 +399,10 @@
     }
     var path = currentPath(profile);
     var renderer = RENDERERS[state.step];
-    stage.innerHTML = renderer(profile, path, state.path) + stageNav();
+    var badge = path.illustrative && path.illustrative.length
+      ? '<div class="demo-badge" role="note">⚠️ Demo uses illustrative factors — real submissions use verified sources</div>'
+      : '';
+    stage.innerHTML = badge + renderer(profile, path, state.path) + stageNav();
   }
 
   function downloadReport() {

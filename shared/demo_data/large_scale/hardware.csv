@@ -1,3 +1,4 @@
 device_type,model,quantity,purchase_year,expected_lifespan_years
 Laptop,Standard laptop,500,2023,4
+GPU,A100-class accelerator,40,2024,3
 Server,Rack server,12,2021,5

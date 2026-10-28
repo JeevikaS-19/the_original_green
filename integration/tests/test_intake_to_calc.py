@@ -74,10 +74,9 @@ class OpenSourceRunTests(unittest.TestCase):
         self.assertGreater(self.calc["scopes"]["scope_1"]["total_co2e_kg"], 0)
         self.assertGreater(self.calc["scopes"]["scope_2"]["total_co2e_kg"], 0)
 
-    def test_scope_3_is_zero_until_person_2_has_verified_factors(self):
-        # Scope 3 factors for hardware, commute and waste are still placeholders.
-        self.assertEqual(self.calc["scopes"]["scope_3"]["total_co2e_kg"], 0)
-        self.assertTrue(self.calc["scopes"]["scope_3"]["unverified_inputs"])
+    def test_scope_3_uses_illustrative_factors_and_says_so(self):
+        self.assertGreater(self.calc["scopes"]["scope_3"]["total_co2e_kg"], 0)
+        self.assertTrue(self.calc["illustrative_inputs"])
 
     def test_unverified_factors_are_visible_not_hidden(self):
         self.assertTrue(self.calc["scopes"]["scope_1"]["unverified_inputs"])
@@ -86,7 +85,7 @@ class OpenSourceRunTests(unittest.TestCase):
 class EndToEndReportTests(unittest.TestCase):
     def test_open_source_reaches_a_graded_report_with_warnings(self):
         report = generate_report(run_calculator(intake_from_demo("demo_data_full.json")))["report"]
-        self.assertEqual(report["grade"], "B")
+        self.assertEqual(report["grade"], "C")  # Scope 3 now counts, so the total moved up a band
         self.assertEqual(report["meta"]["org_type"], "school")
         self.assertTrue(any("Scope 1" in w and "overstate" in w for w in report["warnings"]))
 

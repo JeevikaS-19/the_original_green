@@ -1,0 +1,4 @@
+instance_type,region,usage_hours,cost
+gpu-a100-x4,ap-south-1,9000,2700000
+gpu-a100-x4,ap-south-1,4000,1200000
+m6i.large,ap-south-1,36000,450000

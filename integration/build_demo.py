@@ -128,6 +128,7 @@ def run_open(persona):
         vehicles_csv=optional(folder / "vehicles.csv"),
         dg_set=dg_set,
         energy_meter_csv=optional(folder / "energy_meter.csv"),
+        cloud_csv=optional(folder / "cloud.csv"),
         hardware_csv=optional(folder / "hardware.csv"),
         commute_survey=optional(folder / "commute.csv"),
         waste_csv=optional(folder / "waste.csv"),
@@ -197,6 +198,12 @@ def path_fixture(persona, path_key, intake_path, estimates):
                 f"{SCOPE_LABELS[scope_id]}: {len(block['unverified_inputs'])} input(s) use placeholder factors "
                 "and count as zero."
             )
+    illustrative = calc.get("illustrative_inputs", [])
+    if illustrative:
+        notes.append(
+            "Demo uses illustrative factors for Scope 3 (" + str(len(illustrative)) +
+            " inputs). Real submissions use verified sources."
+        )
     if path_key == "closed_source":
         notes.append("Totals only: Scope 3 is not available, and the ±40% range is a rough estimate.")
 
@@ -236,6 +243,7 @@ def path_fixture(persona, path_key, intake_path, estimates):
         "grade_bands": grade_bands(persona["org_type"]),
         "actions": actions,
         "notes": notes,
+        "illustrative": illustrative,
     }
 
 
