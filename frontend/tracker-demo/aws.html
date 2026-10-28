@@ -1,34 +1,70 @@
 <!doctype html>
 <html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Cloud usage bill · Tracker demo · Carbon Aggregation</title>
-<link rel="stylesheet" href="../assets/dashboard.css"></head>
+<title>Cloud usage bill · Carbon Aggregation</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;650;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../assets/app.css"></head>
 <body>
-<header class="topbar"><div class="top-left"><a class="logo" href="../index.html">Carbon Aggregation</a></div>
-<div class="top-right"><a class="btn btn-ghost btn-small" href="index.html">All tracker demos</a></div></header>
-<div class="main" style="max-width:1100px;margin:0 auto;padding:30px 24px 70px">
+<header class="topbar">
+  <div><a class="logo" href="../index.html">Carbon Aggregation</a></div>
+  <div></div>
+  <div class="top-right"><a class="btn btn-ghost btn-small" href="index.html">All trackers</a><a class="btn btn-small" href="../dashboard.html#small_scale">Dashboard</a></div>
+</header>
+<main class="flow-page">
 
-<section class="block demo-hero">
-  <p class="kicker">Cloud tracker</p>
+<div class="flow-head">
+  <span class="kicker">Tracker demo · Cloud usage export</span>
   <h1>Cloud usage bill</h1>
-  <p>A cloud usage export, one row per instance family and region. The platform reads the usage hours, separates GPU from general-purpose instances, and calculates what it can.</p>
-  <p class="disclaimer">Demo. This shows how the platform reads a cloud usage export. It is not a connection to any provider.</p>
-</section>
-<section class="block">
-  <p class="kicker">Sample export: cloud usage (CSV)</p>
-  <pre class="code">instance_type,region,usage_hours,cost
+  <p>A cloud usage export with one row per instance family and region. The platform reads the usage hours, separates GPU from general-purpose instances, and calculates what it can.</p>
+  <span class="disclaimer">Shows how the platform reads this kind of export. Not a connection to any product.</span>
+</div>
+
+<ol class="stepper" aria-label="Progress">
+  <li class="done"><span class="n">1</span>Connect</li>
+  <li class="done"><span class="n">2</span>Upload</li>
+  <li class="done"><span class="n">3</span>Review</li>
+  <li class="done"><span class="n">4</span>Done</li>
+</ol>
+
+<div class="flow-grid">
+  <section class="panel-card">
+    <h2>Connect</h2>
+    <p class="hint">The source is linked and its columns are matched to our fields.</p>
+    <div class="connect">
+      <div class="ico">CL</div>
+      <div class="who"><strong>Cloud usage export</strong><span>Export format recognised</span></div>
+      <span class="state tag measured">Connected</span>
+    </div>
+    <div class="fields"><div class="field"><span>instance_type</span><code>instance family</code></div><div class="field"><span>region</span><code>region</code></div><div class="field"><span>usage_hours</span><code>hours</code></div><div class="field"><span>cost</span><code>spend (fallback only)</code></div></div>
+  </section>
+
+  <section class="panel-card">
+    <h2>Upload</h2>
+    <p class="hint">The export is read as it is. Nothing is typed in by hand.</p>
+    <div class="file">
+      <div class="file-top"><div class="doc" data-ext="CSV"></div><div><strong>cloud_usage_2025.csv</strong><span>3 usage lines · 2 KB</span></div><span class="tag measured" style="margin-left:auto">Read</span></div>
+      <div class="progressbar"><i></i></div>
+    </div>
+    <pre class="code">instance_type,region,usage_hours,cost
 gpu-a100-x4,ap-south-1,9000,2700000
 gpu-a100-x4,ap-south-1,4000,1200000
 m6i.large,ap-south-1,36000,450000</pre>
-</section>
-<section class="block">
-  <p class="kicker">How the platform reads it</p>
-  <div class="steps-row"><div class="step"><div class="n">STEP 1</div><h3>Read the export</h3><p>Each row is a billed usage line, with its region and hours.</p></div><div class="step"><div class="n">STEP 2</div><h3>Map the columns</h3><p>Instance type, region, usage hours and cost are matched by name.</p></div><div class="step"><div class="n">STEP 3</div><h3>Classify instances</h3><p>GPU families use the GPU factor. General-purpose families have no factor yet, so they are flagged.</p></div><div class="step"><div class="n">STEP 4</div><h3>Calculate Scope 3.1</h3><p>GPU hours × 0.4 kg CO₂e per hour. Illustrative until a verified source is added.</p></div></div>
-</section>
-<section class="block">
-  <p class="kicker">What it finds</p>
-  <div class="result-grid"><div class="card"><div class="label">Usage lines</div><div class="value">3</div><div class="sub">2 instance families</div></div><div class="card"><div class="label">GPU hours</div><div class="value">13,000 h</div><div class="sub">gpu-a100-x4, two lines</div></div><div class="card"><div class="label">General-purpose hours</div><div class="value">36,000 h</div><div class="sub">m6i.large, not calculated</div></div><div class="card"><div class="label">Scope 3.1 (GPU)</div><div class="value">5.2 t</div><div class="sub">Illustrative factor</div></div></div>
-  <div class="gap-note"><strong>Not calculated, and why</strong><ul><li>General-purpose instances have no verified factor, so their 36,000 hours are not in the total.</li><li>Spend is shown, but spend-based estimates are used only as a fallback, and labelled as one.</li></ul></div>
+  </section>
+</div>
+
+<section class="panel-card" style="margin-top:18px">
+  <div style="display:flex;justify-content:space-between;align-items:flex-start;gap:16px;flex-wrap:wrap">
+    <div><h2>Review</h2><p class="hint">Each check runs in order. Anything filled in or left out is stated.</p></div>
+    <span class="tag illustrative">Illustrative factor</span>
+  </div>
+  <ol class="timeline"><li><span class="tick">✓</span><h3>Rows read</h3><p>3 usage lines across 2 instance families.</p></li><li><span class="tick">✓</span><h3>Columns matched</h3><p>Instance type, region, hours and cost recognised.</p></li><li><span class="tick">✓</span><h3>Classified</h3><p>GPU lines use the GPU factor. General-purpose lines have no factor yet and are flagged.</p></li><li><span class="tick">✓</span><h3>Calculated</h3><p>13,000 GPU hours × 0.4 kg CO₂e per hour.</p></li></ol>
+  <div class="results"><div class="card"><div class="label">Usage lines</div><div class="value">3</div><div class="sub">2 families</div></div><div class="card"><div class="label">GPU hours</div><div class="value">13,000 h</div><div class="sub">gpu-a100-x4</div></div><div class="card"><div class="label">General-purpose</div><div class="value">36,000 h</div><div class="sub">not calculated</div></div><div class="card dark"><div class="label">Scope 3.1 · GPU</div><div class="value">5.2 t</div><div class="sub">CO₂e a year</div></div></div>
+  <div class="gap-note"><strong>Not calculated, and why</strong><ul><li>The GPU factor is an illustrative assumption, not a verified source.</li><li>General-purpose instances have no verified factor, so their 36,000 hours are not in the total.</li></ul></div>
 </section>
 
-<section class="block"><a class="btn btn-ghost" href="../dashboard.html#small_scale">Back to the dashboard</a></section>
-</div></body></html>
+<div class="cta-row">
+  <div><strong>Done. The data is in your dashboard.</strong><p>See it in the report, with its formula and source beside it.</p></div>
+  <div style="display:flex;gap:10px;flex-wrap:wrap"><a class="btn btn-ghost" href="index.html">Another tracker</a><a class="btn" href="../dashboard.html#small_scale">Open the dashboard →</a></div>
+</div>
+
+</main></body></html>

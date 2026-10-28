@@ -4,7 +4,10 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Dashboard · Carbon Aggregation</title>
-  <link rel="stylesheet" href="assets/dashboard.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;650;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="assets/app.css">
 </head>
 <body>
   <header class="topbar">
@@ -22,7 +25,7 @@
       <section class="side-block">
         <p class="side-title">Connected trackers</p>
         <ul class="tracker-list" id="tracker-list"></ul>
-        <a class="side-link" href="tracker-demo/index.html">+ Connect a new tracker (demo)</a>
+        <a class="side-link" href="tracker-demo/index.html">+ Connect a tracker</a>
       </section>
 
       <section class="side-block">
@@ -67,7 +70,7 @@
           <div class="scenario-head">
             <div>
               <p class="kicker">Scenario analysis</p>
-              <h3>Move one action, see the total and the grade change.</h3>
+              <h3>Stack actions and watch the total and grade move.</h3>
             </div>
           </div>
           <div class="scenario-body">
@@ -75,7 +78,7 @@
             <div id="scenario-slot"></div>
             <div class="scenario-out" id="scenario-out"></div>
             <div id="scenario-warn"></div>
-            <p class="muted small">Actions overlap, so savings are not added together. Each scenario is one action on its own.</p>
+            <p class="muted small">Savings are added together as an upper bound. When two or more actions are stacked, a warning shows that they may overlap.</p>
           </div>
         </div>
       </section>

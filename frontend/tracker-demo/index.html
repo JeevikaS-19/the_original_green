@@ -1,24 +1,27 @@
 <!doctype html>
 <html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Tracker demos · Tracker demo · Carbon Aggregation</title>
-<link rel="stylesheet" href="../assets/dashboard.css"></head>
+<title>Tracker demos · Carbon Aggregation</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;650;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../assets/app.css"></head>
 <body>
-<header class="topbar"><div class="top-left"><a class="logo" href="../index.html">Carbon Aggregation</a></div>
-<div class="top-right"><a class="btn btn-ghost btn-small" href="index.html">All tracker demos</a></div></header>
-<div class="main" style="max-width:1100px;margin:0 auto;padding:30px 24px 70px">
+<header class="topbar">
+  <div><a class="logo" href="../index.html">Carbon Aggregation</a></div>
+  <div></div>
+  <div class="top-right"><a class="btn btn-ghost btn-small" href="index.html">All trackers</a><a class="btn btn-small" href="../dashboard.html#small_scale">Dashboard</a></div>
+</header>
+<main class="flow-page">
 
-<section class="block demo-hero">
-  <p class="kicker">Tracker demos</p>
-  <h1>How the platform reads each tracker's file.</h1>
-  <p>Each demo takes a real-format export, shows the steps the platform takes, and shows what it finds. These are demos of our reading logic, not connections to the products.</p>
-</section>
-<section class="block">
-  <div class="tracker-grid">
-    <a class="tracker-card" href="fuelio.html"><span class="tag measured">Fleet</span><h3>Fuel and fleet log</h3><p>Vehicles, fuel and distance, read into Scope 1.</p></a>
-    <a class="tracker-card" href="energy-meter.html"><span class="tag measured">Energy</span><h3>Energy meter export</h3><p>Twelve monthly readings, read into Scope 2.</p></a>
-    <a class="tracker-card" href="aws.html"><span class="tag illustrative">Cloud</span><h3>Cloud usage bill</h3><p>Usage hours by instance family, read into Scope 3.1 where a factor exists.</p></a>
-  </div>
-</section>
+<div class="flow-head">
+  <span class="kicker">Tracker demos</span>
+  <h1>Connect a tracker.</h1>
+  <p>Pick a source to see how its export is read, checked and turned into a scope, step by step.</p>
+  <span class="disclaimer">Demos of our reading logic, using sample exports. Not connections to the products.</span>
+</div>
+<div class="tracker-grid">
+  <a class="tracker-card" href="fuelio.html"><div class="ico">FL</div><h3>Fleet and fuel log</h3><p>Vehicles, fuel and distance into Scope 1.</p><span class="tag measured">Measured</span><span class="go">Open demo →</span></a>
+  <a class="tracker-card" href="energy-meter.html"><div class="ico">EM</div><h3>Energy meter</h3><p>Monthly readings into Scope 2.</p><span class="tag measured">Measured</span><span class="go">Open demo →</span></a>
+  <a class="tracker-card" href="aws.html"><div class="ico">CL</div><h3>Cloud usage bill</h3><p>Instance hours into Scope 3.1.</p><span class="tag illustrative">Illustrative factor</span><span class="go">Open demo →</span></a>
+</div>
 
-<section class="block"><a class="btn btn-ghost" href="../dashboard.html#small_scale">Back to the dashboard</a></section>
-</div></body></html>
+</main></body></html>
