@@ -2,8 +2,11 @@
   "use strict";
 
   var ALL = window.DEMO_FIXTURES || [];
-  var SCALES = ["individual", "small_scale", "large_scale"];
-  var SCALE_LABEL = { individual: "Individual", small_scale: "Small-Scale", large_scale: "Large-Scale" };
+  var SCALES = ["individual", "small_scale", "large_scale", "case_tcs", "case_infosys"];
+  var SCALE_LABEL = {
+    individual: "Individual", small_scale: "Small-Scale", large_scale: "Large-Scale",
+    case_tcs: "TCS FY25-26", case_infosys: "Infosys FY25-26"
+  };
   var SCOPE_NAME = { scope_1: "Scope 1", scope_2: "Scope 2", scope_3: "Scope 3" };
   var state = { scale: "small_scale", path: "open_source", scope: "scope_1", picked: {} };
 
@@ -297,10 +300,9 @@
     if ((b = e.target.closest("[data-impact]"))) { openImpact(Number(b.getAttribute("data-impact"))); return; }
     if (e.target.id === "dl-json") { downloadJson(); return; }
     if (e.target.id === "dl-csv") { downloadCsv(); return; }
-    if (e.target.id === "download") { e.preventDefault(); downloadJson(); return; }
   });
   document.addEventListener("change", function (e) {
-    if (e.target.matches("#scenario-checks input[data-pick]")) {
+    if (e.target.matches("#scenario-slot input[data-pick]")) {
       var key = state.scale + state.path;
       state.picked[key] = state.picked[key] || {};
       state.picked[key][e.target.getAttribute("data-pick")] = e.target.checked;

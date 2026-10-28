@@ -416,6 +416,9 @@ def build():
     })
     for case in CASE_STUDIES:
         fixtures.append(build_case(case))
+    # Also written as a plain JSON file, for the record and for other tools.
+    case_fixtures = [f for f in fixtures if f["id"].startswith("case_")]
+    (FRONTEND_DATA.parent / "case_studies.json").write_text(json.dumps(case_fixtures, indent=2, ensure_ascii=False), encoding="utf-8")
     return fixtures
 
 
