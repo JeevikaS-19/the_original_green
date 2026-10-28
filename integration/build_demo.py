@@ -100,8 +100,8 @@ PARTIAL_PERSONA = {
     "tier_answer": "Large Enterprise",
     "tier": "tier_3",
     "org_type": "enterprise",
-    "label": "Large scale · partial data",
-    "sublabel": "Headcount, energy bill and cloud only",
+    "label": "Large scale, partial",
+    "sublabel": "Headcount and bill only",
     "description": "The same technology company, but with only its headcount, annual energy bill and cloud usage. Everything else is estimated and labelled.",
     "open_sources": [
         ("Headcount and bill", "Form", "500 employees, ₹56 lakh annual energy bill, Karnataka", "scope_2"),
@@ -282,15 +282,6 @@ def path_fixture(persona, path_key, intake_path, estimates):
 
 def build():
     fixtures = []
-    est_path, est_assumptions, est_notes = run_estimated(PARTIAL_PERSONA)
-    fixtures.append({
-        "id": PARTIAL_PERSONA["id"],
-        "tier": PARTIAL_PERSONA["tier"],
-        "label": PARTIAL_PERSONA["label"],
-        "sublabel": PARTIAL_PERSONA["sublabel"],
-        "description": PARTIAL_PERSONA["description"],
-        "paths": {"open_source": path_fixture(PARTIAL_PERSONA, "open_source", est_path, est_assumptions)},
-    })
     for persona in PERSONAS:
         open_path, open_estimates = run_open(persona)
         closed_path, closed_estimates = run_closed(persona)
@@ -305,6 +296,15 @@ def build():
                 "closed_source": path_fixture(persona, "closed_source", closed_path, closed_estimates),
             },
         })
+    est_path, est_assumptions, est_notes = run_estimated(PARTIAL_PERSONA)
+    fixtures.append({
+        "id": PARTIAL_PERSONA["id"],
+        "tier": PARTIAL_PERSONA["tier"],
+        "label": PARTIAL_PERSONA["label"],
+        "sublabel": PARTIAL_PERSONA["sublabel"],
+        "description": PARTIAL_PERSONA["description"],
+        "paths": {"open_source": path_fixture(PARTIAL_PERSONA, "open_source", est_path, est_assumptions)},
+    })
     return fixtures
 
 
