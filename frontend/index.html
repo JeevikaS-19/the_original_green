@@ -1,0 +1,133 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Carbon Aggregation Platform</title>
+  <meta name="description" content="One carbon footprint report from the trackers you already use. Scope 1, 2 and 3, with confidence ranges and ranked reduction actions.">
+  <link rel="stylesheet" href="assets/styles.css">
+</head>
+<body>
+  <header class="site-header">
+    <div class="wrap nav">
+      <a class="brand" href="index.html">
+        <span class="brand-mark" aria-hidden="true">CA</span>
+        <span>Carbon Aggregation</span>
+      </a>
+      <nav class="nav-links" aria-label="Main">
+        <a href="#who">Who it's for</a>
+        <a href="#how">How it works</a>
+        <a class="btn btn-small" href="demo.html#small_scale/open">Open demo</a>
+      </nav>
+    </div>
+  </header>
+
+  <main>
+    <section class="hero">
+      <div class="wrap hero-grid">
+        <div>
+          <p class="eyebrow">Cross-scope carbon reporting</p>
+          <h1>Your footprint, from the trackers you already use.</h1>
+          <p class="lede">
+            We don't ask you to track anything again. We read the exports your fleet, energy,
+            cloud and HR tools already produce, calculate Scope 1, 2 and 3 emissions, and show
+            the actions that save the most per rupee.
+          </p>
+          <div class="cta-row">
+            <a class="btn" href="demo.html#small_scale/open">Open the demo</a>
+            <a class="btn btn-ghost" href="#how">See how it works</a>
+          </div>
+          <p class="fine">Demo values are illustrative and built from the team's emission factors.</p>
+        </div>
+        <aside class="hero-card" aria-label="What the platform reads">
+          <p class="card-title">What we read</p>
+          <ul class="check-list">
+            <li><strong>Vehicle logs</strong> — fuel type and annual km</li>
+            <li><strong>Meter exports</strong> — monthly kWh and state</li>
+            <li><strong>Cloud bills</strong> — instance hours and cost</li>
+            <li><strong>Asset registers</strong> — devices and lifespans</li>
+            <li><strong>Commute surveys</strong> — mode split and distance</li>
+            <li><strong>Waste logs</strong> — solid, e-waste, wastewater</li>
+          </ul>
+        </aside>
+      </div>
+    </section>
+
+    <section id="who" class="section">
+      <div class="wrap">
+        <h2>Three kinds of user, one report</h2>
+        <p class="section-lede">Pick the scale that matches you. Each one needs a different amount of data, and the report adjusts to match.</p>
+        <div class="grid-3">
+          <article class="card">
+            <p class="tag">Individual</p>
+            <h3>A personal footprint</h3>
+            <p><strong>You give us:</strong> your car's fuel log and your electricity bills.</p>
+            <p><strong>You get:</strong> a grade, your biggest drivers, and a few changes that help.</p>
+          </article>
+          <article class="card">
+            <p class="tag">Small scale</p>
+            <h3>School or small company</h3>
+            <p><strong>You give us:</strong> your vehicle log, DG set, meter export, asset register, commute survey and waste logs.</p>
+            <p><strong>You get:</strong> a Scope 1, 2 and 3 report with confidence ranges and a ranked action plan.</p>
+          </article>
+          <article class="card">
+            <p class="tag">Large scale</p>
+            <h3>Large enterprise</h3>
+            <p><strong>You give us:</strong> fleet telematics, multi-site meters, IT asset registers and HR commute data.</p>
+            <p><strong>You get:</strong> a BRSR-ready report with grade against benchmarks and ROI-ranked actions.</p>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section class="section section-alt">
+      <div class="wrap">
+        <h2>Two ways to share your data</h2>
+        <p class="section-lede">The more detail you share, the tighter the range. If you can't share detail, we still work from what you have.</p>
+        <div class="grid-2">
+          <article class="card path-card">
+            <p class="tag tag-green">Open-source data</p>
+            <h3>Full exports from your trackers</h3>
+            <p>Detailed vehicle, meter, asset, commute and waste data gives a tight result.</p>
+            <p class="range">Confidence about ±15%</p>
+          </article>
+          <article class="card path-card">
+            <p class="tag tag-amber">Closed-source data</p>
+            <h3>Budget totals only</h3>
+            <p>Fuel spend, the electricity bill and headcount are enough to get a rough estimate. We say how rough.</p>
+            <p class="range">Confidence about ±40%</p>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section id="how" class="section">
+      <div class="wrap">
+        <h2>How it works</h2>
+        <ol class="steps">
+          <li><span class="step-num">1</span><div><h3>Connect trackers</h3><p>We read the metadata your existing tools export. Nothing is retyped.</p></div></li>
+          <li><span class="step-num">2</span><div><h3>Validate and route</h3><p>Every file is checked. Missing values are estimated and flagged, not hidden.</p></div></li>
+          <li><span class="step-num">3</span><div><h3>Calculate</h3><p>Scope 1 fuel, Scope 2 electricity, and Scope 3 devices, commute and waste.</p></div></li>
+          <li><span class="step-num">4</span><div><h3>Act</h3><p>Reduction actions ranked by tons saved per lakh of rupees, with payback periods.</p></div></li>
+        </ol>
+      </div>
+    </section>
+
+    <section class="cta-band">
+      <div class="wrap cta-inner">
+        <div>
+          <h2>See it run on demo data</h2>
+          <p>Switch between user types and data paths and step through each stage.</p>
+        </div>
+        <a class="btn" href="demo.html#individual/open">Start the demo</a>
+      </div>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <div class="wrap">
+      <p>Built at HackFest 2026 by team TheOriginal Green (T3-02).</p>
+    </div>
+  </footer>
+</body>
+</html>
