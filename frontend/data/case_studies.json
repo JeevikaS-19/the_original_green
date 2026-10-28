@@ -38,6 +38,80 @@
         "note": "Not calculated: waste factors are illustrative and no other Scope 3 category has verified data. The disclosed total covers business travel, commuting and purchased goods."
       }
     ],
+    "raw": {
+      "energy": [
+        {
+          "month": "Apr",
+          "kwh": 40821235.9,
+          "region_state": "Maharashtra"
+        },
+        {
+          "month": "May",
+          "kwh": 40821235.9,
+          "region_state": "Maharashtra"
+        },
+        {
+          "month": "Jun",
+          "kwh": 40821235.9,
+          "region_state": "Maharashtra"
+        },
+        {
+          "month": "Jul",
+          "kwh": 40821235.9,
+          "region_state": "Maharashtra"
+        },
+        {
+          "month": "Aug",
+          "kwh": 40821235.9,
+          "region_state": "Maharashtra"
+        },
+        {
+          "month": "Sep",
+          "kwh": 40821235.9,
+          "region_state": "Maharashtra"
+        },
+        {
+          "month": "Oct",
+          "kwh": 40821235.9,
+          "region_state": "Maharashtra"
+        },
+        {
+          "month": "Nov",
+          "kwh": 40821235.9,
+          "region_state": "Maharashtra"
+        },
+        {
+          "month": "Dec",
+          "kwh": 40821235.9,
+          "region_state": "Maharashtra"
+        },
+        {
+          "month": "Jan",
+          "kwh": 40821235.9,
+          "region_state": "Maharashtra"
+        },
+        {
+          "month": "Feb",
+          "kwh": 40821235.9,
+          "region_state": "Maharashtra"
+        },
+        {
+          "month": "Mar",
+          "kwh": 40821235.9,
+          "region_state": "Maharashtra"
+        }
+      ],
+      "waste": [
+        {
+          "category": "Solid Waste",
+          "mass_kg_per_month": 576916.7
+        },
+        {
+          "category": "E-waste",
+          "mass_kg_per_month": 42083.3
+        }
+      ]
+    },
     "paths": {
       "open_source": {
         "label": "Open-source data",
@@ -374,6 +448,80 @@
         "note": "Not calculated: waste factors are illustrative and no other Scope 3 category has verified data. The disclosed total covers business travel, commuting and purchased goods."
       }
     ],
+    "raw": {
+      "energy": [
+        {
+          "month": "Apr",
+          "kwh": 19281481.5,
+          "region_state": "Karnataka"
+        },
+        {
+          "month": "May",
+          "kwh": 19281481.5,
+          "region_state": "Karnataka"
+        },
+        {
+          "month": "Jun",
+          "kwh": 19281481.5,
+          "region_state": "Karnataka"
+        },
+        {
+          "month": "Jul",
+          "kwh": 19281481.5,
+          "region_state": "Karnataka"
+        },
+        {
+          "month": "Aug",
+          "kwh": 19281481.5,
+          "region_state": "Karnataka"
+        },
+        {
+          "month": "Sep",
+          "kwh": 19281481.5,
+          "region_state": "Karnataka"
+        },
+        {
+          "month": "Oct",
+          "kwh": 19281481.5,
+          "region_state": "Karnataka"
+        },
+        {
+          "month": "Nov",
+          "kwh": 19281481.5,
+          "region_state": "Karnataka"
+        },
+        {
+          "month": "Dec",
+          "kwh": 19281481.5,
+          "region_state": "Karnataka"
+        },
+        {
+          "month": "Jan",
+          "kwh": 19281481.5,
+          "region_state": "Karnataka"
+        },
+        {
+          "month": "Feb",
+          "kwh": 19281481.5,
+          "region_state": "Karnataka"
+        },
+        {
+          "month": "Mar",
+          "kwh": 19281481.5,
+          "region_state": "Karnataka"
+        }
+      ],
+      "waste": [
+        {
+          "category": "Solid Waste",
+          "mass_kg_per_month": 1010125.8
+        },
+        {
+          "category": "E-waste",
+          "mass_kg_per_month": 55182.5
+        }
+      ]
+    },
     "paths": {
       "open_source": {
         "label": "Open-source data",

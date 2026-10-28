@@ -10,6 +10,7 @@ Then it writes frontend/data/demo_fixtures.js from those real outputs, so the
 demo shows pipeline results, not stand-in numbers.
 """
 
+import csv
 import json
 import math
 import sys
@@ -364,6 +365,7 @@ def build_case(case):
         "source": case["source"],
         "disclosed": case["disclosed"],
         "comparison": comparison(case, {"calc": open_calc}),
+        "raw": raw_data(DEMO / case["folder"]),
         "paths": {
             "open_source": open_fixture,
             "closed_source": closed_fixture,
@@ -389,6 +391,23 @@ def run_case_closed(case):
     )
 
 
+def raw_data(folder):
+    """The tracker exports as read, so the Connect page can chart the real rows."""
+    def num(v):
+        try:
+            return float(v)
+        except (TypeError, ValueError):
+            return v
+    raw = {}
+    for f in sorted(folder.glob("*.csv")):
+        with f.open(encoding="utf-8", newline="") as fh:
+            raw[f.stem] = [{k: num(v) for k, v in row.items()} for row in csv.DictReader(fh)]
+    dg = folder / "dg_set.json"
+    if dg.exists():
+        raw["dg_set"] = json.loads(dg.read_text(encoding="utf-8"))
+    return raw
+
+
 def build():
     fixtures = []
     for persona in PERSONAS:
@@ -400,6 +419,7 @@ def build():
             "label": persona["label"],
             "sublabel": persona["sublabel"],
             "description": persona["description"],
+            "raw": raw_data(DEMO / persona["folder"]),
             "paths": {
                 "open_source": path_fixture(persona, "open_source", open_path, open_estimates),
                 "closed_source": path_fixture(persona, "closed_source", closed_path, closed_estimates),

@@ -6,6 +6,106 @@ window.DEMO_FIXTURES = [
     "label": "Individual",
     "sublabel": "Software developer, one car",
     "description": "One person with a petrol car, home electricity and a work laptop.",
+    "raw": {
+      "commute": [
+        {
+          "total_employees": 1.0,
+          "car_pct": 1.0,
+          "bus_pct": 0.0,
+          "bike_pct": 0.0,
+          "wfh_pct": 0.0,
+          "avg_distance_km": 18.0
+        }
+      ],
+      "energy_meter": [
+        {
+          "month": "2025-01",
+          "kwh": 310.0,
+          "region_state": "Karnataka"
+        },
+        {
+          "month": "2025-02",
+          "kwh": 295.0,
+          "region_state": "Karnataka"
+        },
+        {
+          "month": "2025-03",
+          "kwh": 330.0,
+          "region_state": "Karnataka"
+        },
+        {
+          "month": "2025-04",
+          "kwh": 360.0,
+          "region_state": "Karnataka"
+        },
+        {
+          "month": "2025-05",
+          "kwh": 370.0,
+          "region_state": "Karnataka"
+        },
+        {
+          "month": "2025-06",
+          "kwh": 340.0,
+          "region_state": "Karnataka"
+        },
+        {
+          "month": "2025-07",
+          "kwh": 330.0,
+          "region_state": "Karnataka"
+        },
+        {
+          "month": "2025-08",
+          "kwh": 350.0,
+          "region_state": "Karnataka"
+        },
+        {
+          "month": "2025-09",
+          "kwh": 345.0,
+          "region_state": "Karnataka"
+        },
+        {
+          "month": "2025-10",
+          "kwh": 320.0,
+          "region_state": "Karnataka"
+        },
+        {
+          "month": "2025-11",
+          "kwh": 300.0,
+          "region_state": "Karnataka"
+        },
+        {
+          "month": "2025-12",
+          "kwh": 315.0,
+          "region_state": "Karnataka"
+        }
+      ],
+      "hardware": [
+        {
+          "device_type": "Laptop",
+          "model": "Business laptop",
+          "quantity": 1.0,
+          "purchase_year": 2022.0,
+          "expected_lifespan_years": 5.0
+        }
+      ],
+      "vehicles": [
+        {
+          "vehicle_id": "CAR_01",
+          "make": "Hatchback",
+          "model": "1.2 L petrol",
+          "year": 2019.0,
+          "fuel_type": "petrol",
+          "annual_km": 11500.0,
+          "fuel_efficiency_l_per_100km": 6.2
+        }
+      ],
+      "waste": [
+        {
+          "category": "Solid Waste",
+          "mass_kg_per_month": 20.0
+        }
+      ]
+    },
     "paths": {
       "open_source": {
         "label": "Open-source data",
@@ -302,6 +402,145 @@ window.DEMO_FIXTURES = [
     "label": "Small scale",
     "sublabel": "Campus, 200 staff",
     "description": "A campus with two diesel buses, a diesel van, a diesel DG set and 200 staff.",
+    "raw": {
+      "commute": [
+        {
+          "total_employees": 200.0,
+          "car_pct": 0.2,
+          "bus_pct": 0.55,
+          "bike_pct": 0.15,
+          "wfh_pct": 0.1,
+          "avg_distance_km": 12.0
+        }
+      ],
+      "energy_meter": [
+        {
+          "month": "2025-01",
+          "kwh": 4600.0,
+          "region_state": "Karnataka"
+        },
+        {
+          "month": "2025-02",
+          "kwh": 4400.0,
+          "region_state": "Karnataka"
+        },
+        {
+          "month": "2025-03",
+          "kwh": 4800.0,
+          "region_state": "Karnataka"
+        },
+        {
+          "month": "2025-04",
+          "kwh": 5100.0,
+          "region_state": "Karnataka"
+        },
+        {
+          "month": "2025-05",
+          "kwh": 5300.0,
+          "region_state": "Karnataka"
+        },
+        {
+          "month": "2025-06",
+          "kwh": 5200.0,
+          "region_state": "Karnataka"
+        },
+        {
+          "month": "2025-07",
+          "kwh": 4900.0,
+          "region_state": "Karnataka"
+        },
+        {
+          "month": "2025-08",
+          "kwh": 5000.0,
+          "region_state": "Karnataka"
+        },
+        {
+          "month": "2025-09",
+          "kwh": 5000.0,
+          "region_state": "Karnataka"
+        },
+        {
+          "month": "2025-10",
+          "kwh": 4700.0,
+          "region_state": "Karnataka"
+        },
+        {
+          "month": "2025-11",
+          "kwh": 4500.0,
+          "region_state": "Karnataka"
+        },
+        {
+          "month": "2025-12",
+          "kwh": 4600.0,
+          "region_state": "Karnataka"
+        }
+      ],
+      "hardware": [
+        {
+          "device_type": "Laptop",
+          "model": "Office laptop",
+          "quantity": 30.0,
+          "purchase_year": 2023.0,
+          "expected_lifespan_years": 5.0
+        },
+        {
+          "device_type": "Desktop",
+          "model": "Lab desktop",
+          "quantity": 20.0,
+          "purchase_year": 2021.0,
+          "expected_lifespan_years": 5.0
+        }
+      ],
+      "vehicles": [
+        {
+          "vehicle_id": "BUS_01",
+          "make": "Bus",
+          "model": "Diesel 40-seater",
+          "year": 2017.0,
+          "fuel_type": "diesel",
+          "annual_km": 85000.0,
+          "fuel_efficiency_l_per_100km": 30.0
+        },
+        {
+          "vehicle_id": "BUS_02",
+          "make": "Bus",
+          "model": "Diesel 40-seater",
+          "year": 2019.0,
+          "fuel_type": "diesel",
+          "annual_km": 70000.0,
+          "fuel_efficiency_l_per_100km": 29.0
+        },
+        {
+          "vehicle_id": "VAN_01",
+          "make": "Van",
+          "model": "Diesel minivan",
+          "year": 2020.0,
+          "fuel_type": "diesel",
+          "annual_km": 25000.0,
+          "fuel_efficiency_l_per_100km": 11.0
+        }
+      ],
+      "waste": [
+        {
+          "category": "Solid Waste",
+          "mass_kg_per_month": 450.0
+        },
+        {
+          "category": "E-waste",
+          "mass_kg_per_month": 40.0
+        },
+        {
+          "category": "Wastewater",
+          "mass_kg_per_month": 900.0
+        }
+      ],
+      "dg_set": {
+        "capacity_kva": 50,
+        "fuel_type": "diesel",
+        "hours_per_year": 400,
+        "fuel_consumption_per_hour": 12
+      }
+    },
     "paths": {
       "open_source": {
         "label": "Open-source data",
@@ -717,6 +956,213 @@ window.DEMO_FIXTURES = [
     "label": "Large scale",
     "sublabel": "Technology company, 500 staff",
     "description": "A technology company with 500 staff, eight cars, a diesel DG set and a data-heavy office.",
+    "raw": {
+      "cloud": [
+        {
+          "instance_type": "gpu-a100-x4",
+          "region": "ap-south-1",
+          "usage_hours": 9000.0,
+          "cost": 2700000.0
+        },
+        {
+          "instance_type": "gpu-a100-x4",
+          "region": "ap-south-1",
+          "usage_hours": 4000.0,
+          "cost": 1200000.0
+        },
+        {
+          "instance_type": "m6i.large",
+          "region": "ap-south-1",
+          "usage_hours": 36000.0,
+          "cost": 450000.0
+        }
+      ],
+      "commute": [
+        {
+          "total_employees": 500.0,
+          "car_pct": 0.4,
+          "bus_pct": 0.2,
+          "bike_pct": 0.1,
+          "wfh_pct": 0.3,
+          "avg_distance_km": 18.0
+        }
+      ],
+      "energy_meter": [
+        {
+          "month": "2025-01",
+          "kwh": 61000.0,
+          "region_state": "Karnataka"
+        },
+        {
+          "month": "2025-02",
+          "kwh": 60000.0,
+          "region_state": "Karnataka"
+        },
+        {
+          "month": "2025-03",
+          "kwh": 63000.0,
+          "region_state": "Karnataka"
+        },
+        {
+          "month": "2025-04",
+          "kwh": 65000.0,
+          "region_state": "Karnataka"
+        },
+        {
+          "month": "2025-05",
+          "kwh": 66000.0,
+          "region_state": "Karnataka"
+        },
+        {
+          "month": "2025-06",
+          "kwh": 64000.0,
+          "region_state": "Karnataka"
+        },
+        {
+          "month": "2025-07",
+          "kwh": 62000.0,
+          "region_state": "Karnataka"
+        },
+        {
+          "month": "2025-08",
+          "kwh": 63000.0,
+          "region_state": "Karnataka"
+        },
+        {
+          "month": "2025-09",
+          "kwh": 64000.0,
+          "region_state": "Karnataka"
+        },
+        {
+          "month": "2025-10",
+          "kwh": 62000.0,
+          "region_state": "Karnataka"
+        },
+        {
+          "month": "2025-11",
+          "kwh": 60000.0,
+          "region_state": "Karnataka"
+        },
+        {
+          "month": "2025-12",
+          "kwh": 61000.0,
+          "region_state": "Karnataka"
+        }
+      ],
+      "hardware": [
+        {
+          "device_type": "Laptop",
+          "model": "Standard laptop",
+          "quantity": 500.0,
+          "purchase_year": 2023.0,
+          "expected_lifespan_years": 4.0
+        },
+        {
+          "device_type": "GPU",
+          "model": "A100-class accelerator",
+          "quantity": 40.0,
+          "purchase_year": 2024.0,
+          "expected_lifespan_years": 3.0
+        },
+        {
+          "device_type": "Server",
+          "model": "Rack server",
+          "quantity": 12.0,
+          "purchase_year": 2021.0,
+          "expected_lifespan_years": 5.0
+        }
+      ],
+      "vehicles": [
+        {
+          "vehicle_id": "CAR_01",
+          "make": "Sedan",
+          "model": "1.5 L petrol",
+          "year": 2022.0,
+          "fuel_type": "petrol",
+          "annual_km": 14000.0,
+          "fuel_efficiency_l_per_100km": 7.0
+        },
+        {
+          "vehicle_id": "CAR_02",
+          "make": "Sedan",
+          "model": "1.5 L petrol",
+          "year": 2022.0,
+          "fuel_type": "petrol",
+          "annual_km": 14000.0,
+          "fuel_efficiency_l_per_100km": 7.0
+        },
+        {
+          "vehicle_id": "CAR_03",
+          "make": "Sedan",
+          "model": "1.5 L petrol",
+          "year": 2022.0,
+          "fuel_type": "petrol",
+          "annual_km": 14000.0,
+          "fuel_efficiency_l_per_100km": 7.0
+        },
+        {
+          "vehicle_id": "CAR_04",
+          "make": "Sedan",
+          "model": "1.5 L petrol",
+          "year": 2022.0,
+          "fuel_type": "petrol",
+          "annual_km": 14000.0,
+          "fuel_efficiency_l_per_100km": 7.0
+        },
+        {
+          "vehicle_id": "CAR_05",
+          "make": "Sedan",
+          "model": "1.5 L petrol",
+          "year": 2022.0,
+          "fuel_type": "petrol",
+          "annual_km": 14000.0,
+          "fuel_efficiency_l_per_100km": 7.0
+        },
+        {
+          "vehicle_id": "CAR_06",
+          "make": "Sedan",
+          "model": "1.5 L petrol",
+          "year": 2022.0,
+          "fuel_type": "petrol",
+          "annual_km": 14000.0,
+          "fuel_efficiency_l_per_100km": 7.0
+        },
+        {
+          "vehicle_id": "CAR_07",
+          "make": "Sedan",
+          "model": "1.5 L petrol",
+          "year": 2022.0,
+          "fuel_type": "petrol",
+          "annual_km": 14000.0,
+          "fuel_efficiency_l_per_100km": 7.0
+        },
+        {
+          "vehicle_id": "CAR_08",
+          "make": "Sedan",
+          "model": "1.5 L petrol",
+          "year": 2022.0,
+          "fuel_type": "petrol",
+          "annual_km": 14000.0,
+          "fuel_efficiency_l_per_100km": 7.0
+        }
+      ],
+      "waste": [
+        {
+          "category": "Solid Waste",
+          "mass_kg_per_month": 3500.0
+        },
+        {
+          "category": "E-waste",
+          "mass_kg_per_month": 250.0
+        }
+      ],
+      "dg_set": {
+        "capacity_kva": 250,
+        "fuel_type": "diesel",
+        "hours_per_year": 600,
+        "fuel_consumption_per_hour": 55
+      }
+    },
     "paths": {
       "open_source": {
         "label": "Open-source data",
@@ -1489,6 +1935,80 @@ window.DEMO_FIXTURES = [
         "note": "Not calculated: waste factors are illustrative and no other Scope 3 category has verified data. The disclosed total covers business travel, commuting and purchased goods."
       }
     ],
+    "raw": {
+      "energy": [
+        {
+          "month": "Apr",
+          "kwh": 40821235.9,
+          "region_state": "Maharashtra"
+        },
+        {
+          "month": "May",
+          "kwh": 40821235.9,
+          "region_state": "Maharashtra"
+        },
+        {
+          "month": "Jun",
+          "kwh": 40821235.9,
+          "region_state": "Maharashtra"
+        },
+        {
+          "month": "Jul",
+          "kwh": 40821235.9,
+          "region_state": "Maharashtra"
+        },
+        {
+          "month": "Aug",
+          "kwh": 40821235.9,
+          "region_state": "Maharashtra"
+        },
+        {
+          "month": "Sep",
+          "kwh": 40821235.9,
+          "region_state": "Maharashtra"
+        },
+        {
+          "month": "Oct",
+          "kwh": 40821235.9,
+          "region_state": "Maharashtra"
+        },
+        {
+          "month": "Nov",
+          "kwh": 40821235.9,
+          "region_state": "Maharashtra"
+        },
+        {
+          "month": "Dec",
+          "kwh": 40821235.9,
+          "region_state": "Maharashtra"
+        },
+        {
+          "month": "Jan",
+          "kwh": 40821235.9,
+          "region_state": "Maharashtra"
+        },
+        {
+          "month": "Feb",
+          "kwh": 40821235.9,
+          "region_state": "Maharashtra"
+        },
+        {
+          "month": "Mar",
+          "kwh": 40821235.9,
+          "region_state": "Maharashtra"
+        }
+      ],
+      "waste": [
+        {
+          "category": "Solid Waste",
+          "mass_kg_per_month": 576916.7
+        },
+        {
+          "category": "E-waste",
+          "mass_kg_per_month": 42083.3
+        }
+      ]
+    },
     "paths": {
       "open_source": {
         "label": "Open-source data",
@@ -1825,6 +2345,80 @@ window.DEMO_FIXTURES = [
         "note": "Not calculated: waste factors are illustrative and no other Scope 3 category has verified data. The disclosed total covers business travel, commuting and purchased goods."
       }
     ],
+    "raw": {
+      "energy": [
+        {
+          "month": "Apr",
+          "kwh": 19281481.5,
+          "region_state": "Karnataka"
+        },
+        {
+          "month": "May",
+          "kwh": 19281481.5,
+          "region_state": "Karnataka"
+        },
+        {
+          "month": "Jun",
+          "kwh": 19281481.5,
+          "region_state": "Karnataka"
+        },
+        {
+          "month": "Jul",
+          "kwh": 19281481.5,
+          "region_state": "Karnataka"
+        },
+        {
+          "month": "Aug",
+          "kwh": 19281481.5,
+          "region_state": "Karnataka"
+        },
+        {
+          "month": "Sep",
+          "kwh": 19281481.5,
+          "region_state": "Karnataka"
+        },
+        {
+          "month": "Oct",
+          "kwh": 19281481.5,
+          "region_state": "Karnataka"
+        },
+        {
+          "month": "Nov",
+          "kwh": 19281481.5,
+          "region_state": "Karnataka"
+        },
+        {
+          "month": "Dec",
+          "kwh": 19281481.5,
+          "region_state": "Karnataka"
+        },
+        {
+          "month": "Jan",
+          "kwh": 19281481.5,
+          "region_state": "Karnataka"
+        },
+        {
+          "month": "Feb",
+          "kwh": 19281481.5,
+          "region_state": "Karnataka"
+        },
+        {
+          "month": "Mar",
+          "kwh": 19281481.5,
+          "region_state": "Karnataka"
+        }
+      ],
+      "waste": [
+        {
+          "category": "Solid Waste",
+          "mass_kg_per_month": 1010125.8
+        },
+        {
+          "category": "E-waste",
+          "mass_kg_per_month": 55182.5
+        }
+      ]
+    },
     "paths": {
       "open_source": {
         "label": "Open-source data",

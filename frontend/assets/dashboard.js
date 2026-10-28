@@ -7,24 +7,31 @@
     individual: "Individual", small_scale: "Small-scale campus", large_scale: "Large-scale enterprise",
     case_tcs: "TCS · FY 2025-26 (case study)", case_infosys: "Infosys · FY 2025-26 (case study)"
   };
-  var VIEWS = ["overview", "scope_1", "scope_2", "scope_3", "reduction", "breakdown", "export"];
+  var VIEWS = ["overview", "connect", "scope_1", "scope_2", "scope_3", "reduction", "breakdown", "export"];
   var VIEW_LABEL = {
-    overview: "Overview", scope_1: "Scope 1 · Direct fuel", scope_2: "Scope 2 · Purchased power",
-    scope_3: "Scope 3 · Value chain", reduction: "Reduction & AI Apply", breakdown: "Data breakdown", export: "Download & export"
+    overview: "Overview", connect: "Connect", scope_1: "Scope 1 · Direct fuel", scope_2: "Scope 2 · Purchased power",
+    scope_3: "Scope 3 · Value chain", reduction: "Reduction", breakdown: "Data breakdown", export: "Download & export"
   };
   var SCOPE_NAME = { scope_1: "Scope 1", scope_2: "Scope 2", scope_3: "Scope 3" };
   var SCOPE_CLASS = { scope_1: "c1", scope_2: "c2", scope_3: "c3" };
   var DIESEL = 2.68, GRID = 0.757;
 
-  // Trackers the platform can read. Status comes from the profile's sources.
+  // Trackers the platform can read. Status comes from the profile's sources; charts from its raw exports.
   var PLATFORMS = [
-    { name: "Fleet & fuel log", note: "Fuel-log CSV export (e.g. Fuelio): vehicle, fuel type, distance", scope: "scope_1", match: /fuel|vehicle|fleet/i, demo: "tracker-demo/fuelio.html" },
-    { name: "DG set log", note: "Run-hours and litres per hour, entered as a form", scope: "scope_1", match: /\bDG\b/, demo: "tracker-demo/index.html" },
-    { name: "Energy meter", note: "Monthly kWh export from a smart meter, with the grid region", scope: "scope_2", match: /meter|electricity|bill/i, demo: "tracker-demo/energy-meter.html" },
-    { name: "Cloud bill", note: "Usage export (e.g. AWS): instance-hours by region", scope: "scope_3", match: /cloud/i, demo: "tracker-demo/aws.html" },
-    { name: "Asset register", note: "Device counts by type, for embodied carbon", scope: "scope_3", match: /asset|device/i, demo: "tracker-demo/index.html" },
-    { name: "Commute survey", note: "Distance and travel mode per person", scope: "scope_3", match: /commute/i, demo: "tracker-demo/index.html" },
-    { name: "Waste log", note: "Monthly kg by waste type and disposal route", scope: "scope_3", match: /waste/i, demo: "tracker-demo/index.html" }
+    { name: "Fleet & fuel log", note: "Fuel-log CSV export (e.g. Fuelio): vehicle, fuel type, distance", scope: "scope_1", cat: "Fleet", match: /fuel|vehicle|fleet/i, demo: "tracker-demo/fuelio.html",
+      steps: ["Export the fuel log as CSV", "Keep vehicle, fuel type, annual km and L/100 km columns", "Upload: each vehicle becomes a Scope 1 line"] },
+    { name: "DG set log", note: "Run-hours and litres per hour, entered as a form", scope: "scope_1", cat: "DG set", match: /\bDG\b/, demo: "tracker-demo/index.html",
+      steps: ["Note the generator's capacity (kVA)", "Enter run-hours a year and litres per hour", "Diesel use becomes a Scope 1 line"] },
+    { name: "Energy meter", note: "Monthly kWh export from a smart meter, with the grid region", scope: "scope_2", cat: "Electricity", match: /meter|electricity|bill/i, demo: "tracker-demo/energy-meter.html",
+      steps: ["Export 12 months of readings as CSV", "Keep month, kWh and state columns", "Upload: kWh × grid factor gives Scope 2"] },
+    { name: "Cloud bill", note: "Usage export (e.g. AWS): instance-hours by region", scope: "scope_3", cat: "Cloud", match: /cloud/i, demo: "tracker-demo/aws.html",
+      steps: ["Download the usage report as CSV", "Keep instance type, region and usage hours", "GPU hours are calculated; others are flagged"] },
+    { name: "Asset register", note: "Device counts by type, for embodied carbon", scope: "scope_3", cat: "Hardware", match: /asset|device/i, demo: "tracker-demo/index.html",
+      steps: ["List devices by type and count", "Add purchase year and expected lifespan", "Embodied carbon is spread over the lifespan"] },
+    { name: "Commute survey", note: "Distance and travel mode per person", scope: "scope_3", cat: "Commute", match: /commute/i, demo: "tracker-demo/index.html",
+      steps: ["Survey staff for mode and distance", "Upload headcount and mode split", "Each mode uses its own factor"] },
+    { name: "Waste log", note: "Monthly kg by waste type and disposal route", scope: "scope_3", cat: "Waste", match: /waste/i, demo: "tracker-demo/index.html",
+      steps: ["Get monthly kg from the waste vendor", "Split by solid, e-waste and wastewater", "Each type uses its own factor"] }
   ];
 
   // Factors used by the calculator. Status mirrors person2 factors.py.
@@ -49,6 +56,7 @@
     { match: /solar/i, pool: "power", label: "Electricity from rooftop solar", max: 40 },
     { match: /./, pool: "total", label: "Scale of action", max: 50 }
   ];
+  var ACT_CLASS = ["a1", "a2", "a3", "a4", "a5"];
 
   var state = { scale: "small_scale", path: "open_source", view: "overview", edits: {}, levers: {} };
   var reduce = window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
@@ -60,7 +68,9 @@
     });
   }
   function t(v) { return Number(v).toLocaleString("en-IN", { minimumFractionDigits: 1, maximumFractionDigits: 1 }) + " t"; }
-  function inr(v) { return "₹" + Math.round(v).toLocaleString("en-IN"); }
+  function n0(v) { return Math.round(v).toLocaleString("en-IN"); }
+  function inr(v) { return "₹" + n0(v); }
+  function lakh(v) { return "₹" + (v / 100000).toLocaleString("en-IN", { maximumFractionDigits: 1 }) + " L"; }
   function pct(v) { return (Math.round(v * 10) / 10) + "%"; }
   function key() { return state.scale + "|" + state.path; }
   function profile() { return ALL.filter(function (p) { return p.id === state.scale; })[0] || ALL[0]; }
@@ -220,7 +230,7 @@
       cut += c; cost += d.a.cost_inr * scale;
       if (sv === null) noSaving = true; else saving += sv * scale;
       scopeCut[poolScope(d.def.pool, d.a)] += c;
-      rows.push({ d: d, pct: s.pct, cut: c, cost: d.a.cost_inr * scale });
+      rows.push({ d: d, pct: s.pct, cut: c, cost: d.a.cost_inr * scale, saving: sv === null ? 0 : sv * scale });
     });
     var after = Math.max(0, eff.total.tons - cut);
     return {
@@ -230,7 +240,8 @@
     };
   }
 
-  // ---- Chart: emissions over the next five years ----
+  // ---- Charts ----
+  // Five-year line: today's level held, and the level with the plan.
   function chart(el, today, after, hasPlan) {
     var years = ["FY 25-26", "FY 26-27", "FY 27-28", "FY 28-29", "FY 29-30", "FY 30-31"];
     var W = 1000, H = 260, L = 64, R = 44, T = 18, B = 36;
@@ -243,54 +254,141 @@
     var grid = [0, 0.5, 1].map(function (f) {
       var v = max / 1.15 * f;
       return '<line x1="' + L + '" x2="' + (W - R) + '" y1="' + y(v) + '" y2="' + y(v) + '" class="gl"/>' +
-        '<text x="' + (L - 8) + '" y="' + (y(v) + 4) + '" class="ax" text-anchor="end">' + Math.round(v).toLocaleString("en-IN") + '</text>';
+        '<text x="' + (L - 8) + '" y="' + (y(v) + 4) + '" class="ax" text-anchor="end">' + n0(v) + '</text>';
     }).join("");
+    var saved = hasPlan
+      ? '<path d="' + line(bau) + line(plan.slice().reverse()).replace("M", "L") + 'Z" class="saved"/>' +
+        '<text x="' + x(5) + '" y="' + ((y(today) + y(after)) / 2 + 4) + '" class="sv" text-anchor="end">−' + t(today - after) + ' a year</text>'
+      : '';
     el.innerHTML = '<svg viewBox="0 0 ' + W + ' ' + H + '" role="img" aria-label="Emissions projection">' + grid +
       years.map(function (yr, i) { return '<text x="' + x(i) + '" y="' + (H - 10) + '" class="ax" text-anchor="middle">' + yr + '</text>'; }).join("") +
-      '<path d="' + line(bau) + '" class="ln bau"/>' +
-      (hasPlan ? '<path d="' + line(plan) + 'L' + x(years.length - 1) + ' ' + (H - B) + 'L' + x(0) + ' ' + (H - B) + 'Z" class="area"/><path d="' + line(plan) + '" class="ln plan"/>' : '') +
+      saved + '<path d="' + line(bau) + '" class="ln bau"/>' +
+      (hasPlan ? '<path d="' + line(plan) + '" class="ln plan"/>' : '') +
       (hasPlan ? plan : bau).map(function (p) { return '<circle cx="' + p[0] + '" cy="' + p[1] + '" r="4" class="pt"/>'; }).join("") +
-      '</svg><div class="chart-legend"><span><i class="bau"></i>Today\'s level held (tCO₂e)</span>' + (hasPlan ? '<span><i class="plan"></i>With your plan</span>' : '') + '</div>';
+      '</svg><div class="chart-legend"><span><i class="bau"></i>Today\'s level held (tCO₂e)</span>' +
+      (hasPlan ? '<span><i class="plan"></i>With your plan</span><span><i class="sw"></i>Saved</span>' : '') + '</div>';
+  }
+
+  // Horizontal stacked bars, one row per series.
+  function stacks(el, rows, max, legend) {
+    el.innerHTML = '<div class="stk">' + rows.map(function (r) {
+      return '<div class="stk-row"><span class="stk-l">' + esc(r.label) + '</span><div class="stk-bar">' +
+        r.parts.map(function (p) {
+          return '<i class="' + p.cls + '" style="width:' + (max ? p.v / max * 100 : 0).toFixed(2) + '%" title="' + esc(p.name + ': ' + p.text) + '"></i>';
+        }).join("") + '</div><b>' + esc(r.text) + '</b></div>';
+    }).join("") + '</div>' +
+      (legend.length ? '<div class="chart-legend">' + legend.map(function (l) { return '<span><i class="dot ' + l.cls + '"></i>' + esc(l.name) + '</span>'; }).join("") + '</div>' : '');
+  }
+
+  // Cumulative money over ten years, with the breakeven point marked.
+  function paybackChart(el, cost, saving) {
+    if (!cost) { el.innerHTML = '<div class="empty">Tick an action to see when it pays back.</div>'; return; }
+    if (!saving) { el.innerHTML = '<div class="empty">These actions have no payback period (a recurring cost), so they never break even on money. They still cut emissions.</div>'; return; }
+    var N = 10, W = 520, H = 230, L = 58, R = 14, T = 14, B = 30;
+    var vals = []; for (var i = 0; i <= N; i++) vals.push(-cost + saving * i);
+    var lo = Math.min.apply(null, vals), hi = Math.max.apply(null, vals.concat([0]));
+    var span = hi - lo || 1;
+    var x = function (i) { return L + i * (W - L - R) / N; };
+    var y = function (v) { return T + (hi - v) / span * (H - T - B); };
+    var pts = vals.map(function (v, i) { return x(i).toFixed(1) + "," + y(v).toFixed(1); });
+    var be = cost / saving;
+    var mark = be <= N
+      ? '<line x1="' + x(be) + '" x2="' + x(be) + '" y1="' + T + '" y2="' + (H - B) + '" class="be"/><circle cx="' + x(be) + '" cy="' + y(0) + '" r="5" class="be-pt"/>' +
+        '<text x="' + (x(be) + 6) + '" y="' + (T + 12) + '" class="sv">Breakeven · ' + Math.round(be * 12) + ' months</text>'
+      : '<text x="' + (W - R) + '" y="' + (T + 12) + '" class="sv" text-anchor="end">Breakeven after ' + N + ' years</text>';
+    el.innerHTML = '<svg viewBox="0 0 ' + W + ' ' + H + '" role="img" aria-label="Cumulative savings">' +
+      '<line x1="' + L + '" x2="' + (W - R) + '" y1="' + y(0) + '" y2="' + y(0) + '" class="zero"/>' +
+      '<text x="' + (L - 8) + '" y="' + (y(0) + 4) + '" class="ax" text-anchor="end">₹0</text>' +
+      '<text x="' + (L - 8) + '" y="' + (y(lo) + 4) + '" class="ax" text-anchor="end">' + lakh(lo) + '</text>' +
+      '<text x="' + (L - 8) + '" y="' + (y(hi) + 4) + '" class="ax" text-anchor="end">' + lakh(hi) + '</text>' +
+      [0, 2, 4, 6, 8, 10].map(function (i) { return '<text x="' + x(i) + '" y="' + (H - 8) + '" class="ax" text-anchor="middle">Yr ' + i + '</text>'; }).join("") +
+      '<polyline points="' + pts.join(" ") + '" class="ln plan"/>' + mark + '</svg>' +
+      '<div class="chart-legend"><span><i class="plan"></i>Cumulative: savings minus investment</span></div>';
+  }
+
+  // Small charts for the Connect page.
+  function miniBars(items, unit) {
+    var max = Math.max.apply(null, items.map(function (i) { return i.v; }).concat([0.0001]));
+    return '<div class="mini-bars">' + items.map(function (i) {
+      return '<div class="mb"><span>' + esc(i.l) + '</span><div><i style="width:' + (i.v / max * 100).toFixed(1) + '%"></i></div><b>' + n0(i.v) + ' ' + esc(unit) + '</b></div>';
+    }).join("") + '</div>';
+  }
+  function miniLine(items, unit) {
+    var W = 320, H = 110, P = 8;
+    var vals = items.map(function (i) { return i.v; });
+    var lo = Math.min.apply(null, vals) * 0.95, hi = Math.max.apply(null, vals) * 1.03, span = hi - lo || 1;
+    var x = function (i) { return P + i * (W - 2 * P) / Math.max(1, vals.length - 1); };
+    var y = function (v) { return P + (hi - v) / span * (H - 2 * P - 14); };
+    var pts = vals.map(function (v, i) { return x(i).toFixed(1) + "," + y(v).toFixed(1); }).join(" ");
+    return '<svg class="mini-line" viewBox="0 0 ' + W + ' ' + H + '" role="img" aria-label="Monthly ' + esc(unit) + '">' +
+      '<polygon points="' + x(0) + ',' + (H - 14) + ' ' + pts + ' ' + x(vals.length - 1) + ',' + (H - 14) + '" class="ml-area"/>' +
+      '<polyline points="' + pts + '" class="ml"/>' +
+      '<text x="' + x(0) + '" y="' + (H - 2) + '" class="ax">' + esc(items[0].l) + '</text>' +
+      '<text x="' + x(vals.length - 1) + '" y="' + (H - 2) + '" class="ax" text-anchor="end">' + esc(items[items.length - 1].l) + '</text></svg>';
+  }
+  function platformData(p) {
+    var raw = profile().raw || {};
+    var r;
+    if (p.cat === "Fleet" && (r = raw.vehicles)) {
+      return { title: "Fuel a year, by vehicle", chart: miniBars(r.map(function (v) { return { l: v.vehicle_id, v: v.annual_km * v.fuel_efficiency_l_per_100km / 100 }; }), "L"),
+        sample: r.slice(0, 3).map(function (v) { return v.vehicle_id + " · " + v.fuel_type + " · " + n0(v.annual_km) + " km · " + v.fuel_efficiency_l_per_100km + " L/100 km"; }) };
+    }
+    if (p.cat === "DG set" && (r = raw.dg_set)) {
+      return { title: "Generator use", chart: miniBars([{ l: "Hours a year", v: r.hours_per_year }, { l: "Litres a year", v: r.hours_per_year * r.fuel_consumption_per_hour }], ""),
+        sample: [r.capacity_kva + " kVA · " + r.fuel_type, r.hours_per_year + " hours a year", r.fuel_consumption_per_hour + " litres per hour"] };
+    }
+    if (p.cat === "Electricity" && (r = raw.energy_meter || raw.energy)) {
+      var even = r.every(function (m) { return m.kwh === r[0].kwh; });
+      return { title: "Monthly kWh, 12 months" + (even ? " (annual total spread evenly)" : ""), chart: miniLine(r.map(function (m) { return { l: String(m.month), v: m.kwh }; }), "kWh"),
+        sample: r.slice(-3).map(function (m) { return m.month + " · " + n0(m.kwh) + " kWh · " + m.region_state; }) };
+    }
+    if (p.cat === "Cloud" && (r = raw.cloud)) {
+      return { title: "Usage hours, by line", chart: miniBars(r.map(function (c, i) { return { l: c.instance_type + " #" + (i + 1), v: c.usage_hours }; }), "h"),
+        sample: r.slice(0, 3).map(function (c) { return c.instance_type + " · " + c.region + " · " + n0(c.usage_hours) + " h"; }) };
+    }
+    if (p.cat === "Hardware" && (r = raw.hardware)) {
+      return { title: "Devices, by type", chart: miniBars(r.map(function (h) { return { l: h.device_type, v: h.quantity }; }), ""),
+        sample: r.slice(0, 3).map(function (h) { return h.quantity + " × " + h.model + " · bought " + h.purchase_year + " · " + h.expected_lifespan_years + "-year life"; }) };
+    }
+    if (p.cat === "Commute" && (r = raw.commute) && r[0]) {
+      var c = r[0];
+      return { title: "How " + n0(c.total_employees) + " people travel", chart: miniBars([
+          { l: "Car", v: c.car_pct * 100 }, { l: "Bus", v: c.bus_pct * 100 }, { l: "Bike", v: c.bike_pct * 100 }, { l: "Home", v: (c.wfh_pct || 0) * 100 }], "%"),
+        sample: [n0(c.total_employees) + " people", "Average " + c.avg_distance_km + " km each way"] };
+    }
+    if (p.cat === "Waste" && (r = raw.waste)) {
+      return { title: "kg a month, by type", chart: miniBars(r.map(function (w) { return { l: w.category, v: w.mass_kg_per_month }; }), "kg"),
+        sample: r.slice(0, 3).map(function (w) { return w.category + " · " + n0(w.mass_kg_per_month) + " kg a month"; }) };
+    }
+    return null;
   }
 
   // ---- Sidebar ----
   function renderSidebar(sc) {
-    var sel = $("org-select");
-    if (!sel.options.length) sel.innerHTML = SCALES.map(function (s) { return '<option value="' + s + '">' + SCALE_LABEL[s] + '</option>'; }).join("");
-    sel.value = state.scale;
-    document.querySelectorAll(".seg2 button").forEach(function (b) { b.setAttribute("aria-pressed", String(b.getAttribute("data-path") === state.path)); });
-
-    var srcs = path().sources;
-    $("connect-list").innerHTML = PLATFORMS.map(function (p, i) {
-      var hit = srcs.filter(function (s) { return s.scope === p.scope && p.match.test(s.tracker); })[0];
-      return '<div class="cn' + (hit ? ' ok' : '') + '" data-cn="' + i + '" tabindex="0" role="button" aria-expanded="false">' +
-        '<div class="cn-top"><strong>' + esc(p.name) + '</strong><span>' + (hit ? '✓ Connected' : '✗ Not connected') + '</span></div>' +
-        '<p>' + esc(p.note) + '</p>' +
-        '<div class="cn-more">' + (hit ? '<p><b>' + esc(hit.tracker) + '</b> · ' + esc(hit.format) + ' · ' + esc(hit.detail) + '</p>' : '<p>No ' + esc(SCOPE_NAME[p.scope]) + ' data from this source yet.</p>') +
-        '<a href="' + p.demo + '">' + (hit ? 'Reconnect →' : 'Connect →') + '</a></div></div>';
-    }).join("");
-
     document.querySelectorAll("#scope-sel button").forEach(function (b) {
       var id = b.getAttribute("data-view"), s = sc.eff.scopes.filter(function (x) { return x.id === id; })[0];
       b.classList.toggle("empty", !s.tons);
       b.setAttribute("aria-pressed", String(state.view === id));
-      b.innerHTML = SCOPE_NAME[id] + '<small>' + (s.tons ? Math.round(s.tons).toLocaleString("en-IN") + ' t' : 'No data') + '</small>';
+      b.innerHTML = SCOPE_NAME[id] + '<small>' + (s.tons ? n0(s.tons) + ' t' : 'No data') + '</small>';
     });
-    document.querySelectorAll("#view-nav a").forEach(function (a) {
+    document.querySelectorAll("#view-nav a, .side-dl").forEach(function (a) {
       if (a.getAttribute("data-view") === state.view) a.setAttribute("aria-current", "page");
       else a.removeAttribute("aria-current");
     });
-
     var tot = sc.eff.total, half = tot.tons ? (tot.high - tot.low) / 2 / tot.tons * 100 : 0;
     $("quick-stats").innerHTML =
       '<div><dt>Total</dt><dd>' + t(tot.tons) + '</dd></div>' +
       '<div><dt>Grade</dt><dd>' + esc(sc.eff.grade) + '</dd></div>' +
       '<div><dt>Confidence</dt><dd>±' + half.toFixed(0) + '%</dd></div>' +
-      (sc.rows.length ? '<div class="plan"><dt>With plan</dt><dd>' + t(sc.after) + ' · ' + esc(sc.grade) + '</dd></div>' : '');
+      '<div class="plan' + (sc.rows.length ? '' : ' none') + '"><dt>With plan</dt><dd>' + (sc.rows.length ? t(sc.after) + ' · ' + esc(sc.grade) : '–') + '</dd></div>';
   }
 
   function renderHeader() {
     var p = profile();
+    var sel = $("org-select");
+    if (!sel.options.length) sel.innerHTML = SCALES.map(function (s) { return '<option value="' + s + '">' + SCALE_LABEL[s] + '</option>'; }).join("");
+    sel.value = state.scale;
+    document.querySelectorAll(".seg2 button").forEach(function (b) { b.setAttribute("aria-pressed", String(b.getAttribute("data-path") === state.path)); });
     $("crumb").textContent = VIEW_LABEL[state.view];
     $("profile-title").textContent = p.label + " · " + p.sublabel;
     $("profile-sub").textContent = p.description;
@@ -298,7 +396,7 @@
     document.querySelectorAll(".view").forEach(function (v) { v.classList.toggle("active", v.getAttribute("data-view") === state.view); });
   }
 
-  // ---- 1. Overview ----
+  // ---- Overview ----
   function renderOverview(sc) {
     var eff = sc.eff, total = eff.total.tons || 0;
     var half = total ? (eff.total.high - eff.total.low) / 2 / total * 100 : 0;
@@ -321,12 +419,46 @@
       return '<i class="' + SCOPE_CLASS[s.id] + '" style="width:' + (total ? s.tons / total * 100 : 0).toFixed(1) + '%" title="' + SCOPE_NAME[s.id] + '"></i>';
     }).join("");
     var cats = categories(eff), max = Math.max.apply(null, cats.map(function (c) { return c.tons; }).concat([0.0001]));
-    $("cat-list").innerHTML = cats.map(function (c) {
+    $("cat-list").innerHTML = '<div class="cat cat-head"><span>Category</span><span>Share</span><span>tCO₂e</span><span>Data</span></div>' + cats.map(function (c) {
       return '<div class="cat' + (c.tons ? '' : ' off') + '" tabindex="0"><span class="cname"><i class="' + SCOPE_CLASS[c.scope] + '"></i>' + esc(c.name) +
         '<small>' + SCOPE_NAME[c.scope] + '</small></span><span class="cbar"><i style="width:' + (c.tons / max * 100).toFixed(1) + '%"></i></span>' +
         '<b>' + (c.tons ? t(c.tons) : '–') + '</b>' + tag(c.kind) +
         '<span class="ftip">ƒ ' + esc(c.formula) + '</span></div>';
     }).join("");
+  }
+
+  // ---- Connect ----
+  function renderConnect() {
+    var srcs = path().sources, cats = categories(effPath()), connected = 0;
+    var html = PLATFORMS.map(function (p) {
+      var hit = srcs.filter(function (s) { return s.scope === p.scope && p.match.test(s.tracker); })[0];
+      if (hit) connected++;
+      var cat = cats.filter(function (c) { return c.name === p.cat; })[0];
+      var kind = hit ? (cat && cat.tons ? cat.kind : "measured") : "none";
+      var body;
+      if (hit && state.path === "closed_source") {
+        body = '<div class="tc-total"><span>Total provided</span><strong>' + esc(hit.detail) + '</strong><p class="muted small">Totals only: no detailed rows to chart.</p></div>';
+      } else if (hit) {
+        var d = platformData(p);
+        body = d ? '<p class="tc-ct">' + esc(d.title) + '</p>' + d.chart +
+            '<ul class="tc-sample">' + d.sample.map(function (s) { return '<li>' + esc(s) + '</li>'; }).join("") + '</ul>'
+          : '<div class="tc-total"><span>Data</span><strong>' + esc(hit.detail) + '</strong></div>';
+      } else {
+        body = '<ol class="tc-steps">' + p.steps.map(function (s) { return '<li>' + esc(s) + '</li>'; }).join("") + '</ol>';
+      }
+      return '<article class="tcard' + (hit ? ' ok' : '') + '">' +
+        '<div class="tc-top"><div><h3>' + esc(p.name) + '</h3><p class="muted small">' + esc(p.note) + '</p></div>' +
+        '<span class="tc-st">' + (hit ? '✓ Connected' : '✗ Not connected') + '</span></div>' +
+        '<div class="tc-tags"><span class="chip-s">' + SCOPE_NAME[p.scope] + '</span>' + tag(kind) + (hit ? '<span class="muted small">' + esc(hit.tracker) + ' · ' + esc(hit.format) + '</span>' : '') + '</div>' +
+        body +
+        '<a class="btn ' + (hit ? 'btn-ghost ' : '') + 'btn-small" href="' + p.demo + '">' + (hit ? 'Reconnect' : 'Connect') + '</a></article>';
+    }).join("");
+    $("connect-list").innerHTML = html;
+    $("connect-head").innerHTML = '<div class="dcard ch"><div><h2>' + connected + ' of ' + PLATFORMS.length + ' trackers connected</h2>' +
+      '<p class="muted small">Charts show the rows each export contains. The demo files hold yearly or monthly data, not daily readings.</p></div>' +
+      '<div class="ch-bar"><i style="width:' + (connected / PLATFORMS.length * 100).toFixed(0) + '%"></i></div></div>';
+    var n = document.querySelector('[data-n="connect"]');
+    if (n) n.textContent = connected + "/" + PLATFORMS.length;
   }
 
   // ---- Scope views ----
@@ -344,7 +476,7 @@
     if (!s.tons) {
       el.innerHTML = '<div class="dcard blank"><span class="tag none">No data</span><h2>' + esc(s.label) + '</h2>' +
         '<p class="muted">None of the connected trackers has data for this scope' + (gaps.length ? ': ' + esc(gaps.join("; ")) : '') + '.</p>' +
-        '<a class="btn btn-small" href="tracker-demo/index.html">Connect a tracker</a></div>';
+        '<a class="btn btn-small" href="#" data-goto="connect">Connect a tracker</a></div>';
       return;
     }
     el.innerHTML =
@@ -377,12 +509,13 @@
         gaps.map(function (g) { return '<li><span>' + esc(g) + '</span>' + tag("estimated") + '</li>'; }).join("") + '</ul></div>' : '');
   }
 
-  // ---- 2. Reduction ----
+  // ---- Reduction ----
   function renderLevers(sc) {
     $("levers").innerHTML = sc.defs.length ? sc.defs.map(function (d) {
       var s = sc.st[d.i], sv = annualSaving(d.a);
       return '<div class="lever' + (d.enabled ? '' : ' off') + (s.on ? ' on' : '') + '" data-lever="' + d.i + '">' +
         '<label class="lv-pick"><input type="checkbox" data-pick="' + d.i + '"' + (s.on ? ' checked' : '') + (d.enabled ? '' : ' disabled') + '>' +
+        '<i class="dot ' + ACT_CLASS[d.i] + '"></i>' +
         '<span><b>#' + (d.i + 1) + ' ' + esc(d.a.action) + '</b><small>' + esc(SCOPE_NAME[d.a.scope] || d.a.scope) + ' · ' + Number(d.a.roi).toFixed(2) + ' t per ₹ lakh' +
         (sv === null ? ' · no direct saving' : ' · payback ' + esc(d.a.payback)) + '</small></span></label>' +
         (d.enabled
@@ -400,26 +533,45 @@
       if (!el) return;
       var s = sc.st[d.i], scale = d.base ? s.pct / d.base : 0;
       el.textContent = "−" + t(d.pool * s.pct / 100) + " · " + inr(d.a.cost_inr * scale);
-      var row = document.querySelector('[data-lever="' + d.i + '"]');
-      row.classList.toggle("on", !!s.on);
+      document.querySelector('[data-lever="' + d.i + '"]').classList.toggle("on", !!s.on);
     });
   }
-  function renderScenarioOut(sc) {
+  function renderReduction(sc) {
+    var now = sc.eff.total.tons;
     $("scenario-out").innerHTML =
-      '<div><span>Emissions cut</span><strong>' + (sc.cut ? '−' + t(sc.cut) : '–') + '</strong></div>' +
-      '<div><span>Total after</span><strong>' + t(sc.after) + '</strong></div>' +
-      '<div><span>Grade after</span><strong>' + esc(sc.grade) + '</strong></div>' +
-      '<div><span>Cost</span><strong>' + inr(sc.cost) + '</strong></div>' +
-      '<div><span>Money saved / yr</span><strong>' + (sc.saving ? inr(sc.saving) : '–') + '</strong></div>' +
-      '<div><span>Payback</span><strong>' + (sc.payback ? Math.round(sc.payback) + ' months' : '–') + '</strong></div>';
+      '<div><span>Current</span><strong>' + t(now) + '</strong><em>Grade ' + esc(sc.eff.grade) + '</em></div>' +
+      '<div class="dk"><span>With plan</span><strong>' + t(sc.after) + '</strong><em>' + (sc.cut ? '↓ ' + (sc.cut / now * 100).toFixed(1) + '%' : 'No actions ticked') + '</em></div>' +
+      '<div><span>Savings</span><strong>' + (sc.cut ? '−' + t(sc.cut) : '–') + '</strong><em>' + (sc.saving ? inr(sc.saving) + ' a year' : 'a year') + '</em></div>' +
+      '<div><span>Cost</span><strong>' + inr(sc.cost) + '</strong><em>one-off investment</em></div>' +
+      '<div><span>Payback</span><strong>' + (sc.payback ? Math.round(sc.payback) + ' mo' : '–') + '</strong><em>' + (sc.payback ? (sc.payback / 12).toFixed(1) + ' years' : 'no money payback') + '</em></div>' +
+      '<div class="dk"><span>New grade</span><strong>' + esc(sc.grade) + '</strong><em>from ' + esc(sc.eff.grade) + '</em></div>';
     var names = sc.rows.map(function (r) { return "#" + (r.d.i + 1); });
-    $("scenario-note").textContent = names.length
-      ? "If you do " + names.join(" + ") + ": cut " + t(sc.cut) + ", cost " + inr(sc.cost) + ", new grade " + sc.grade
-      : "Tick actions below to stack them";
-    $("scenario-warn").innerHTML = (sc.rows.length > 1 ? '<p class="warn">Actions on the same emissions are applied one after another, so they don\'t double count. Other overlaps are possible, so treat the cut as an upper bound.</p>' : '') +
-      (sc.noSaving ? '<p class="muted small" style="margin-top:8px">Some actions have no payback period (a recurring cost), so they add no money saved.</p>' : '') +
-      '<p class="muted small" style="margin-top:8px">Cost and savings scale in proportion from the knowledge base\'s figures for each action. Slider caps are assumptions.</p>';
-    chart($("scenario-chart"), sc.eff.total.tons, sc.after, sc.rows.length > 0);
+    $("scenario-note").innerHTML = names.length
+      ? 'If you do <b>' + names.join(" + ") + '</b>: cut <b>' + t(sc.cut) + '</b>, cost <b>' + inr(sc.cost) + '</b>, new grade <b>' + esc(sc.grade) + '</b>'
+      : 'Tick actions below, or use AI Apply, to build a plan.';
+
+    var scopes = sc.eff.scopes;
+    stacks($("em-chart"), [
+      { label: "Now", text: t(now), parts: scopes.map(function (s) { return { v: s.tons, cls: SCOPE_CLASS[s.id], name: SCOPE_NAME[s.id], text: t(s.tons) }; }) },
+      { label: "With plan", text: t(sc.after), parts: scopes.map(function (s) {
+        var v = Math.max(0, s.tons - sc.scopeCut[s.id]);
+        return { v: v, cls: SCOPE_CLASS[s.id], name: SCOPE_NAME[s.id], text: t(v) };
+      }).concat([{ v: sc.cut, cls: "cut", name: "Cut", text: t(sc.cut) }]) }
+    ], now, [{ cls: "c1", name: "Scope 1" }, { cls: "c2", name: "Scope 2" }, { cls: "c3", name: "Scope 3" }, { cls: "cut", name: "Cut" }]);
+
+    var maxMoney = Math.max(sc.cost, sc.saving, 1);
+    stacks($("cost-chart"), [
+      { label: "Investment", text: lakh(sc.cost), parts: sc.rows.map(function (r) { return { v: r.cost, cls: ACT_CLASS[r.d.i], name: r.d.a.action, text: inr(r.cost) }; }) },
+      { label: "Savings / yr", text: lakh(sc.saving), parts: sc.rows.map(function (r) { return { v: r.saving, cls: ACT_CLASS[r.d.i], name: r.d.a.action, text: inr(r.saving) }; }) }
+    ], maxMoney, sc.rows.map(function (r) { return { cls: ACT_CLASS[r.d.i], name: "#" + (r.d.i + 1) + " " + r.d.a.action }; }));
+    if (!sc.rows.length) $("cost-chart").insertAdjacentHTML("beforeend", '<p class="muted small">Tick an action to see its cost.</p>');
+
+    paybackChart($("pay-chart"), sc.cost, sc.saving);
+
+    $("scenario-warn").innerHTML = '<p class="muted small fine-print">' +
+      (sc.rows.length > 1 ? 'Actions on the same emissions apply one after another, so they don\'t double count; other overlaps are possible, so treat the cut as an upper bound. ' : '') +
+      (sc.noSaving ? 'Some actions have no payback period (a recurring cost), so they add no money saved. ' : '') +
+      'Cost and savings scale in proportion from the knowledge base\'s figures for each action. Slider caps are assumptions.</p>';
   }
   function renderEdits() {
     var v = inputs(), b = baseInputs();
@@ -436,7 +588,7 @@
     }).join("");
   }
 
-  // ---- 3. AI Apply: search the levers for the best plan within the budget ----
+  // ---- AI Apply: search the levers for the best plan within the budget ----
   function optimise(sc, budget, priority) {
     var cands = sc.defs.filter(function (d) { return d.enabled; }).map(function (d) {
       var costPer = d.a.cost_inr / d.base, tonsPer = d.pool / 100, sv = annualSaving(d.a);
@@ -488,8 +640,8 @@
       var e = 1 - Math.pow(1 - k, 3);
       sc.defs.forEach(function (d) {
         var to = target[d.i].on ? target[d.i].pct : from[d.i];
-        sc.st[d.i].pct = Math.round((from[d.i] + (to - from[d.i]) * e) * 10) / 10;
-        document.querySelectorAll('[data-pct="' + d.i + '"]').forEach(function (inp) { inp.value = sc.st[d.i].pct; });
+        sc.st[d.i].pct = k === 1 ? to : from[d.i] + (to - from[d.i]) * e;
+        document.querySelectorAll('[data-pct="' + d.i + '"]').forEach(function (inp) { inp.value = Math.round(sc.st[d.i].pct * 10) / 10; });
         var cb = document.querySelector('[data-pick="' + d.i + '"]');
         if (cb) cb.checked = sc.st[d.i].on;
       });
@@ -510,12 +662,12 @@
       : '<div class="empty">Nothing fits this budget and priority.</div>';
   }
 
-  // ---- 4. Data breakdown ----
+  // ---- Data breakdown ----
   function renderBreakdown(sc) {
     var eff = sc.eff, cats = categories(eff), total = eff.total.tons || 0;
     var H = eff.total.high - eff.total.tons;
     var mix = { measured: 0, estimated: 0, illustrative: 0 };
-    cats.forEach(function (c) { mix[c.kind === "totals" ? "estimated" : c.kind] = (mix[c.kind === "totals" ? "estimated" : c.kind] || 0) + c.tons; });
+    cats.forEach(function (c) { var k = c.kind === "totals" ? "estimated" : c.kind; if (mix[k] !== undefined) mix[k] += c.tons; });
     $("mix-bar").innerHTML = ["measured", "estimated", "illustrative"].map(function (k) {
       return '<i class="mx ' + k + '" style="width:' + (total ? mix[k] / total * 100 : 0).toFixed(1) + '%"></i>';
     }).join("");
@@ -523,7 +675,7 @@
     $("mix-legend").innerHTML = ["measured", "estimated", "illustrative"].map(function (k) {
       return '<div><i class="mx ' + k + '"></i><span>' + LBL[k] + '</span><b>' + t(mix[k]) + ' · ' + (total ? (mix[k] / total * 100).toFixed(0) : 0) + '%</b></div>';
     }).join("");
-    $("mix-note").textContent = "Overall confidence ±" + (total ? (H / total * 100).toFixed(0) : 0) + "%";
+    $("mix-note").textContent = "Overall confidence ±" + (total ? (H / total * 100).toFixed(1) : 0) + "%";
 
     $("breakdown-table").innerHTML = '<div class="tbl-wrap"><table class="tbl"><thead><tr><th>Scope</th><th>Category</th><th>tCO₂e</th><th>Status</th><th>If you measure it</th></tr></thead><tbody>' +
       cats.map(function (c) {
@@ -531,7 +683,7 @@
         if (c.tons && c.kind !== "measured" && c.band > 0.1 && total) {
           var nh = H - c.tons * (c.band - 0.1);
           impact = 'Confidence ±' + (H / total * 100).toFixed(1) + '% → ±' + (nh / total * 100).toFixed(1) + '%';
-        } else if (!c.tons) impact = '<a href="tracker-demo/index.html">Upload data</a>';
+        } else if (!c.tons) impact = '<a href="#" data-goto="connect">Upload data</a>';
         return '<tr' + (c.tons ? '' : ' class="off"') + '><td>' + SCOPE_NAME[c.scope] + '</td><td>' + esc(c.name) + '</td><td><b>' + (c.tons ? t(c.tons) : '–') + '</b></td><td>' +
           tag(c.kind) + '</td><td class="muted">' + impact + '</td></tr>';
       }).join("") + '</tbody></table></div>';
@@ -541,7 +693,7 @@
       '<tr><td>Grade bands</td><td>–</td><td class="muted">Illustrative benchmarks, not a sourced standard</td><td>' + tag("illustrative") + '</td></tr></tbody></table></div>';
   }
 
-  // ---- 5. Downloads ----
+  // ---- Downloads ----
   function download(name, mime, text) {
     var blob = new Blob([text], { type: mime });
     var url = URL.createObjectURL(blob);
@@ -558,8 +710,7 @@
   function downloadCsv() {
     var p = profile(), rows = ["scope,category,tCO2e,status,confidence"];
     var bySc = {}; path().scopes.forEach(function (s) { bySc[s.id] = s.confidence; });
-    var base = { scopes: path().scopes, total: path().total };
-    categories(base).forEach(function (c) {
+    categories({ scopes: path().scopes, total: path().total }).forEach(function (c) {
       rows.push(c.scope + ',"' + c.name.replace(/"/g, "'") + '",' + c.tons.toFixed(2) + "," + c.kind + "," + bySc[c.scope]);
     });
     download(p.id + "-" + state.path + "-breakdown.csv", "text/csv", rows.join("\n") + "\n");
@@ -576,12 +727,13 @@
     renderSidebar(sc);
     renderOverview(sc);
     ["scope_1", "scope_2", "scope_3"].forEach(function (id) { renderScopeView(id, sc); });
-    renderScenarioOut(sc);
+    renderReduction(sc);
     updateLeverResults(sc);
     renderBreakdown(sc);
   }
   function render() {
     renderHeader();
+    renderConnect();
     renderEdits();
     renderLevers(scenario());
     $("ai-out").innerHTML = "";
@@ -592,7 +744,7 @@
     state.view = view;
     closeMenu();
     render();
-    if (window.scrollTo) try { window.scrollTo(0, 0); } catch (e) { /* jsdom */ }
+    try { window.scrollTo(0, 0); } catch (e) { /* not available in tests */ }
   }
   function readHash() {
     var parts = window.location.hash.replace("#", "").split("/");
@@ -615,11 +767,6 @@
     if ((b = e.target.closest("a[data-view], button[data-view]"))) { e.preventDefault(); go(b.getAttribute("data-view")); return; }
     if ((b = e.target.closest("[data-goto]"))) { e.preventDefault(); go(b.getAttribute("data-goto")); return; }
     if ((b = e.target.closest("[data-path]"))) { state.path = b.getAttribute("data-path"); render(); return; }
-    if ((b = e.target.closest("[data-cn]")) && !e.target.closest("a")) {
-      var open = b.classList.toggle("open");
-      b.setAttribute("aria-expanded", String(open));
-      return;
-    }
     if (e.target.id === "ai-apply") { aiApply(); return; }
     if (e.target.id === "dl-json") { downloadJson(); return; }
     if (e.target.id === "dl-csv") { downloadCsv(); return; }
@@ -629,10 +776,6 @@
       delete state.levers[key()];
       renderEdits(); renderLevers(scenario()); live();
     }
-  });
-  document.addEventListener("keydown", function (e) {
-    var b = e.target.closest && e.target.closest("[data-cn]");
-    if (b && (e.key === "Enter" || e.key === " ")) { e.preventDefault(); b.click(); }
   });
   document.addEventListener("change", function (e) {
     if (e.target.id === "org-select") { state.scale = e.target.value; render(); return; }

@@ -50,10 +50,17 @@ check("overview total 228.6", $("#summary-cards").textContent.includes("228.6"))
 check("summary has Total, Grade, Confidence, Trend", ["Total", "Grade", "Confidence", "Trend"].every((k) => $("#summary-cards").textContent.includes(k)));
 check("trend chart drawn", !!$("#trend-chart svg"));
 check("categories listed with formula tips", $$("#cat-list .cat").length >= 6 && $$("#cat-list .ftip").length >= 6, String($$("#cat-list .cat").length));
-check("connect tab lists 7 platforms", $$("#connect-list .cn").length === 7);
-check("connected and not connected both shown", $$(".cn.ok").length === 6 && $("#connect-list").textContent.includes("Not connected"), String($$(".cn.ok").length));
-click($('.cn[data-cn="0"]'));
-check("platform card opens details", $('.cn[data-cn="0"]').classList.contains("open") && $('.cn[data-cn="0"]').textContent.includes("Vehicle log"));
+check("sidebar is navigation only (no org picker inside)", !$("#snav #org-select") && !$("#snav .tcard"));
+nav("connect");
+check("Connect is its own page", active().dataset.view === "connect" && w.location.hash.endsWith("/connect"));
+check("Connect lists 7 tracker cards", $$("#connect-list .tcard").length === 7);
+check("6 connected, 1 not", $$(".tcard.ok").length === 6 && $("#connect-list").textContent.includes("Not connected"), String($$(".tcard.ok").length));
+check("connected cards chart real rows", $$(".tcard.ok .mini-bars, .tcard.ok .mini-line").length >= 5 && $("#connect-list").textContent.includes("BUS_01"));
+check("meter card shows 12 monthly kWh", !!$(".tcard.ok .mini-line") && $("#connect-list").textContent.includes("2025-12"));
+check("disconnected card shows setup steps", $$(".tcard:not(.ok) .tc-steps li").length === 3);
+check("cards carry quality badges", $$(".tcard .tag").length === 7);
+check("connect / reconnect buttons", $("#connect-list").textContent.includes("Reconnect") && /Connect$/m.test($$(".tcard:not(.ok) .btn")[0].textContent));
+nav("overview");
 check("quick stats show total and grade", $("#quick-stats").textContent.includes("228.6") && $("#quick-stats").textContent.includes("Grade"));
 
 // 2. Scope selector
@@ -83,7 +90,9 @@ box0.checked = true; change(box0);
 const out1 = $("#scenario-out").textContent;
 check("ticking an action updates the live result", out1 !== out0 && out1.includes("−"), out1.slice(0, 60));
 const slider0 = $('input[type=range][data-pct="0"]');
+const em1 = $("#em-chart").innerHTML;
 input(slider0, "15");
+check("charts update when a slider moves", $("#em-chart").innerHTML !== em1);
 const out2 = $("#scenario-out").textContent;
 check("dragging a lever updates the result", out2 !== out1, out2.slice(0, 60));
 check("number box follows the slider", $('input[type=number][data-pct="0"]').value === "15");
@@ -91,7 +100,10 @@ const box2 = $('[data-pick="2"]');
 box2.checked = true; change(box2);
 check("stacking two actions shows the combined line", $("#scenario-note").textContent.includes("#1 + #3"), $("#scenario-note").textContent);
 check("overlap note with two actions", $("#scenario-warn").textContent.includes("double count"));
-check("money saved and payback shown", $("#scenario-out").textContent.includes("Money saved") && $("#scenario-out").textContent.includes("months"));
+check("six summary cards", $$("#scenario-out > div").length === 6 && ["Current", "With plan", "Savings", "Cost", "Payback", "New grade"].every((k) => $("#scenario-out").textContent.includes(k)));
+check("emissions chart: now vs with plan", $$("#em-chart .stk-row").length === 2 && $$("#em-chart .stk-bar i.cut").length === 1);
+check("cost chart has investment and savings", $("#cost-chart").textContent.includes("Investment") && $("#cost-chart").textContent.includes("Savings"));
+check("payback chart marks breakeven", $("#pay-chart").textContent.includes("Breakeven"), $("#pay-chart").textContent.slice(0, 60));
 check("sidebar shows with-plan total", $("#quick-stats").textContent.includes("With plan"));
 nav("overview");
 check("overview trend shows the plan", $("#summary-cards").textContent.includes("↓") && $$("#trend-chart path.plan").length === 1);
@@ -126,7 +138,8 @@ check("confidence impact shown", $("#breakdown-table").textContent.includes("→
 check("upload CTA", active().textContent.includes("Upload data to improve"));
 
 // 6. Export
-nav("export");
+click($(".side-dl"));
+check("sidebar Download opens export", active().dataset.view === "export");
 click($("#dl-json"));
 click($("#dl-csv"));
 click($("#dl-pdf"));

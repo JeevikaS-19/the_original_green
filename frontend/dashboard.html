@@ -14,19 +14,12 @@
   <aside class="snav" id="snav" aria-label="Dashboard navigation">
     <a class="logo" href="index.html">The Original Green</a>
 
-    <div class="sblock">
-      <label class="field-label" for="org-select">Organisation</label>
-      <select id="org-select" class="org-select"></select>
-      <div class="seg2" role="group" aria-label="Data available">
-        <button data-path="open_source">Detailed</button>
-        <button data-path="closed_source">Totals only</button>
-      </div>
-    </div>
-
-    <div class="sblock">
-      <p class="snav-title">Connect</p>
-      <div class="connect-list" id="connect-list"></div>
-    </div>
+    <nav class="snav-list" id="view-nav" aria-label="Sections">
+      <a href="#" data-view="overview"><svg viewBox="0 0 20 20"><path d="M3 3h6v6H3zM11 3h6v6h-6zM3 11h6v6H3zM11 11h6v6h-6z"/></svg>Overview</a>
+      <a href="#" data-view="connect"><svg viewBox="0 0 20 20"><path d="M8 12l4-4M7 9l-2 2a3 3 0 0 0 4 4l2-2M13 11l2-2a3 3 0 0 0-4-4L9 7"/></svg>Connect<span class="n" data-n="connect"></span></a>
+      <a href="#" data-view="reduction"><svg viewBox="0 0 20 20"><path d="M3 5l6 6 3-3 5 6M13 14h4v-4"/></svg>Reduction</a>
+      <a href="#" data-view="breakdown"><svg viewBox="0 0 20 20"><path d="M4 16V8M10 16V4M16 16v-6"/></svg>Data breakdown</a>
+    </nav>
 
     <div class="sblock">
       <p class="snav-title">Scope</p>
@@ -37,34 +30,34 @@
       </div>
     </div>
 
-    <nav class="snav-list" id="view-nav" aria-label="Sections">
-      <p class="snav-title">Dashboard</p>
-      <a href="#" data-view="overview"><svg viewBox="0 0 20 20"><path d="M3 3h6v6H3zM11 3h6v6h-6zM3 11h6v6H3zM11 11h6v6h-6z"/></svg>Overview</a>
-      <a href="#" data-view="reduction"><svg viewBox="0 0 20 20"><path d="M3 5l6 6 3-3 5 6M13 14h4v-4"/></svg>Reduction &amp; AI Apply</a>
-      <a href="#" data-view="breakdown"><svg viewBox="0 0 20 20"><path d="M4 16V8M10 16V4M16 16v-6"/></svg>Data breakdown</a>
-      <a href="#" data-view="export"><svg viewBox="0 0 20 20"><path d="M10 3v10M6 9l4 4 4-4M4 17h12"/></svg>Download &amp; export</a>
-    </nav>
-
     <dl class="qstats" id="quick-stats" aria-label="Quick stats"></dl>
+    <a class="side-dl" href="#" data-view="export"><svg viewBox="0 0 20 20"><path d="M10 3v10M6 9l4 4 4-4M4 17h12"/></svg>Download</a>
   </aside>
 
   <div class="dmain">
     <header class="dtop">
       <button class="menu-btn" id="menu-btn" aria-label="Open navigation" aria-controls="snav" aria-expanded="false">☰</button>
-      <div>
+      <div class="dtitle">
         <p class="crumb" id="crumb">Overview</p>
         <h1 id="profile-title">–</h1>
       </div>
-      <span class="pill" id="top-source">Detailed exports</span>
+      <div class="dctl">
+        <select id="org-select" class="org-select" aria-label="Organisation"></select>
+        <div class="seg2" role="group" aria-label="Data available">
+          <button data-path="open_source">Detailed</button>
+          <button data-path="closed_source">Totals only</button>
+        </div>
+      </div>
     </header>
     <p class="muted dsub" id="profile-sub"></p>
+    <span class="pill sr" id="top-source">Detailed exports</span>
 
     <main id="main">
-      <!-- 1. Overview -->
+      <!-- Overview -->
       <section class="view" data-view="overview">
         <div class="cards four" id="summary-cards"></div>
         <div class="dcard">
-          <div class="dcard-head"><h2>Emissions, year by year</h2><span class="muted small" id="trend-note"></span></div>
+          <div class="dcard-head"><h2>Five-year view</h2><span class="muted small" id="trend-note"></span></div>
           <div class="chart" id="trend-chart"></div>
         </div>
         <div class="dcard">
@@ -74,17 +67,32 @@
         </div>
       </section>
 
+      <!-- Connect -->
+      <section class="view" data-view="connect">
+        <div class="connect-head" id="connect-head"></div>
+        <div class="tracker-cards" id="connect-list"></div>
+      </section>
+
       <!-- Scope views -->
       <section class="view" data-view="scope_1"></section>
       <section class="view" data-view="scope_2"></section>
       <section class="view" data-view="scope_3"></section>
 
-      <!-- 2 + 3. Reduction and AI Apply -->
+      <!-- Reduction -->
       <section class="view" data-view="reduction">
+        <div class="red-cards" id="scenario-out"></div>
+        <p class="result-line" id="scenario-note"></p>
+        <div class="chart-grid">
+          <div class="dcard"><h2>Emissions: now vs with plan</h2><div class="chart" id="em-chart"></div></div>
+          <div class="dcard"><h2>Cost: investment vs yearly savings</h2><div class="chart" id="cost-chart"></div></div>
+          <div class="dcard"><h2>Payback timeline</h2><div class="chart" id="pay-chart"></div></div>
+        </div>
+        <div id="scenario-warn"></div>
+
         <div class="dcard ai" id="ai">
-          <div class="dcard-head"><h2>AI Apply</h2><span class="muted small">Optimiser: searches the levers below for the best result within your budget</span></div>
+          <div class="dcard-head"><h2>AI Apply</h2><span class="muted small">Optimiser: searches the sliders for the best plan within your budget</span></div>
           <div class="ai-row">
-            <label class="budget">Budget <span>₹</span><input type="number" id="ai-budget" min="0" step="100000" value="2500000"></label>
+            <label class="budget">Budget (₹)<input type="number" id="ai-budget" min="0" step="100000" value="2500000"></label>
             <label class="budget">Priority
               <select id="ai-priority">
                 <option value="balanced">Balanced: cut and cost</option>
@@ -98,25 +106,18 @@
         </div>
 
         <div class="dcard">
-          <div class="dcard-head"><h2>Live result</h2><span class="muted small" id="scenario-note"></span></div>
-          <div class="scenario-out" id="scenario-out"></div>
-          <div id="scenario-warn"></div>
-          <div class="chart" id="scenario-chart"></div>
-        </div>
-
-        <div class="dcard">
-          <div class="dcard-head"><h2>Top actions</h2><span class="muted small">Tick to stack. Drag or type to change how far each goes.</span></div>
+          <div class="dcard-head"><h2>Top actions</h2><span class="muted small">Tick to combine. Drag or type to change how far each goes.</span></div>
           <div class="levers" id="levers"></div>
         </div>
 
         <div class="dcard">
           <div class="dcard-head"><h2>Your inputs</h2><button class="btn btn-ghost btn-small" id="reset-edits">Reset</button></div>
-          <p class="muted small" style="margin-bottom:14px">Change what you measured and every number on the dashboard follows. This is a what-if view; the saved report doesn't change.</p>
+          <p class="muted small" style="margin-bottom:14px">Change what you measured and every graph follows. This is a what-if view; the saved report doesn't change.</p>
           <div class="edits" id="edits"></div>
         </div>
       </section>
 
-      <!-- 4. Data breakdown -->
+      <!-- Data breakdown -->
       <section class="view" data-view="breakdown">
         <div class="dcard">
           <div class="dcard-head"><h2>Where the numbers come from</h2><span class="muted small" id="mix-note"></span></div>
@@ -124,7 +125,7 @@
           <div class="mix-legend" id="mix-legend"></div>
         </div>
         <div class="dcard">
-          <div class="dcard-head"><h2>Every category</h2><a class="btn btn-small" href="tracker-demo/index.html">Upload data to improve</a></div>
+          <div class="dcard-head"><h2>Every category</h2><a class="btn btn-small" href="#" data-view="connect">Upload data to improve</a></div>
           <div id="breakdown-table"></div>
         </div>
         <div class="dcard">
@@ -133,11 +134,11 @@
         </div>
       </section>
 
-      <!-- 5. Export -->
+      <!-- Export -->
       <section class="view" data-view="export">
         <div class="dcard">
           <h2>Download &amp; export</h2>
-          <p class="muted small" style="margin-bottom:16px">Exports include the current organisation and data view. What-if edits are not included.</p>
+          <p class="muted small" style="margin-bottom:16px">Exports cover the current organisation and data view. What-if edits are not included.</p>
           <div class="download-row">
             <button class="btn" id="dl-json">Download JSON</button>
             <button class="btn" id="dl-csv">Download CSV</button>
