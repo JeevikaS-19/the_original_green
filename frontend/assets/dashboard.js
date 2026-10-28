@@ -100,8 +100,6 @@
       return '<option value="' + esc(p.id) + '">' + esc(p.name) + '</option>';
     }).join("") + '<option value="__new__">+ New project…</option>';
     sel.value = projects.active;
-    var active = projects.list.filter(function (p) { return p.id === projects.active; })[0];
-    $("inputs-project").textContent = active ? active.name : "";
   }
   function importCsv(text) {
     var fields = { litres: "litres", kwh: "kwh", renewable: "renewable", s3pct: "s3pct" };
@@ -133,13 +131,17 @@
   function pct(v) { return (Math.round(v * 10) / 10) + "%"; }
   function key() { return state.scale + "|" + state.path; }
   function profile() { return ALL.filter(function (p) { return p.id === state.scale; })[0] || ALL[0]; }
-  function path() { return profile().paths[state.path] || profile().paths.open_source; }
+  function path() {
+    var p = profile().paths[state.path] || profile().paths.open_source;
+    return activeBlank() ? Object.assign({}, p, { sources: [], assumptions: [] }) : p;
+  }
   function baseScope(id) { return path().scopes.filter(function (s) { return s.id === id; })[0]; }
-  function estimatesFor(id) { return profile().paths.open_source.intake.estimates[id] || []; }
+  function estimatesFor(id) { return activeBlank() ? [] : profile().paths.open_source.intake.estimates[id] || []; }
   function bandOf(s) { return (parseFloat(String(s.confidence).replace(/[^\d.]/g, "")) || 0) / 100; }
   function gradeFor(bands, tons) {
     var heads = profile().id === "individual" ? 1 : path().employees;
     if (!heads) return "N/A";
+    if (tons <= 0) return "N/A";
     tons = tons / heads;
     for (var i = 0; i < bands.length; i++) {
       var b = bands[i];
@@ -505,9 +507,9 @@
         ? ranked.slice(0, 2).map(function (r) { return r.name + ": " + inr(r.perT) + " per tonne a year"; }).join(" · ") + ". Cost per tonne is the knowledge base's cost ÷ tonnes saved."
         : "No actions apply to this profile yet.",
       link: "See all actions", goto: "reduction" });
-    cards.push({ title: "Plan against your budget", body: sc.rows.length
+    cards.push({ title: "Plan cost and payback", body: sc.rows.length
         ? "Your plan cuts " + t(sc.cut) + " for " + inr(sc.cost) + (sc.payback ? ", paying back in about " + Math.round(sc.payback) + " months." : ".")
-        : "Tick actions, or let AI Apply choose within a budget. Nothing is ticked yet.",
+        : "Press AI Apply to build a plan from the actions that fit your data.",
       link: "Open the plan", goto: "reduction" });
     cards.push({ title: "Your inputs drive every chart", body: "Change fuel, electricity, renewable share or Scope 3 activity on the Reduction page. Totals, grade and charts update together. Saved reports do not change.",
       link: "Try an input", goto: "reduction" });
@@ -739,7 +741,7 @@
     rows += '<tr><th>Investment</th><td class="num">–</td><td class="num">–</td><td class="num">' + inr(sc.cost) + '</td><td class="muted">' +
       (sc.payback ? 'Pays back in ' + Math.round(sc.payback) + ' months from ' + inr(sc.saving) + ' saved a year' : (sc.cost ? 'No money payback on these actions' : 'One-off cost of the plan')) + '</td></tr>';
     rows += '<tr><th>Grade</th><td class="num">' + esc(sc.eff.grade) + '</td><td class="num">→</td><td class="num">' + esc(sc.grade) + '</td><td class="muted">Per-employee bands, see the methodology</td></tr>';
-    $("scenario-out").innerHTML = rows;
+    $("scenario-out").innerHTML = inputRows() + rows;
 
     var names = sc.rows.map(function (r) { return "#" + (r.d.i + 1); });
     $("scenario-note").innerHTML = names.length
@@ -752,19 +754,20 @@
       (sc.noSaving ? 'Some actions have no payback period (a recurring cost), so they add no money saved. ' : '') +
       'Cost and savings scale in proportion from the knowledge base\'s figures for each action. Slider caps are assumptions.</p>';
   }
-  // Project inputs as an editable table. Blank values stay blank.
-  function renderEdits() {
+  // Project inputs are rows of the reduction table, edited in the Now column. Blank stays blank.
+  function inputRows() {
     var v = inputs(), b = baseInputs();
     var fields = [
-      { k: "litres", label: "Fuel burned (Scope 1)", unit: "litres a year, diesel-equivalent", on: b.litres > 0 },
-      { k: "kwh", label: "Electricity used (Scope 2)", unit: "kWh a year", on: b.kwh > 0 },
-      { k: "renewable", label: "Renewable share (Scope 2)", unit: "% of electricity", on: b.kwh > 0 },
-      { k: "s3pct", label: "Scope 3 activity", unit: "% of the sample: staff, devices, travel, waste", on: baseScope("scope_3").tons > 0 }
+      { k: "litres", label: "Fuel burned, litres a year", note: "Scope 1 input, diesel-equivalent", on: b.litres > 0 },
+      { k: "kwh", label: "Electricity used, kWh a year", note: "Scope 2 input", on: b.kwh > 0 },
+      { k: "renewable", label: "Renewable share of electricity, %", note: "Scope 2 input", on: b.kwh > 0 },
+      { k: "s3pct", label: "Scope 3 activity, % of the sample", note: "Staff, devices, travel and waste", on: baseScope("scope_3").tons > 0 }
     ];
-    $("edits").innerHTML = fields.map(function (f) {
+    return fields.map(function (f) {
       var val = v[f.k] === null || v[f.k] === undefined ? "" : v[f.k];
-      return '<tr' + (f.on ? '' : ' class="off"') + '><th>' + f.label + '</th><td class="num"><input type="number" min="0" step="any" data-edit="' + f.k +
-        '" value="' + val + '" aria-label="' + esc(f.label) + '"' + (f.on ? '' : ' disabled') + '></td><td class="muted">' + (f.on ? f.unit : 'No tracker data') + '</td></tr>';
+      return '<tr class="input-row' + (f.on ? '' : ' off') + '"><th>' + f.label + '</th><td class="num"><input type="number" min="0" step="any" data-edit="' + f.k +
+        '" value="' + val + '" aria-label="' + esc(f.label) + '"' + (f.on ? '' : ' disabled') + '></td><td class="num">–</td><td class="num">–</td><td class="muted">' +
+        (f.on ? esc(f.note) : 'No tracker data') + '</td></tr>';
     }).join("");
   }
 
@@ -832,7 +835,7 @@
       showAiResult();
       var sub = after.rows.length
         ? "Grade " + after.grade + ". The water drains to " + Math.round(ratio * 100) + "% of today's level."
-        : "Nothing fits the AI's budget, so the water stays where it is.";
+        : "The AI found no change to apply, so the water stays where it is.";
       if (window.Flood) window.Flood.go(ratio, reduce ? 0 : 3500, "Plan applied", t(after.after) + " a year", sub);
       setTimeout(function () {
         if (window.Flood) window.Flood.hide();
@@ -950,7 +953,6 @@
     renderProjects();
     renderConnect();
     renderMissing();
-    renderEdits();
     $("ai-out").innerHTML = "";
     live();
     window.history.replaceState(null, "", "#" + state.scale + "/" + (state.path === "closed_source" ? "closed" : "open") + "/" + state.view);
