@@ -510,6 +510,33 @@
     }).join("");
   }
 
+  // Organisations side by side: intensity per employee, and the scope mix of each total.
+  function renderCompare() {
+    var orgs = ALL.filter(function (p) {
+      var P = p.paths.open_source;
+      return p.id !== "individual" && P && (P.employees || p.employees);
+    });
+    var labels = orgs.map(function (p) { return p.label.replace(/^Case: /, "").replace(/ FY.*$/, ""); });
+    var intensity = orgs.map(function (p) {
+      var P = p.paths.open_source;
+      return Math.round(P.total.tons / (P.employees || p.employees) * 100) / 100;
+    });
+    mountChart("compare-chart", { type: "bar", data: { labels: labels, datasets: [{ label: "t CO₂e per employee", data: intensity, backgroundColor: PALETTE.s1 }] },
+      options: chartOptions({ plugins: { legend: { display: false } }, scales: { x: { grid: { display: false } }, y: { beginAtZero: true } } }) });
+    var share = function (scopeId) {
+      return orgs.map(function (p) {
+        var P = p.paths.open_source, tot = P.total.tons || 1;
+        var sc = P.scopes.filter(function (x) { return x.id === scopeId; })[0];
+        return Math.round((sc ? sc.tons : 0) / tot * 1000) / 10;
+      });
+    };
+    mountChart("mix-compare", { type: "bar", data: { labels: labels, datasets: [
+      { label: "Scope 1", data: share("scope_1"), backgroundColor: PALETTE.s1 },
+      { label: "Scope 2", data: share("scope_2"), backgroundColor: PALETTE.s2 },
+      { label: "Scope 3", data: share("scope_3"), backgroundColor: PALETTE.s3 }
+    ] }, options: chartOptions({ scales: { x: { stacked: true, grid: { display: false } }, y: { stacked: true, max: 100, beginAtZero: true, ticks: { callback: function (v) { return v + "%"; } } } } }) });
+  }
+
   // ---- Overview ----
   function renderOverview(sc) {
     var eff = sc.eff, total = eff.total.tons || 0;
@@ -542,6 +569,7 @@
     renderCallouts(sc);
 
     renderScopeDonut(eff);
+    renderCompare();
     var cats = categories(eff);
     $("cat-list").innerHTML = '<table class="tbl cat-tbl"><thead><tr><th>Category</th><th>Scope</th><th class="num">tCO₂e</th><th class="num">Share</th><th>Data</th><th>Method</th></tr></thead><tbody>' + cats.map(function (c) {
       return '<tr' + (c.tons ? '' : ' class="off"') + '><td><b>' + esc(c.name) + '</b></td><td>' + SCOPE_NAME[c.scope] + '</td><td class="num">' + (c.tons ? t(c.tons) : '–') +

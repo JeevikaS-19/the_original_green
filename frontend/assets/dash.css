@@ -439,3 +439,7 @@
 /* Highlights: rows that rest on an estimate, illustrative factor or totals only */
 .tbl tr.flag td { background: #fbf6e9; }
 .tbl tr.flag td:first-child { box-shadow: inset 3px 0 0 var(--ochre); }
+
+.cmp-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; }
+.cmp-grid .chart { height: 260px; }
+@media (max-width: 900px) { .cmp-grid { grid-template-columns: 1fr; } }

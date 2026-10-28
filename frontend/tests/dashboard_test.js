@@ -55,6 +55,7 @@ check("initial title shows Small scale", $("#profile-title").textContent.include
 check("overview total 264.0 (commute×2)", $("#summary-cards").textContent.includes("264"));
 check("summary has Total, Grade, Confidence, Measured data", ["Total", "Grade", "Confidence", "Measured data"].every((k) => $("#summary-cards").textContent.includes(k)));
 check("overview projection is a line with and without plan", chartOf("trend-chart") && chartOf("trend-chart").type === "line" && chartOf("trend-chart").datasets === 2);
+check("overview compares organisations by intensity", chartOf("compare-chart") && chartOf("compare-chart").type === "bar" && chartOf("mix-compare") && chartOf("mix-compare").datasets === 3);
 check("overview scope split is a doughnut", chartOf("scope-donut") && chartOf("scope-donut").type === "doughnut");
 check("categories listed in a table with method", $$("#cat-list tbody tr").length >= 6 && $("#cat-list thead").textContent.includes("Method"), String($$("#cat-list tbody tr").length));
 check("sidebar is navigation only (no org picker inside)", !$("#snav #org-select") && !$("#snav .tcard"));
