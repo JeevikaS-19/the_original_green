@@ -42,7 +42,7 @@ python demo.py
 
 Runs both paths and writes two handoff files:
 - `output/open_source/intake_output.json` — detailed exports from `sample_data/`
-- `output/closed_source/intake_output.json` — budget-only numbers from `../shared/demo_data/demo_data_budget.json`
+- `output/closed_source/intake_output.json` — consumption totals (litres and kWh) from `../shared/demo_data/small_scale/closed.json`
 
 ## Tests
 
@@ -56,8 +56,8 @@ python tests/test_intake.py
 
 Matches `../shared/contracts/intake_output.example.json`, plus one extra top-level field:
 
-- `data_path`: per scope, `open_source` (detailed exports) or `closed_source` (budget only). This is an addition to the contract and needs the team's agreement.
+- `data_path`: per scope, `open_source` (detailed exports) or `closed_source` (consumption totals only). This is an addition to the contract and needs the team's agreement.
 
 Confidence labels are `full_data`, `partial_data`, or `overview_only`.
 
-Budget-only scopes (e.g. `annual_fuel_budget_inr`) pass through with `overview_only`. Person 2 does not yet handle that shape.
+Totals-only scopes (`fuel_totals` for Scope 1, `annual_kwh` for Scope 2) are marked `overview_only`. Budgets in rupees are no longer accepted: the closed-source path is consumption totals.

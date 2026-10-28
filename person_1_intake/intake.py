@@ -138,3 +138,23 @@ def run_intake(
 
     payload, estimates = validate_and_route(tier, scope_1, scope_2, scope_3)
     return send_to_calculator(payload, output_file), estimates
+
+
+def run_totals_intake(tier_answer, totals_json, output_file=OUTPUT_FILE):
+    """Closed-source path: run the intake on consumption totals.
+
+    totals_json is a JSON file shaped like:
+        {"scope_1": {"fuel_totals": [{"fuel_type": "petrol", "litres_per_year": 713}]},
+         "scope_2": {"energy_meter": {"annual_kwh": 4200, "region_state": "Karnataka"}}}
+
+    Returns (output_path, estimates).
+    """
+    tier = tier_selector(tier_answer)
+    scopes = json.loads(Path(totals_json).read_text(encoding="utf-8"))
+    payload, estimates = validate_and_route(
+        tier,
+        scopes.get("scope_1"),
+        scopes.get("scope_2"),
+        scopes.get("scope_3"),
+    )
+    return send_to_calculator(payload, output_file), estimates

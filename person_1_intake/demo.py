@@ -3,7 +3,8 @@
 Usage, from person_1_intake/:  python demo.py
 
 - Open-source path: detailed tracker exports from sample_data/
-- Closed-source path: budget-only numbers from ../shared/demo_data/demo_data_budget.json
+- Closed-source path: consumption totals only (litres and annual kWh) from
+  ../shared/demo_data/small_scale/closed.json
 
 Each path writes its handoff file to output/<path>/intake_output.json.
 """
@@ -11,7 +12,7 @@ Each path writes its handoff file to output/<path>/intake_output.json.
 import json
 from pathlib import Path
 
-from intake import run_intake, send_to_calculator, validate_and_route
+from intake import run_intake, run_totals_intake
 
 HERE = Path(__file__).resolve().parent
 SAMPLE = HERE / "sample_data"
@@ -39,10 +40,11 @@ def open_source_run():
 
 
 def closed_source_run():
-    demo = json.loads((SHARED_DEMO / "demo_data_budget.json").read_text(encoding="utf-8"))["scopes"]
-    payload, estimates = validate_and_route("tier_2", demo["scope_1"], demo["scope_2"], demo["scope_3"])
-    path = send_to_calculator(payload, OUTPUT / "closed_source" / "intake_output.json")
-    return path, estimates
+    return run_totals_intake(
+        "School/Small Company",
+        SHARED_DEMO / "small_scale" / "closed.json",
+        output_file=OUTPUT / "closed_source" / "intake_output.json",
+    )
 
 
 def describe(title, path, estimates):
@@ -60,4 +62,4 @@ def describe(title, path, estimates):
 
 if __name__ == "__main__":
     describe("Open-source path (detailed exports)", *open_source_run())
-    describe("Closed-source path (budget only)", *closed_source_run())
+    describe("Closed-source path (totals only)", *closed_source_run())

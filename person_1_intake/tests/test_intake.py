@@ -9,9 +9,9 @@ from pathlib import Path
 HERE = Path(__file__).resolve().parent
 sys.path.insert(0, str(HERE.parent))
 
-from intake import run_intake, tier_selector, validate_and_route  # noqa: E402
+from intake import run_intake, run_totals_intake, tier_selector, validate_and_route  # noqa: E402
 from parsers import parse_scope_1, parse_scope_2, parse_scope_3  # noqa: E402
-from validators import IntakeError, validate_scope_1, validate_scope_3  # noqa: E402
+from validators import IntakeError, validate_scope_1, validate_scope_2, validate_scope_3  # noqa: E402
 
 SAMPLE = HERE.parent / "sample_data"
 DEMO = HERE.parent.parent / "shared" / "demo_data"
@@ -19,6 +19,11 @@ DEMO = HERE.parent.parent / "shared" / "demo_data"
 
 def load_demo(name):
     return json.loads((DEMO / name).read_text(encoding="utf-8"))["scopes"]
+
+
+def load_closed(persona):
+    """Totals-only input for a persona: {"scope_1": ..., "scope_2": ...}."""
+    return json.loads((DEMO / persona / "closed.json").read_text(encoding="utf-8"))
 
 
 class TierSelectorTests(unittest.TestCase):
@@ -121,9 +126,22 @@ class ValidatorTests(unittest.TestCase):
         self.assertAlmostEqual(sum(split.values()), 1.0)
         self.assertTrue(report["estimates_made"])
 
-    def test_budget_only_scope_is_overview(self):
-        report = validate_scope_1({"annual_fuel_budget_inr": 500000})
+    def test_fuel_totals_only_is_overview(self):
+        report = validate_scope_1({"fuel_totals": [{"fuel_type": "petrol", "litres_per_year": 700}]})
         self.assertEqual(report["completeness"], "overview")
+        self.assertEqual(report["data"]["fuel_totals"][0]["litres_per_year"], 700)
+
+    def test_fuel_total_with_unknown_fuel_is_an_error(self):
+        report = validate_scope_1({"fuel_totals": [{"fuel_type": "coal", "litres_per_year": 700}]})
+        self.assertFalse(report["valid"])
+
+    def test_annual_kwh_only_is_overview(self):
+        report = validate_scope_2({"energy_meter": {"annual_kwh": 4000, "region_state": "Karnataka"}})
+        self.assertEqual(report["completeness"], "overview")
+
+    def test_monthly_kwh_is_full_when_region_given(self):
+        report = validate_scope_2({"energy_meter": {"monthly_kwh": 400, "region_state": "Karnataka"}})
+        self.assertEqual(report["completeness"], "full")
 
 
 class RouteTests(unittest.TestCase):
@@ -139,10 +157,10 @@ class RouteTests(unittest.TestCase):
         self.assertEqual(payload["confidence_metadata"]["scope_3"], "partial_data")
         self.assertEqual(set(payload["scopes"]["scope_3"]), {"cloud", "hardware", "commute", "waste"})
 
-    def test_budget_demo_routes_as_overview(self):
-        demo = load_demo("demo_data_budget.json")
-        payload, _ = validate_and_route("tier_2", demo["scope_1"], demo["scope_2"], demo["scope_3"])
-        self.assertEqual(set(payload["confidence_metadata"].values()), {"overview_only"})
+    def test_totals_persona_routes_as_overview(self):
+        closed = load_closed("small_scale")
+        payload, _ = validate_and_route("tier_2", closed["scope_1"], closed["scope_2"], None)
+        self.assertEqual(payload["confidence_metadata"], {"scope_1": "overview_only", "scope_2": "overview_only"})
 
 
 class EndToEndTests(unittest.TestCase):
@@ -168,10 +186,13 @@ class EndToEndTests(unittest.TestCase):
         self.assertEqual(written["confidence_metadata"]["scope_2"], "full_data")
         self.assertEqual(set(written["data_path"].values()), {"open_source"})
 
-    def test_budget_demo_is_marked_closed_source(self):
-        demo = load_demo("demo_data_budget.json")
-        payload, _ = validate_and_route("tier_2", demo["scope_1"], demo["scope_2"], demo["scope_3"])
-        self.assertEqual(set(payload["data_path"].values()), {"closed_source"})
+    def test_totals_persona_is_marked_closed_source(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            out = Path(tmp) / "intake_output.json"
+            path, _ = run_totals_intake("School/Small Company", DEMO / "small_scale" / "closed.json", output_file=out)
+            written = json.loads(Path(path).read_text(encoding="utf-8"))
+        self.assertEqual(set(written["data_path"].values()), {"closed_source"})
+        self.assertEqual(set(written["scopes"]), {"scope_1", "scope_2"})
 
 
 if __name__ == "__main__":

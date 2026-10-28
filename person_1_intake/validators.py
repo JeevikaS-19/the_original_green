@@ -5,7 +5,11 @@ Each validator takes one scope's parsed data and returns:
 
 - errors block the run: the user has to fix the file
 - estimates_made are assumptions filled in; any estimate lowers confidence
-- completeness is "full", "partial", "overview" (budget only), or "missing"
+- completeness is "full", "partial", "overview" (totals only: the closed-source
+  path), or "missing"
+
+Closed-source input is consumption totals, not spend: annual litres of fuel
+per fuel type, and annual kWh of grid electricity.
 """
 
 DEFAULT_ANNUAL_DISTANCE_KM = 15000
@@ -14,19 +18,13 @@ DEFAULT_COMMUTE_KM = 10
 DEFAULT_GRID_STATE = "default_india"
 COMMUTE_MODES = ("car", "bus", "bike", "wfh")
 COMMUTE_SUM_TOLERANCE = 0.05
+TOTAL_FUEL_TYPES = ("petrol", "diesel", "lpg")
 
 CONFIDENCE_LABELS = {
     "full": "full_data",
     "partial": "partial_data",
     "overview": "overview_only",
     "missing": "missing",
-}
-
-# A scope given as budget-only uses these keys instead of its detailed data.
-BUDGET_KEYS = {
-    "scope_1": ["annual_fuel_budget_inr"],
-    "scope_2": ["annual_energy_bill_inr"],
-    "scope_3": ["cloud_spend_inr", "employee_count"],
 }
 
 
@@ -61,17 +59,20 @@ def _completeness(estimates):
     return "partial" if estimates else "full"
 
 
-def _is_budget(scope, scope_name):
-    return any(key in scope for key in BUDGET_KEYS[scope_name])
-
-
-def _budget_report(scope, scope_name):
-    errors = []
-    for key in BUDGET_KEYS[scope_name]:
-        value = scope.get(key)
-        if not _is_number(value) or value <= 0:
-            errors.append(f"{key} must be a positive number")
-    return _report(scope, errors, [], "overview")
+def _validate_fuel_totals(totals, errors):
+    cleaned = []
+    for index, raw in enumerate(totals):
+        label = f"fuel total {index + 1}"
+        fuel_type = str(raw.get("fuel_type") or "").strip().lower()
+        if fuel_type not in TOTAL_FUEL_TYPES:
+            errors.append(f"{label}: fuel_type must be one of {', '.join(TOTAL_FUEL_TYPES)}")
+            continue
+        litres = raw.get("litres_per_year")
+        if not _is_number(litres) or litres <= 0:
+            errors.append(f"{label}: litres_per_year must be a positive number")
+            continue
+        cleaned.append({"fuel_type": fuel_type, "litres_per_year": litres})
+    return cleaned
 
 
 def _validate_hardware(devices, errors, estimates):
@@ -151,12 +152,10 @@ def _validate_waste(items, errors):
 
 
 def validate_scope_1(scope):
-    """Vehicles and DG set. Returns data as {"vehicles": [...], "dg_set": {...} or None}."""
-    if _is_budget(scope, "scope_1"):
-        return _budget_report(scope, "scope_1")
-
+    """Vehicles, DG set, or fuel totals. Returns data with vehicles, dg_set, and fuel_totals where present."""
     errors, estimates, vehicles = [], [], []
     dg_set = None
+    totals = _validate_fuel_totals(scope.get("fuel_totals") or [], errors)
 
     for index, raw in enumerate(scope.get("vehicles") or []):
         vehicle = dict(raw)
@@ -182,41 +181,52 @@ def validate_scope_1(scope):
             dg_set["fuel_type"] = "diesel"
             estimates.append("dg_set: fuel type not given, assumed diesel")
 
-    if not vehicles and not dg_set and not errors:
+    if not vehicles and not dg_set and not totals and not errors:
         return _empty_report()
 
     data = {"vehicles": vehicles, "dg_set": dg_set}
+    if totals:
+        data["fuel_totals"] = totals
+
+    # Totals only, with no detail behind them: the closed-source path.
+    if totals and not vehicles and not dg_set:
+        return _report(data, errors, estimates, "overview")
     return _report(data, errors, estimates, _completeness(estimates))
 
 
 def validate_scope_2(scope):
-    """Grid electricity. Returns data as {"energy_meter": {...}}."""
-    if _is_budget(scope, "scope_2"):
-        return _budget_report(scope, "scope_2")
-
+    """Grid electricity. Monthly readings (open source) or an annual total (closed source)."""
     meter = scope.get("energy_meter")
     if not meter:
         return _empty_report()
 
     meter = dict(meter)
     errors, estimates = [], []
+    monthly = meter.get("monthly_kwh")
+    annual = meter.get("annual_kwh")
 
-    kwh = meter.get("monthly_kwh")
-    if not _is_number(kwh) or kwh <= 0:
-        errors.append("energy_meter: monthly_kwh must be a positive number")
+    totals_only = False
+    if not _is_blank(monthly):
+        if not _is_number(monthly) or monthly <= 0:
+            errors.append("energy_meter: monthly_kwh must be a positive number")
+    elif not _is_blank(annual):
+        if not _is_number(annual) or annual <= 0:
+            errors.append("energy_meter: annual_kwh must be a positive number")
+        totals_only = True
+    else:
+        errors.append("energy_meter: monthly_kwh or annual_kwh is required")
 
     if _is_blank(meter.get("region_state")):
         meter["region_state"] = DEFAULT_GRID_STATE
         estimates.append("energy_meter: region not given, using India default grid factor")
 
+    if totals_only and not errors:
+        return _report({"energy_meter": meter}, errors, estimates, "overview")
     return _report({"energy_meter": meter}, errors, estimates, _completeness(estimates))
 
 
 def validate_scope_3(scope):
     """Cloud, hardware, commute, and waste. Returns data with those four keys."""
-    if _is_budget(scope, "scope_3"):
-        return _budget_report(scope, "scope_3")
-
     errors, estimates = [], []
     hardware = _validate_hardware(scope.get("hardware") or [], errors, estimates)
     commute = _validate_commute(scope.get("commute"), errors, estimates)

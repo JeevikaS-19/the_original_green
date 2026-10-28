@@ -100,7 +100,7 @@ def parse_scope_1(vehicles_csv=None, dg_set=None):
         vehicles = _read_rows(
             vehicles_csv,
             required=["make", "fuel_type"],
-            numeric=("year", "annual_distance_km", "lifespan_years"),
+            numeric=("year", "annual_distance_km", "lifespan_years", "fuel_efficiency_l_per_100km"),
             aliases=VEHICLE_ALIASES,
         )
         for vehicle in vehicles:
