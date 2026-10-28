@@ -75,3 +75,10 @@ def test_illustrative_inputs_are_labelled_in_the_report():
     payload["illustrative_inputs"] = ["scope_3.commute.car.factor", "scope_3.waste.e-waste.recycling.factor"]
     warnings = generate_report(payload)["report"]["warnings"]
     assert any("illustrative factors for 2 input(s)" in warning for warning in warnings)
+
+
+def test_estimated_inputs_are_counted_in_the_warnings():
+    payload = calc_payload("tier_2")
+    payload["assumptions"] = {"scope_1": ["About 20 vehicles."], "scope_3": ["Typical commute split.", "Waste."]}
+    warnings = generate_report(payload)["report"]["warnings"]
+    assert any("3 input(s) were estimated" in warning for warning in warnings)

@@ -297,6 +297,10 @@ def normalize_calc_results(raw: Any) -> dict[str, Any]:
             "Demo uses illustrative factors for "
             f"{len(illustrative_paths)} input(s). Real submissions use verified sources."
         )
+    assumption_map = raw.get("assumptions") if isinstance(raw.get("assumptions"), dict) else {}
+    assumption_count = sum(len(items) for items in assumption_map.values() if isinstance(items, list))
+    if assumption_count:
+        warnings.append(f"{assumption_count} input(s) were estimated from partial data; see the assumptions list.")
 
     activity = raw.get("activity_summary")
     if not isinstance(activity, dict):
