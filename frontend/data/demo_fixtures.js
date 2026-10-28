@@ -221,6 +221,57 @@ window.DEMO_FIXTURES = [
         },
         "grade": "F",
         "employees": 1,
+        "inputs": {
+          "scope_1": {
+            "vehicles": [
+              {
+                "vehicle_id": "CAR_01",
+                "make": "Hatchback",
+                "model": "1.2 L petrol",
+                "year": 2019,
+                "fuel_type": "petrol",
+                "annual_distance_km": 11500,
+                "fuel_efficiency_l_per_100km": 6.2,
+                "lifespan_years": 5
+              }
+            ],
+            "dg_set": null
+          },
+          "scope_2": {
+            "energy_meter": {
+              "monthly_kwh": 330.42,
+              "region_state": "Karnataka"
+            }
+          },
+          "scope_3": {
+            "cloud": null,
+            "hardware": [
+              {
+                "device_type": "Laptop",
+                "model": "Business laptop",
+                "quantity": 1,
+                "purchase_year": 2022,
+                "expected_lifespan_years": 5
+              }
+            ],
+            "commute": {
+              "total_employees": 1,
+              "mode_split": {
+                "car": 1,
+                "bus": 0,
+                "bike": 0,
+                "wfh": 0
+              },
+              "avg_distance_km": 18
+            },
+            "waste": [
+              {
+                "category": "Solid Waste",
+                "mass_kg_per_month": 20
+              }
+            ]
+          }
+        },
         "grade_bands": [
           {
             "grade": "A",
@@ -360,6 +411,24 @@ window.DEMO_FIXTURES = [
         },
         "grade": "F",
         "employees": 1,
+        "inputs": {
+          "scope_1": {
+            "vehicles": [],
+            "dg_set": null,
+            "fuel_totals": [
+              {
+                "fuel_type": "petrol",
+                "litres_per_year": 713
+              }
+            ]
+          },
+          "scope_2": {
+            "energy_meter": {
+              "annual_kwh": 3965,
+              "region_state": "Karnataka"
+            }
+          }
+        },
         "grade_bands": [
           {
             "grade": "A",
@@ -682,6 +751,97 @@ window.DEMO_FIXTURES = [
         },
         "grade": "B",
         "employees": 200,
+        "inputs": {
+          "scope_1": {
+            "vehicles": [
+              {
+                "vehicle_id": "BUS_01",
+                "make": "Bus",
+                "model": "Diesel 40-seater",
+                "year": 2017,
+                "fuel_type": "diesel",
+                "annual_distance_km": 85000,
+                "fuel_efficiency_l_per_100km": 30,
+                "lifespan_years": 5
+              },
+              {
+                "vehicle_id": "BUS_02",
+                "make": "Bus",
+                "model": "Diesel 40-seater",
+                "year": 2019,
+                "fuel_type": "diesel",
+                "annual_distance_km": 70000,
+                "fuel_efficiency_l_per_100km": 29,
+                "lifespan_years": 5
+              },
+              {
+                "vehicle_id": "VAN_01",
+                "make": "Van",
+                "model": "Diesel minivan",
+                "year": 2020,
+                "fuel_type": "diesel",
+                "annual_distance_km": 25000,
+                "fuel_efficiency_l_per_100km": 11,
+                "lifespan_years": 5
+              }
+            ],
+            "dg_set": {
+              "capacity_kva": 50,
+              "fuel_type": "diesel",
+              "hours_per_year": 400,
+              "fuel_consumption_per_hour": 12
+            }
+          },
+          "scope_2": {
+            "energy_meter": {
+              "monthly_kwh": 4841.67,
+              "region_state": "Karnataka"
+            }
+          },
+          "scope_3": {
+            "cloud": null,
+            "hardware": [
+              {
+                "device_type": "Laptop",
+                "model": "Office laptop",
+                "quantity": 30,
+                "purchase_year": 2023,
+                "expected_lifespan_years": 5
+              },
+              {
+                "device_type": "Desktop",
+                "model": "Lab desktop",
+                "quantity": 20,
+                "purchase_year": 2021,
+                "expected_lifespan_years": 5
+              }
+            ],
+            "commute": {
+              "total_employees": 200,
+              "mode_split": {
+                "car": 0.2,
+                "bus": 0.55,
+                "bike": 0.15,
+                "wfh": 0.1
+              },
+              "avg_distance_km": 12
+            },
+            "waste": [
+              {
+                "category": "Solid Waste",
+                "mass_kg_per_month": 450
+              },
+              {
+                "category": "E-waste",
+                "mass_kg_per_month": 40
+              },
+              {
+                "category": "Wastewater",
+                "mass_kg_per_month": 900
+              }
+            ]
+          }
+        },
         "grade_bands": [
           {
             "grade": "A",
@@ -875,6 +1035,24 @@ window.DEMO_FIXTURES = [
         },
         "grade": "B",
         "employees": 200,
+        "inputs": {
+          "scope_1": {
+            "vehicles": [],
+            "dg_set": null,
+            "fuel_totals": [
+              {
+                "fuel_type": "diesel",
+                "litres_per_year": 53350
+              }
+            ]
+          },
+          "scope_2": {
+            "energy_meter": {
+              "annual_kwh": 58100,
+              "region_state": "Karnataka"
+            }
+          }
+        },
         "grade_bands": [
           {
             "grade": "A",
@@ -1324,6 +1502,169 @@ window.DEMO_FIXTURES = [
         },
         "grade": "C",
         "employees": 500,
+        "inputs": {
+          "scope_1": {
+            "vehicles": [
+              {
+                "vehicle_id": "CAR_01",
+                "make": "Sedan",
+                "model": "1.5 L petrol",
+                "year": 2022,
+                "fuel_type": "petrol",
+                "annual_distance_km": 14000,
+                "fuel_efficiency_l_per_100km": 7,
+                "lifespan_years": 5
+              },
+              {
+                "vehicle_id": "CAR_02",
+                "make": "Sedan",
+                "model": "1.5 L petrol",
+                "year": 2022,
+                "fuel_type": "petrol",
+                "annual_distance_km": 14000,
+                "fuel_efficiency_l_per_100km": 7,
+                "lifespan_years": 5
+              },
+              {
+                "vehicle_id": "CAR_03",
+                "make": "Sedan",
+                "model": "1.5 L petrol",
+                "year": 2022,
+                "fuel_type": "petrol",
+                "annual_distance_km": 14000,
+                "fuel_efficiency_l_per_100km": 7,
+                "lifespan_years": 5
+              },
+              {
+                "vehicle_id": "CAR_04",
+                "make": "Sedan",
+                "model": "1.5 L petrol",
+                "year": 2022,
+                "fuel_type": "petrol",
+                "annual_distance_km": 14000,
+                "fuel_efficiency_l_per_100km": 7,
+                "lifespan_years": 5
+              },
+              {
+                "vehicle_id": "CAR_05",
+                "make": "Sedan",
+                "model": "1.5 L petrol",
+                "year": 2022,
+                "fuel_type": "petrol",
+                "annual_distance_km": 14000,
+                "fuel_efficiency_l_per_100km": 7,
+                "lifespan_years": 5
+              },
+              {
+                "vehicle_id": "CAR_06",
+                "make": "Sedan",
+                "model": "1.5 L petrol",
+                "year": 2022,
+                "fuel_type": "petrol",
+                "annual_distance_km": 14000,
+                "fuel_efficiency_l_per_100km": 7,
+                "lifespan_years": 5
+              },
+              {
+                "vehicle_id": "CAR_07",
+                "make": "Sedan",
+                "model": "1.5 L petrol",
+                "year": 2022,
+                "fuel_type": "petrol",
+                "annual_distance_km": 14000,
+                "fuel_efficiency_l_per_100km": 7,
+                "lifespan_years": 5
+              },
+              {
+                "vehicle_id": "CAR_08",
+                "make": "Sedan",
+                "model": "1.5 L petrol",
+                "year": 2022,
+                "fuel_type": "petrol",
+                "annual_distance_km": 14000,
+                "fuel_efficiency_l_per_100km": 7,
+                "lifespan_years": 5
+              }
+            ],
+            "dg_set": {
+              "capacity_kva": 250,
+              "fuel_type": "diesel",
+              "hours_per_year": 600,
+              "fuel_consumption_per_hour": 55
+            }
+          },
+          "scope_2": {
+            "energy_meter": {
+              "monthly_kwh": 62583.33,
+              "region_state": "Karnataka"
+            }
+          },
+          "scope_3": {
+            "cloud": [
+              {
+                "instance_type": "gpu-a100-x4",
+                "region": "ap-south-1",
+                "usage_hours": 9000,
+                "cost": 2700000
+              },
+              {
+                "instance_type": "gpu-a100-x4",
+                "region": "ap-south-1",
+                "usage_hours": 4000,
+                "cost": 1200000
+              },
+              {
+                "instance_type": "m6i.large",
+                "region": "ap-south-1",
+                "usage_hours": 36000,
+                "cost": 450000
+              }
+            ],
+            "hardware": [
+              {
+                "device_type": "Laptop",
+                "model": "Standard laptop",
+                "quantity": 500,
+                "purchase_year": 2023,
+                "expected_lifespan_years": 4
+              },
+              {
+                "device_type": "GPU",
+                "model": "A100-class accelerator",
+                "quantity": 40,
+                "purchase_year": 2024,
+                "expected_lifespan_years": 3
+              },
+              {
+                "device_type": "Server",
+                "model": "Rack server",
+                "quantity": 12,
+                "purchase_year": 2021,
+                "expected_lifespan_years": 5
+              }
+            ],
+            "commute": {
+              "total_employees": 500,
+              "mode_split": {
+                "car": 0.4,
+                "bus": 0.2,
+                "bike": 0.1,
+                "wfh": 0.3
+              },
+              "avg_distance_km": 18
+            },
+            "waste": [
+              {
+                "category": "Solid Waste",
+                "mass_kg_per_month": 3500
+              },
+              {
+                "category": "E-waste",
+                "mass_kg_per_month": 250
+              }
+            ]
+          }
+        },
         "grade_bands": [
           {
             "grade": "A",
@@ -1522,6 +1863,28 @@ window.DEMO_FIXTURES = [
         },
         "grade": "B",
         "employees": 500,
+        "inputs": {
+          "scope_1": {
+            "vehicles": [],
+            "dg_set": null,
+            "fuel_totals": [
+              {
+                "fuel_type": "petrol",
+                "litres_per_year": 7840
+              },
+              {
+                "fuel_type": "diesel",
+                "litres_per_year": 33000
+              }
+            ]
+          },
+          "scope_2": {
+            "energy_meter": {
+              "annual_kwh": 751000,
+              "region_state": "Karnataka"
+            }
+          }
+        },
         "grade_bands": [
           {
             "grade": "A",
@@ -1638,16 +2001,16 @@ window.DEMO_FIXTURES = [
           },
           "estimates": {
             "scope_1": [
-              "Assumed a minimal corporate fleet of 1 mid-range operational car covering 15,000 km annually with conservative fuel efficiency of 7 L/100 km.",
-              "Assumed a standard 250 kVA backup diesel generator running 10 hours per month (120 hours annually) consuming 50 litres of diesel per hour."
+              "About 20 vehicles from 500 employees (0.04 per employee), split 80% diesel and 20% petrol, 20,000 km each a year.",
+              "Backup diesel generator assumed for an office of this size: 50 kVA, 500 hours a year at 15 L/h."
             ],
             "scope_2": [
-              "Calculated from the annual bill of INR 5,600,000 using a mid-range commercial tariff of INR 8.0/kWh, yielding 700,000 kWh annually or 58,333 kWh per month."
+              "Calculated annual electricity consumption from the annual energy bill of INR 5,600,000 using an illustrative tariff of 7.5 INR per kWh, then divided by 12 months, resulting in approximately 62,222.22 kWh per month."
             ],
             "scope_3": [
-              "Assumed 1 standard laptop per employee (500 units) and a minimal infrastructure of 5 on-premise servers for 500 employees.",
-              "Assumed an urban tech workforce profile with 500 employees, 15 km average one-way commute, and a conservative split of 45% bus, 20% bike, 15% car, and 20% remote (WFH).",
-              "Estimated monthly waste based on 500 employees: 5 kg/person/month landfill solid waste, 0.08 kg/person/month e-waste, and 600 kg/person/month wastewater."
+              "One laptop per employee (1), 20% desktops, 0.5 servers per 100 employees. No inventory was given.",
+              "Typical urban India commute split (40% car, 35% bus, 15% bike, 10% work from home), 12 km average, 250 working days. Replace with a staff survey.",
+              "0.3 kg solid waste per employee per office day and 0.25 kg e-waste per employee a year. No waste log was given."
             ]
           }
         },
@@ -1655,18 +2018,94 @@ window.DEMO_FIXTURES = [
           {
             "id": "scope_1",
             "label": "Scope 1 · Direct fuel",
-            "tons": 18.89,
-            "low": 14.17,
-            "high": 23.62,
+            "tons": 127.26,
+            "low": 95.44,
+            "high": 159.07,
             "confidence": "±25%",
             "drivers": [
               {
-                "name": "Fleet vehicle (VEH-001)",
-                "tons": 2.8
+                "name": "Fleet vehicle (est_diesel_01)",
+                "tons": 5.9
+              },
+              {
+                "name": "Fleet vehicle (est_diesel_02)",
+                "tons": 5.9
+              },
+              {
+                "name": "Fleet vehicle (est_diesel_03)",
+                "tons": 5.9
+              },
+              {
+                "name": "Fleet vehicle (est_diesel_04)",
+                "tons": 5.9
+              },
+              {
+                "name": "Fleet vehicle (est_diesel_05)",
+                "tons": 5.9
+              },
+              {
+                "name": "Fleet vehicle (est_diesel_06)",
+                "tons": 5.9
+              },
+              {
+                "name": "Fleet vehicle (est_diesel_07)",
+                "tons": 5.9
+              },
+              {
+                "name": "Fleet vehicle (est_diesel_08)",
+                "tons": 5.9
+              },
+              {
+                "name": "Fleet vehicle (est_diesel_09)",
+                "tons": 5.9
+              },
+              {
+                "name": "Fleet vehicle (est_diesel_10)",
+                "tons": 5.9
+              },
+              {
+                "name": "Fleet vehicle (est_diesel_11)",
+                "tons": 5.9
+              },
+              {
+                "name": "Fleet vehicle (est_diesel_12)",
+                "tons": 5.9
+              },
+              {
+                "name": "Fleet vehicle (est_diesel_13)",
+                "tons": 5.9
+              },
+              {
+                "name": "Fleet vehicle (est_diesel_14)",
+                "tons": 5.9
+              },
+              {
+                "name": "Fleet vehicle (est_diesel_15)",
+                "tons": 5.9
+              },
+              {
+                "name": "Fleet vehicle (est_diesel_16)",
+                "tons": 5.9
+              },
+              {
+                "name": "Fleet vehicle (est_petrol_01)",
+                "tons": 3.2
+              },
+              {
+                "name": "Fleet vehicle (est_petrol_02)",
+                "tons": 3.2
+              },
+              {
+                "name": "Fleet vehicle (est_petrol_03)",
+                "tons": 3.2
+              },
+              {
+                "name": "Fleet vehicle (est_petrol_04)",
+                "tons": 3.2
               },
               {
                 "name": "DG Set (diesel)",
-                "tons": 16.1
+                "tons": 20.1
               }
             ],
             "formula": "Litres of fuel × kg CO2e per litre (IPCC 2006 defaults, converted)"
@@ -1674,14 +2113,14 @@ window.DEMO_FIXTURES = [
           {
             "id": "scope_2",
             "label": "Scope 2 · Purchased electricity",
-            "tons": 529.9,
-            "low": 397.42,
-            "high": 662.37,
+            "tons": 565.23,
+            "low": 423.92,
+            "high": 706.53,
             "confidence": "±25%",
             "drivers": [
               {
                 "name": "electricity",
-                "tons": 529.9
+                "tons": 565.2
               }
             ],
             "formula": "kWh × CEA combined margin (0.757 kg CO2e/kWh)"
@@ -1689,9 +2128,9 @@ window.DEMO_FIXTURES = [
           {
             "id": "scope_3",
             "label": "Scope 3 · Devices, commute, waste",
-            "tons": 198.95,
-            "low": 99.47,
-            "high": 298.43,
+            "tons": 282.57,
+            "low": 141.29,
+            "high": 423.86,
             "confidence": "±50%",
             "drivers": [
               {
@@ -1700,27 +2139,290 @@ window.DEMO_FIXTURES = [
               },
               {
                 "name": "Hardware (embodied)",
-                "tons": 17.5
+                "tons": 22.0
               },
               {
                 "name": "Commute",
-                "tons": 176.2
+                "tons": 237.0
               },
               {
                 "name": "Waste",
-                "tons": 0.0
+                "tons": 18.4
               }
             ],
             "formula": "Devices, commute and waste × factor. Factors are illustrative assumptions, not verified sources."
           }
         ],
         "total": {
-          "tons": 747.74,
-          "low": 511.07,
-          "high": 984.41
+          "tons": 975.06,
+          "low": 660.65,
+          "high": 1289.47
         },
-        "grade": "B",
+        "grade": "C",
         "employees": 500,
+        "inputs": {
+          "scope_1": {
+            "vehicles": [
+              {
+                "vehicle_id": "est_diesel_01",
+                "make": "Estimated",
+                "model": "diesel fleet vehicle",
+                "fuel_type": "diesel",
+                "annual_distance_km": 20000,
+                "fuel_efficiency_l_per_100km": 11.0,
+                "lifespan_years": 5
+              },
+              {
+                "vehicle_id": "est_diesel_02",
+                "make": "Estimated",
+                "model": "diesel fleet vehicle",
+                "fuel_type": "diesel",
+                "annual_distance_km": 20000,
+                "fuel_efficiency_l_per_100km": 11.0,
+                "lifespan_years": 5
+              },
+              {
+                "vehicle_id": "est_diesel_03",
+                "make": "Estimated",
+                "model": "diesel fleet vehicle",
+                "fuel_type": "diesel",
+                "annual_distance_km": 20000,
+                "fuel_efficiency_l_per_100km": 11.0,
+                "lifespan_years": 5
+              },
+              {
+                "vehicle_id": "est_diesel_04",
+                "make": "Estimated",
+                "model": "diesel fleet vehicle",
+                "fuel_type": "diesel",
+                "annual_distance_km": 20000,
+                "fuel_efficiency_l_per_100km": 11.0,
+                "lifespan_years": 5
+              },
+              {
+                "vehicle_id": "est_diesel_05",
+                "make": "Estimated",
+                "model": "diesel fleet vehicle",
+                "fuel_type": "diesel",
+                "annual_distance_km": 20000,
+                "fuel_efficiency_l_per_100km": 11.0,
+                "lifespan_years": 5
+              },
+              {
+                "vehicle_id": "est_diesel_06",
+                "make": "Estimated",
+                "model": "diesel fleet vehicle",
+                "fuel_type": "diesel",
+                "annual_distance_km": 20000,
+                "fuel_efficiency_l_per_100km": 11.0,
+                "lifespan_years": 5
+              },
+              {
+                "vehicle_id": "est_diesel_07",
+                "make": "Estimated",
+                "model": "diesel fleet vehicle",
+                "fuel_type": "diesel",
+                "annual_distance_km": 20000,
+                "fuel_efficiency_l_per_100km": 11.0,
+                "lifespan_years": 5
+              },
+              {
+                "vehicle_id": "est_diesel_08",
+                "make": "Estimated",
+                "model": "diesel fleet vehicle",
+                "fuel_type": "diesel",
+                "annual_distance_km": 20000,
+                "fuel_efficiency_l_per_100km": 11.0,
+                "lifespan_years": 5
+              },
+              {
+                "vehicle_id": "est_diesel_09",
+                "make": "Estimated",
+                "model": "diesel fleet vehicle",
+                "fuel_type": "diesel",
+                "annual_distance_km": 20000,
+                "fuel_efficiency_l_per_100km": 11.0,
+                "lifespan_years": 5
+              },
+              {
+                "vehicle_id": "est_diesel_10",
+                "make": "Estimated",
+                "model": "diesel fleet vehicle",
+                "fuel_type": "diesel",
+                "annual_distance_km": 20000,
+                "fuel_efficiency_l_per_100km": 11.0,
+                "lifespan_years": 5
+              },
+              {
+                "vehicle_id": "est_diesel_11",
+                "make": "Estimated",
+                "model": "diesel fleet vehicle",
+                "fuel_type": "diesel",
+                "annual_distance_km": 20000,
+                "fuel_efficiency_l_per_100km": 11.0,
+                "lifespan_years": 5
+              },
+              {
+                "vehicle_id": "est_diesel_12",
+                "make": "Estimated",
+                "model": "diesel fleet vehicle",
+                "fuel_type": "diesel",
+                "annual_distance_km": 20000,
+                "fuel_efficiency_l_per_100km": 11.0,
+                "lifespan_years": 5
+              },
+              {
+                "vehicle_id": "est_diesel_13",
+                "make": "Estimated",
+                "model": "diesel fleet vehicle",
+                "fuel_type": "diesel",
+                "annual_distance_km": 20000,
+                "fuel_efficiency_l_per_100km": 11.0,
+                "lifespan_years": 5
+              },
+              {
+                "vehicle_id": "est_diesel_14",
+                "make": "Estimated",
+                "model": "diesel fleet vehicle",
+                "fuel_type": "diesel",
+                "annual_distance_km": 20000,
+                "fuel_efficiency_l_per_100km": 11.0,
+                "lifespan_years": 5
+              },
+              {
+                "vehicle_id": "est_diesel_15",
+                "make": "Estimated",
+                "model": "diesel fleet vehicle",
+                "fuel_type": "diesel",
+                "annual_distance_km": 20000,
+                "fuel_efficiency_l_per_100km": 11.0,
+                "lifespan_years": 5
+              },
+              {
+                "vehicle_id": "est_diesel_16",
+                "make": "Estimated",
+                "model": "diesel fleet vehicle",
+                "fuel_type": "diesel",
+                "annual_distance_km": 20000,
+                "fuel_efficiency_l_per_100km": 11.0,
+                "lifespan_years": 5
+              },
+              {
+                "vehicle_id": "est_petrol_01",
+                "make": "Estimated",
+                "model": "petrol fleet vehicle",
+                "fuel_type": "petrol",
+                "annual_distance_km": 20000,
+                "fuel_efficiency_l_per_100km": 7.0,
+                "lifespan_years": 5
+              },
+              {
+                "vehicle_id": "est_petrol_02",
+                "make": "Estimated",
+                "model": "petrol fleet vehicle",
+                "fuel_type": "petrol",
+                "annual_distance_km": 20000,
+                "fuel_efficiency_l_per_100km": 7.0,
+                "lifespan_years": 5
+              },
+              {
+                "vehicle_id": "est_petrol_03",
+                "make": "Estimated",
+                "model": "petrol fleet vehicle",
+                "fuel_type": "petrol",
+                "annual_distance_km": 20000,
+                "fuel_efficiency_l_per_100km": 7.0,
+                "lifespan_years": 5
+              },
+              {
+                "vehicle_id": "est_petrol_04",
+                "make": "Estimated",
+                "model": "petrol fleet vehicle",
+                "fuel_type": "petrol",
+                "annual_distance_km": 20000,
+                "fuel_efficiency_l_per_100km": 7.0,
+                "lifespan_years": 5
+              }
+            ],
+            "dg_set": {
+              "capacity_kva": 50,
+              "fuel_type": "diesel",
+              "hours_per_year": 500,
+              "fuel_consumption_per_hour": 15
+            }
+          },
+          "scope_2": {
+            "energy_meter": {
+              "monthly_kwh": 62222.22,
+              "region_state": "Karnataka"
+            }
+          },
+          "scope_3": {
+            "cloud": [
+              {
+                "instance_type": "gpu-a100-x4",
+                "region": "ap-south-1",
+                "usage_hours": 9000,
+                "cost": 2700000
+              },
+              {
+                "instance_type": "gpu-a100-x4",
+                "region": "ap-south-1",
+                "usage_hours": 4000,
+                "cost": 1200000
+              },
+              {
+                "instance_type": "m6i.large",
+                "region": "ap-south-1",
+                "usage_hours": 36000,
+                "cost": 450000
+              }
+            ],
+            "hardware": [
+              {
+                "device_type": "Laptop",
+                "model": "Estimated laptop",
+                "quantity": 500,
+                "purchase_year": null,
+                "expected_lifespan_years": 5
+              },
+              {
+                "device_type": "Desktop",
+                "model": "Estimated desktop",
+                "quantity": 100,
+                "purchase_year": null,
+                "expected_lifespan_years": 6
+              },
+              {
+                "device_type": "Server",
+                "model": "Estimated server",
+                "quantity": 2,
+                "purchase_year": null,
+                "expected_lifespan_years": 5
+              }
+            ],
+            "commute": {
+              "total_employees": 500,
+              "mode_split": {
+                "car": 0.4,
+                "bus": 0.35,
+                "bike": 0.15,
+                "wfh": 0.1
+              },
+              "avg_distance_km": 12
+            },
+            "waste": [
+              {
+                "category": "Solid Waste",
+                "mass_kg_per_month": 3000.0
+              },
+              {
+                "category": "E-waste",
+                "mass_kg_per_month": 10.4
+              }
+            ]
+          }
+        },
         "grade_bands": [
           {
             "grade": "A",
@@ -1749,6 +2451,16 @@ window.DEMO_FIXTURES = [
           }
         ],
         "actions": [
+          {
+            "scope": "scope_1",
+            "action": "Route optimization",
+            "description": "Review routes and schedules to reduce vehicle distance and fuel use.",
+            "tons": 3.0,
+            "cost_inr": 200000,
+            "payback": "12 months",
+            "roi": 1.5,
+            "placeholder": false
+          },
           {
             "scope": "scope_3",
             "action": "Carpooling and public transport",
@@ -1792,29 +2504,32 @@ window.DEMO_FIXTURES = [
         ],
         "notes": [
           "Reduction savings and costs are planning assumptions from the knowledge base. Verify them before relying on them.",
-          "Scope 3 · Devices, commute, waste: 4 input(s) use placeholder factors and count as zero.",
-          "Demo uses illustrative factors for Scope 3 (6 inputs). Real submissions use verified sources."
+          "Scope 3 · Devices, commute, waste: 1 input(s) use placeholder factors and count as zero.",
+          "Demo uses illustrative factors for Scope 3 (9 inputs). Real submissions use verified sources."
         ],
         "illustrative": [
           "scope_3.cloud.gpu.factor",
           "scope_3.hardware.laptop.embodied_carbon_factor",
+          "scope_3.hardware.desktop.embodied_carbon_factor",
           "scope_3.hardware.server.embodied_carbon_factor",
           "scope_3.commute.car.factor",
           "scope_3.commute.bus.factor",
-          "scope_3.commute.bike.factor"
+          "scope_3.commute.bike.factor",
+          "scope_3.waste.solid waste.landfill.factor",
+          "scope_3.waste.e-waste.recycling.factor"
         ],
         "assumptions": [
-          "Assumed a minimal corporate fleet of 1 mid-range operational car covering 15,000 km annually with conservative fuel efficiency of 7 L/100 km.",
-          "Assumed a standard 250 kVA backup diesel generator running 10 hours per month (120 hours annually) consuming 50 litres of diesel per hour.",
-          "Calculated from the annual bill of INR 5,600,000 using a mid-range commercial tariff of INR 8.0/kWh, yielding 700,000 kWh annually or 58,333 kWh per month.",
-          "Assumed 1 standard laptop per employee (500 units) and a minimal infrastructure of 5 on-premise servers for 500 employees.",
-          "Assumed an urban tech workforce profile with 500 employees, 15 km average one-way commute, and a conservative split of 45% bus, 20% bike, 15% car, and 20% remote (WFH).",
-          "Estimated monthly waste based on 500 employees: 5 kg/person/month landfill solid waste, 0.08 kg/person/month e-waste, and 600 kg/person/month wastewater."
+          "Calculated annual electricity consumption from the annual energy bill of INR 5,600,000 using an illustrative tariff of 7.5 INR per kWh, then divided by 12 months, resulting in approximately 62,222.22 kWh per month.",
+          "About 20 vehicles from 500 employees (0.04 per employee), split 80% diesel and 20% petrol, 20,000 km each a year.",
+          "Backup diesel generator assumed for an office of this size: 50 kVA, 500 hours a year at 15 L/h.",
+          "One laptop per employee (1), 20% desktops, 0.5 servers per 100 employees. No inventory was given.",
+          "Typical urban India commute split (40% car, 35% bus, 15% bike, 10% work from home), 12 km average, 250 working days. Replace with a staff survey.",
+          "0.3 kg solid waste per employee per office day and 0.25 kg e-waste per employee a year. No waste log was given."
         ]
       }
     },
     "ai_log": {
-      "model": "default",
+      "model": "gemini-flash-lite-latest",
       "methodology_version": 1,
       "missing": {
         "scope_1": [
@@ -1837,97 +2552,265 @@ window.DEMO_FIXTURES = [
         "note": "Partial data: headcount and the annual energy bill only. Cloud usage is uploaded separately."
       },
       "used": "llm",
-      "prompt_chars": 4123,
-      "raw_response": "{\n  \"scope_1\": {\n    \"vehicles\": {\n      \"value\": [\n        {\n          \"vehicle_id\": \"VEH-001\",\n          \"make\": \"Generic\",\n          \"model\": \"Fleet Car\",\n          \"fuel_type\": \"diesel\",\n          \"annual_distance_km\": 15000,\n          \"fuel_efficiency_l_per_100km\": 7.0\n        }\n      ],\n      \"assumption\": \"Assumed a minimal corporate fleet of 1 mid-range operational car covering 15,000 km annually with conservative fuel efficiency of 7 L/100 km.\"\n    },\n    \"dg_set\": {\n      \"value\": {\n        \"capacity_kva\": 250,\n        \"fuel_type\": \"diesel\",\n        \"hours_per_year\": 120,\n        \"fuel_consumption_per_hour\": 50\n      },\n      \"assumption\": \"Assumed a standard 250 kVA backup diesel generator running 10 hours per month (120 hours annually) consuming 50 litres of diesel per hour.\"\n    }\n  },\n  \"scope_2\": {\n    \"energy_meter\": {\n      \"value\": {\n        \"monthly_kwh\": 58333,\n        \"region_state\": \"Karnataka\"\n      },\n      \"assumption\": \"Calculated from the annual bill of INR 5,600,000 using a mid-range commercial tariff of INR 8.0/kWh, yielding 700,000 kWh annually or 58,333 kWh per month.\"\n    }\n  },\n  \"scope_3\": {\n    \"hardware\": {\n      \"value\": [\n        {\n          \"device_type\": \"laptop\",\n          \"model\": \"Standard Office Laptop\",\n          \"quantity\": 500,\n          \"purchase_year\": 2022,\n          \"expected_lifespan_years\": 4\n        },\n        {\n          \"device_type\": \"server\",\n          \"model\": \"On-premise Rack Server\",\n          \"quantity\": 5,\n          \"purchase_year\": 2021,\n          \"expected_lifespan_years\": 5\n        }\n      ],\n      \"assumption\": \"Assumed 1 standard laptop per employee (500 units) and a minimal infrastructure of 5 on-premise servers for 500 employees.\"\n    },\n    \"commute\": {\n      \"value\": {\n        \"total_employees\": 500,\n        \"mode_split\": {\n          \"car\": 0.15,\n          \"bus\": 0.45,\n          \"bike\": 0.20,\n          \"wfh\": 0.20\n        },\n        \"avg_distance_km\": 15\n      },\n      \"assumption\": \"Assumed an urban tech workforce profile with 500 employees, 15 km average one-way commute, and a conservative split of 45% bus, 20% bike, 15% car, and 20% remote (WFH).\"\n    },\n    \"waste\": {\n      \"value\": [\n        {\n          \"category\": \"solid waste / landfill\",\n          \"mass_kg_per_month\": 2500\n        },\n        {\n          \"category\": \"e-waste / recycling\",\n          \"mass_kg_per_month\": 40\n        },\n        {\n          \"category\": \"wastewater / treatment\",\n          \"mass_kg_per_month\": 300000\n        }\n      ],\n      \"assumption\": \"Estimated monthly waste based on 500 employees: 5 kg/person/month landfill solid waste, 0.08 kg/person/month e-waste, and 600 kg/person/month wastewater.\"\n    }\n  }\n}",
+      "prompt_chars": 4373,
+      "raw_response": "{\n  \"scope_2\": {\n    \"energy_meter\": {\n      \"value\": {\n        \"monthly_kwh\": 62222.22,\n        \"region_state\": \"Karnataka\"\n      },\n      \"assumption\": \"Calculated annual electricity consumption from the annual energy bill of INR 5,600,000 using an illustrative tariff of 7.5 INR per kWh, then divided by 12 months, resulting in approximately 62,222.22 kWh per month.\"\n    }\n  }\n}",
       "validation": "passed",
-      "seconds": 45.2,
+      "rules_filled": {
+        "scope_1": [
+          "vehicles",
+          "dg_set"
+        ],
+        "scope_3": [
+          "hardware",
+          "commute",
+          "waste"
+        ]
+      },
+      "seconds": 1.1,
       "proposal": {
+        "scope_2": {
+          "energy_meter": {
+            "value": {
+              "monthly_kwh": 62222.22,
+              "region_state": "Karnataka"
+            },
+            "assumption": "Calculated annual electricity consumption from the annual energy bill of INR 5,600,000 using an illustrative tariff of 7.5 INR per kWh, then divided by 12 months, resulting in approximately 62,222.22 kWh per month."
+          }
+        },
         "scope_1": {
           "vehicles": {
             "value": [
               {
-                "vehicle_id": "VEH-001",
-                "make": "Generic",
-                "model": "Fleet Car",
+                "vehicle_id": "est_diesel_01",
+                "make": "Estimated",
+                "model": "diesel fleet vehicle",
                 "fuel_type": "diesel",
-                "annual_distance_km": 15000,
+                "annual_distance_km": 20000,
+                "fuel_efficiency_l_per_100km": 11.0
+              },
+              {
+                "vehicle_id": "est_diesel_02",
+                "make": "Estimated",
+                "model": "diesel fleet vehicle",
+                "fuel_type": "diesel",
+                "annual_distance_km": 20000,
+                "fuel_efficiency_l_per_100km": 11.0
+              },
+              {
+                "vehicle_id": "est_diesel_03",
+                "make": "Estimated",
+                "model": "diesel fleet vehicle",
+                "fuel_type": "diesel",
+                "annual_distance_km": 20000,
+                "fuel_efficiency_l_per_100km": 11.0
+              },
+              {
+                "vehicle_id": "est_diesel_04",
+                "make": "Estimated",
+                "model": "diesel fleet vehicle",
+                "fuel_type": "diesel",
+                "annual_distance_km": 20000,
+                "fuel_efficiency_l_per_100km": 11.0
+              },
+              {
+                "vehicle_id": "est_diesel_05",
+                "make": "Estimated",
+                "model": "diesel fleet vehicle",
+                "fuel_type": "diesel",
+                "annual_distance_km": 20000,
+                "fuel_efficiency_l_per_100km": 11.0
+              },
+              {
+                "vehicle_id": "est_diesel_06",
+                "make": "Estimated",
+                "model": "diesel fleet vehicle",
+                "fuel_type": "diesel",
+                "annual_distance_km": 20000,
+                "fuel_efficiency_l_per_100km": 11.0
+              },
+              {
+                "vehicle_id": "est_diesel_07",
+                "make": "Estimated",
+                "model": "diesel fleet vehicle",
+                "fuel_type": "diesel",
+                "annual_distance_km": 20000,
+                "fuel_efficiency_l_per_100km": 11.0
+              },
+              {
+                "vehicle_id": "est_diesel_08",
+                "make": "Estimated",
+                "model": "diesel fleet vehicle",
+                "fuel_type": "diesel",
+                "annual_distance_km": 20000,
+                "fuel_efficiency_l_per_100km": 11.0
+              },
+              {
+                "vehicle_id": "est_diesel_09",
+                "make": "Estimated",
+                "model": "diesel fleet vehicle",
+                "fuel_type": "diesel",
+                "annual_distance_km": 20000,
+                "fuel_efficiency_l_per_100km": 11.0
+              },
+              {
+                "vehicle_id": "est_diesel_10",
+                "make": "Estimated",
+                "model": "diesel fleet vehicle",
+                "fuel_type": "diesel",
+                "annual_distance_km": 20000,
+                "fuel_efficiency_l_per_100km": 11.0
+              },
+              {
+                "vehicle_id": "est_diesel_11",
+                "make": "Estimated",
+                "model": "diesel fleet vehicle",
+                "fuel_type": "diesel",
+                "annual_distance_km": 20000,
+                "fuel_efficiency_l_per_100km": 11.0
+              },
+              {
+                "vehicle_id": "est_diesel_12",
+                "make": "Estimated",
+                "model": "diesel fleet vehicle",
+                "fuel_type": "diesel",
+                "annual_distance_km": 20000,
+                "fuel_efficiency_l_per_100km": 11.0
+              },
+              {
+                "vehicle_id": "est_diesel_13",
+                "make": "Estimated",
+                "model": "diesel fleet vehicle",
+                "fuel_type": "diesel",
+                "annual_distance_km": 20000,
+                "fuel_efficiency_l_per_100km": 11.0
+              },
+              {
+                "vehicle_id": "est_diesel_14",
+                "make": "Estimated",
+                "model": "diesel fleet vehicle",
+                "fuel_type": "diesel",
+                "annual_distance_km": 20000,
+                "fuel_efficiency_l_per_100km": 11.0
+              },
+              {
+                "vehicle_id": "est_diesel_15",
+                "make": "Estimated",
+                "model": "diesel fleet vehicle",
+                "fuel_type": "diesel",
+                "annual_distance_km": 20000,
+                "fuel_efficiency_l_per_100km": 11.0
+              },
+              {
+                "vehicle_id": "est_diesel_16",
+                "make": "Estimated",
+                "model": "diesel fleet vehicle",
+                "fuel_type": "diesel",
+                "annual_distance_km": 20000,
+                "fuel_efficiency_l_per_100km": 11.0
+              },
+              {
+                "vehicle_id": "est_petrol_01",
+                "make": "Estimated",
+                "model": "petrol fleet vehicle",
+                "fuel_type": "petrol",
+                "annual_distance_km": 20000,
+                "fuel_efficiency_l_per_100km": 7.0
+              },
+              {
+                "vehicle_id": "est_petrol_02",
+                "make": "Estimated",
+                "model": "petrol fleet vehicle",
+                "fuel_type": "petrol",
+                "annual_distance_km": 20000,
+                "fuel_efficiency_l_per_100km": 7.0
+              },
+              {
+                "vehicle_id": "est_petrol_03",
+                "make": "Estimated",
+                "model": "petrol fleet vehicle",
+                "fuel_type": "petrol",
+                "annual_distance_km": 20000,
+                "fuel_efficiency_l_per_100km": 7.0
+              },
+              {
+                "vehicle_id": "est_petrol_04",
+                "make": "Estimated",
+                "model": "petrol fleet vehicle",
+                "fuel_type": "petrol",
+                "annual_distance_km": 20000,
                 "fuel_efficiency_l_per_100km": 7.0
               }
             ],
-            "assumption": "Assumed a minimal corporate fleet of 1 mid-range operational car covering 15,000 km annually with conservative fuel efficiency of 7 L/100 km."
+            "assumption": "About 20 vehicles from 500 employees (0.04 per employee), split 80% diesel and 20% petrol, 20,000 km each a year."
           },
           "dg_set": {
             "value": {
-              "capacity_kva": 250,
+              "capacity_kva": 50,
               "fuel_type": "diesel",
-              "hours_per_year": 120,
-              "fuel_consumption_per_hour": 50
+              "hours_per_year": 500,
+              "fuel_consumption_per_hour": 15
             },
-            "assumption": "Assumed a standard 250 kVA backup diesel generator running 10 hours per month (120 hours annually) consuming 50 litres of diesel per hour."
-          }
-        },
-        "scope_2": {
-          "energy_meter": {
-            "value": {
-              "monthly_kwh": 58333,
-              "region_state": "Karnataka"
-            },
-            "assumption": "Calculated from the annual bill of INR 5,600,000 using a mid-range commercial tariff of INR 8.0/kWh, yielding 700,000 kWh annually or 58,333 kWh per month."
+            "assumption": "Backup diesel generator assumed for an office of this size: 50 kVA, 500 hours a year at 15 L/h."
           }
         },
         "scope_3": {
           "hardware": {
             "value": [
               {
-                "device_type": "laptop",
-                "model": "Standard Office Laptop",
+                "device_type": "Laptop",
+                "model": "Estimated laptop",
                 "quantity": 500,
-                "purchase_year": 2022,
-                "expected_lifespan_years": 4
+                "purchase_year": null,
+                "expected_lifespan_years": 5
               },
               {
-                "device_type": "server",
-                "model": "On-premise Rack Server",
-                "quantity": 5,
-                "purchase_year": 2021,
+                "device_type": "Desktop",
+                "model": "Estimated desktop",
+                "quantity": 100,
+                "purchase_year": null,
+                "expected_lifespan_years": 6
+              },
+              {
+                "device_type": "Server",
+                "model": "Estimated server",
+                "quantity": 2,
+                "purchase_year": null,
                 "expected_lifespan_years": 5
               }
             ],
-            "assumption": "Assumed 1 standard laptop per employee (500 units) and a minimal infrastructure of 5 on-premise servers for 500 employees."
+            "assumption": "One laptop per employee (1), 20% desktops, 0.5 servers per 100 employees. No inventory was given."
           },
           "commute": {
             "value": {
               "total_employees": 500,
               "mode_split": {
-                "car": 0.15,
-                "bus": 0.45,
-                "bike": 0.2,
-                "wfh": 0.2
+                "car": 0.4,
+                "bus": 0.35,
+                "bike": 0.15,
+                "wfh": 0.1
               },
-              "avg_distance_km": 15
+              "avg_distance_km": 12
             },
-            "assumption": "Assumed an urban tech workforce profile with 500 employees, 15 km average one-way commute, and a conservative split of 45% bus, 20% bike, 15% car, and 20% remote (WFH)."
+            "assumption": "Typical urban India commute split (40% car, 35% bus, 15% bike, 10% work from home), 12 km average, 250 working days. Replace with a staff survey."
           },
           "waste": {
             "value": [
               {
-                "category": "solid waste / landfill",
-                "mass_kg_per_month": 2500
+                "category": "Solid Waste",
+                "mass_kg_per_month": 3000.0
               },
               {
-                "category": "e-waste / recycling",
-                "mass_kg_per_month": 40
-              },
-              {
-                "category": "wastewater / treatment",
-                "mass_kg_per_month": 300000
+                "category": "E-waste",
+                "mass_kg_per_month": 10.4
               }
             ],
-            "assumption": "Estimated monthly waste based on 500 employees: 5 kg/person/month landfill solid waste, 0.08 kg/person/month e-waste, and 600 kg/person/month wastewater."
+            "assumption": "0.3 kg solid waste per employee per office day and 0.25 kg e-waste per employee a year. No waste log was given."
           }
         }
       },
-      "notes": []
+      "notes": [
+        "AI did not propose {'scope_1': ['vehicles', 'dg_set'], 'scope_3': ['hardware', 'commute', 'waste']}; rule-based defaults filled those fields."
+      ]
     }
   },
   {
@@ -2140,6 +3023,29 @@ window.DEMO_FIXTURES = [
         },
         "grade": "A",
         "employees": 580000,
+        "inputs": {
+          "scope_2": {
+            "energy_meter": {
+              "monthly_kwh": 40821235.9,
+              "region_state": "Maharashtra"
+            }
+          },
+          "scope_3": {
+            "cloud": null,
+            "hardware": null,
+            "commute": null,
+            "waste": [
+              {
+                "category": "Solid Waste",
+                "mass_kg_per_month": 576916.7
+              },
+              {
+                "category": "E-waste",
+                "mass_kg_per_month": 42083.3
+              }
+            ]
+          }
+        },
         "grade_bands": [
           {
             "grade": "A",
@@ -2283,6 +3189,14 @@ window.DEMO_FIXTURES = [
         },
         "grade": "A",
         "employees": 580000,
+        "inputs": {
+          "scope_2": {
+            "energy_meter": {
+              "annual_kwh": 489854831,
+              "region_state": "Maharashtra"
+            }
+          }
+        },
         "grade_bands": [
           {
             "grade": "A",
@@ -2552,6 +3466,29 @@ window.DEMO_FIXTURES = [
         },
         "grade": "N/A",
         "employees": null,
+        "inputs": {
+          "scope_2": {
+            "energy_meter": {
+              "monthly_kwh": 19281481.5,
+              "region_state": "Karnataka"
+            }
+          },
+          "scope_3": {
+            "cloud": null,
+            "hardware": null,
+            "commute": null,
+            "waste": [
+              {
+                "category": "Solid Waste",
+                "mass_kg_per_month": 1010125.8
+              },
+              {
+                "category": "E-waste",
+                "mass_kg_per_month": 55182.5
+              }
+            ]
+          }
+        },
         "grade_bands": [
           {
             "grade": "A",
@@ -2695,6 +3632,14 @@ window.DEMO_FIXTURES = [
         },
         "grade": "N/A",
         "employees": null,
+        "inputs": {
+          "scope_2": {
+            "energy_meter": {
+              "annual_kwh": 231377778,
+              "region_state": "Karnataka"
+            }
+          }
+        },
         "grade_bands": [
           {
             "grade": "A",
@@ -2755,3 +3700,4 @@ window.DEMO_FIXTURES = [
     }
   }
 ];
+window.METHODOLOGY = {"version": 1, "factors": {"grid": {"value": 0.757, "unit": "kg CO2e/kWh", "source": "CEA CO2 Baseline Database v20.0, combined margin (secondary report; primary PDF to confirm)", "year": "FY2023-24", "status": "sourced"}, "fuel": {"diesel": {"value": 2.68, "unit": "kg CO2e/L", "source": "IPCC 2006 Vol 2 Ch 1 Table 1.4, derived", "year": "2006", "status": "sourced"}, "petrol": {"value": 2.29, "unit": "kg CO2e/L", "source": "IPCC 2006 Vol 2 Ch 1 Table 1.4, derived", "year": "2006", "status": "sourced"}, "lpg": {"value": 1.61, "unit": "kg CO2e/L", "source": "IPCC 2006 Vol 2 Ch 1 Table 1.4, derived", "year": "2006", "status": "sourced"}, "cng": {"value": null, "unit": "kg CO2e/L", "source": "UNVERIFIED placeholder", "year": null, "status": "placeholder"}}, "fuel_efficiency": {"bus": {"value": 25, "unit": "L/100 km", "source": "UNVERIFIED placeholder", "year": null, "status": "placeholder"}, "car": {"value": 7, "unit": "L/100 km", "source": "UNVERIFIED placeholder", "year": null, "status": "placeholder"}, "two_wheeler": {"value": 3, "unit": "L/100 km", "source": "UNVERIFIED placeholder", "year": null, "status": "placeholder"}, "fuel_default": {"value": null, "unit": "L/100 km", "source": "UNVERIFIED placeholder", "year": null, "status": "placeholder"}}, "indirect_water": {"value": 2.5, "unit": "L/kWh", "source": "UNVERIFIED placeholder", "year": null, "status": "placeholder"}, "hardware_embodied_carbon": {"laptop": {"value": 30, "unit": "kg CO2e/device/yr", "source": "ILLUSTRATIVE demo assumption, not a sourced value. About 150 kg lifecycle over 5 years.", "year": null, "status": "illustrative_assumption"}, "desktop": {"value": 60, "unit": "kg CO2e/device/yr", "source": "ILLUSTRATIVE demo assumption, not a sourced value. About 300 kg lifecycle over 5 years.", "year": null, "status": "illustrative_assumption"}, "monitor": {"value": null, "unit": "kg CO2e/device", "source": "UNVERIFIED placeholder", "year": null, "status": "placeholder"}, "server": {"value": 500, "unit": "kg CO2e/device/yr", "source": "ILLUSTRATIVE demo assumption, not a sourced value. About 2,500 kg lifecycle over 5 years.", "year": null, "status": "illustrative_assumption"}, "gpu": {"value": 333, "unit": "kg CO2e/device/yr", "source": "ILLUSTRATIVE demo assumption, not a sourced value. About 1,000 kg lifecycle over 3 years.", "year": null, "status": "illustrative_assumption"}}, "commute": {"car": {"value": 0.15, "unit": "kg CO2e/km", "source": "ILLUSTRATIVE demo assumption, not a sourced value. Per passenger-km, rounded.", "year": null, "status": "illustrative_assumption"}, "bus": {"value": 0.05, "unit": "kg CO2e/km", "source": "ILLUSTRATIVE demo assumption, not a sourced value. Per passenger-km, rounded.", "year": null, "status": "illustrative_assumption"}, "bike": {"value": 0.01, "unit": "kg CO2e/km", "source": "ILLUSTRATIVE demo assumption, not a sourced value. Per km, small embodied footprint.", "year": null, "status": "illustrative_assumption"}, "two_wheeler": {"value": null, "unit": "kg CO2e/km", "source": "UNVERIFIED placeholder", "year": null, "status": "placeholder"}, "wfh": {"value": 0, "unit": "kg CO2e/km", "source": "UNVERIFIED placeholder", "year": null, "status": "placeholder"}}, "waste": {"solid waste / landfill": {"value": 0.5, "unit": "kg CO2e/kg", "source": "ILLUSTRATIVE demo assumption, not a sourced value. Landfill of mixed solid waste.", "year": null, "status": "illustrative_assumption"}, "solid waste / recycling": {"value": null, "unit": "kg CO2e/kg", "source": "UNVERIFIED placeholder", "year": null, "status": "placeholder"}, "e-waste / recycling": {"value": 3.0, "unit": "kg CO2e/kg", "source": "ILLUSTRATIVE demo assumption, not a sourced value. Recycling of electronic waste.", "year": null, "status": "illustrative_assumption"}, "wastewater / treatment": {"value": 0.001, "unit": "kg CO2e/kg", "source": "ILLUSTRATIVE demo assumption, not a sourced value. Treatment of wastewater.", "year": null, "status": "illustrative_assumption"}}, "cloud": {"gpu": {"value": 0.4, "unit": "kg CO2e/hour", "source": "ILLUSTRATIVE demo assumption, not a sourced value. A100-class GPU instance-hour.", "year": null, "status": "illustrative_assumption"}}, "fuel_price_per_litre": {"diesel": {"value": null, "unit": "INR/L", "source": "UNVERIFIED placeholder", "year": null, "status": "placeholder"}, "petrol": {"value": null, "unit": "INR/L", "source": "UNVERIFIED placeholder", "year": null, "status": "placeholder"}, "lpg": {"value": null, "unit": "INR/L", "source": "UNVERIFIED placeholder", "year": null, "status": "placeholder"}}, "tariff_per_kwh": {"value": null, "unit": "INR/kWh", "source": "UNVERIFIED placeholder", "year": null, "status": "placeholder"}}, "formulas": {"scope_1.vehicle": "annual_km x (L per 100 km / 100) x fuel factor (kg CO2e/L)", "scope_1.fuel_total": "litres per year x fuel factor (kg CO2e/L)", "scope_1.dg_set": "run hours per year x litres per hour x fuel factor", "scope_2.electricity": "kWh per year x grid factor (kg CO2e/kWh), location-based, one all-India factor", "scope_3.hardware": "device count x embodied-carbon factor per device per year", "scope_3.commute": "one-way km x 2 (return trip) x 250 working days x employees x mode share x mode factor", "scope_3.waste": "kg per year x waste factor for that category and disposal route", "scope_3.cloud": "GPU hours x cloud GPU factor", "confidence": "full data ±10%, partial ±25%, totals only ±40%, missing ±50%; total range is the sum of scope ranges", "intensity": "total t CO2e / employees (organisations) or / 1 (individuals)"}, "categories": {"scope_1": {"vehicles": "Company-owned or leased vehicles: fuel logs, fleet km, fuel cards", "dg_set": "Diesel generators: run-hour logs, diesel purchases for backup power", "fuel_total": "Any other fuel burnt on site: LPG/PNG for canteens, boilers", "refrigerants": "AC/chiller gas top-ups (HFCs). No factor in this calculator: flag, do not calculate"}, "scope_2": {"energy_meter": "Purchased grid electricity: meter readings, electricity bills (kWh)"}, "scope_3": {"cloud": "Cloud compute bills, GPU hours (Cat. 1 purchased services)", "hardware": "Laptops, desktops, servers, GPUs bought (Cat. 2 capital goods)", "commute": "Staff travel between home and work: commute surveys (Cat. 7)", "waste": "Solid waste, e-waste, wastewater from vendor logs (Cat. 5)", "business_travel": "Flights, trains, hotels for work (Cat. 6). Not calculated here: flag", "purchased_goods": "Other purchases (Cat. 1). Not calculated here: flag"}, "out_of_scope": "Personal spending, revenue, salaries, anything that is not an emission activity"}, "grading": {"basis": "Graded on intensity, not size. Organisations: t CO2e per employee per year, A < 0.8, B < 1.5, C < 2.5, D < 4.0, F >= 4.0. Individuals: t per person against India's per-capita figure (~2.0 t, approximate), A < 0.5x, B < 1x, C < 1.5x, D < 2x. Reference point: TCS FY26 disclosed Scope 1+2+3 = 914,687 t over 580,000 employees = 1.58 t/employee. Organisations without a headcount are not graded.", "india_per_capita_t": 2.0, "bands": {"individual": [[1.0, "A"], [2.0, "B"], [3.0, "C"], [4.0, "D"], [null, "F"]], "school": [[0.8, "A"], [1.5, "B"], [2.5, "C"], [4.0, "D"], [null, "F"]], "enterprise": [[0.8, "A"], [1.5, "B"], [2.5, "C"], [4.0, "D"], [null, "F"]]}}, "report_template": [{"section": "Summary", "contents": "Total t CO2e, range, intensity per employee, grade and grade basis"}, {"section": "Scope 1", "contents": "Measured sources, estimated sources, formula, inputs, result, confidence"}, {"section": "Scope 2", "contents": "kWh, grid factor, location-based result, renewable share if known"}, {"section": "Scope 3", "contents": "Each category: measured, estimated or illustrative, with formula and inputs"}, {"section": "Assumptions", "contents": "Every assumed value: what, why, formula, effect on the total, how to replace it"}, {"section": "Other reportable items", "contents": "Energy use, fuel use, waste by type, intensity, data quality mix"}, {"section": "Reduction plan", "contents": "Ranked actions with t saved, cost, payback; what to change and where"}, {"section": "Sources", "contents": "Every factor with its source, year and status (sourced or illustrative)"}], "rules": ["Never invent a source. Factors marked illustrative_assumption must be called illustrative.", "Never override uploaded data; only fill fields that are missing.", "Every estimated value needs a one-sentence assumption with the reasoning and the numbers used.", "Use India-specific, mid-range defaults. Be conservative.", "If something cannot be calculated with these factors, say so instead of guessing a number.", "Electricity from a bill: monthly_kwh = annual_bill_inr / 7.5 / 12. 7.5 INR per kWh is an illustrative tariff; say so in the assumption.", "Never return null for a value: if a field cannot be estimated, omit that field and say why in the assumption."]};

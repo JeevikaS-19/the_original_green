@@ -343,9 +343,21 @@ def estimate(uploaded, org, client=None, methodology=None, trace=None):
         start = time.time()
         try:
             proposal = LLMProposer(client, methodology).propose(missing, org, trace)
+            left = {}
+            for scope, fields in missing.items():
+                gap = [f for f in fields if f not in proposal.get(scope, {})]
+                if gap:
+                    left[scope] = gap
+            if left:
+                filler = RuleProposer().propose(left, org)
+                validate_proposal(filler, left)
+                for scope, fields in filler.items():
+                    proposal.setdefault(scope, {}).update(fields)
+                notes.append(f"AI did not propose {left}; rule-based defaults filled those fields.")
             if trace is not None:
                 trace["used"] = "llm"
                 trace["validation"] = "passed"
+                trace["rules_filled"] = left
         except ProposalRejected as error:
             notes.append(f"LLM proposal rejected ({error}); rule-based defaults used instead.")
             if trace is not None:

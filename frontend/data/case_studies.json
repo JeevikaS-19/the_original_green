@@ -209,6 +209,29 @@
         },
         "grade": "A",
         "employees": 580000,
+        "inputs": {
+          "scope_2": {
+            "energy_meter": {
+              "monthly_kwh": 40821235.9,
+              "region_state": "Maharashtra"
+            }
+          },
+          "scope_3": {
+            "cloud": null,
+            "hardware": null,
+            "commute": null,
+            "waste": [
+              {
+                "category": "Solid Waste",
+                "mass_kg_per_month": 576916.7
+              },
+              {
+                "category": "E-waste",
+                "mass_kg_per_month": 42083.3
+              }
+            ]
+          }
+        },
         "grade_bands": [
           {
             "grade": "A",
@@ -352,6 +375,14 @@
         },
         "grade": "A",
         "employees": 580000,
+        "inputs": {
+          "scope_2": {
+            "energy_meter": {
+              "annual_kwh": 489854831,
+              "region_state": "Maharashtra"
+            }
+          }
+        },
         "grade_bands": [
           {
             "grade": "A",
@@ -621,6 +652,29 @@
         },
         "grade": "N/A",
         "employees": null,
+        "inputs": {
+          "scope_2": {
+            "energy_meter": {
+              "monthly_kwh": 19281481.5,
+              "region_state": "Karnataka"
+            }
+          },
+          "scope_3": {
+            "cloud": null,
+            "hardware": null,
+            "commute": null,
+            "waste": [
+              {
+                "category": "Solid Waste",
+                "mass_kg_per_month": 1010125.8
+              },
+              {
+                "category": "E-waste",
+                "mass_kg_per_month": 55182.5
+              }
+            ]
+          }
+        },
         "grade_bands": [
           {
             "grade": "A",
@@ -764,6 +818,14 @@
         },
         "grade": "N/A",
         "employees": null,
+        "inputs": {
+          "scope_2": {
+            "energy_meter": {
+              "annual_kwh": 231377778,
+              "region_state": "Karnataka"
+            }
+          }
+        },
         "grade_bands": [
           {
             "grade": "A",

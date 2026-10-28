@@ -362,6 +362,8 @@
     "Never override uploaded data; only fill fields that are missing.",
     "Every estimated value needs a one-sentence assumption with the reasoning and the numbers used.",
     "Use India-specific, mid-range defaults. Be conservative.",
-    "If something cannot be calculated with these factors, say so instead of guessing a number."
+    "If something cannot be calculated with these factors, say so instead of guessing a number.",
+    "Electricity from a bill: monthly_kwh = annual_bill_inr / 7.5 / 12. 7.5 INR per kWh is an illustrative tariff; say so in the assumption.",
+    "Never return null for a value: if a field cannot be estimated, omit that field and say why in the assumption."
   ]
 }
