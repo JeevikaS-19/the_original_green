@@ -8,9 +8,9 @@ Everything in this folder is read by more than one person. Do not edit it on you
   - `intake_output.example.json` — Person 1 → Person 2
   - `calc_output.example.json` — Person 2 → Person 3
   - `report_output.example.json` — Person 3's final JSON
-- `demo_data/` — the two demo inputs used by everyone for testing.
-  - `demo_data_full.json` — open-source, full-data campus
-  - `demo_data_budget.json` — closed-source, budget-only estimates
+- `demo_data/` — demo inputs used by everyone for testing and the frontend.
+  - `demo_data_full.json` — older open-source test fixture used by unit tests
+  - `individual/`, `small_scale/`, `large_scale/` — one persona each: tracker CSVs (open source) and `closed.json` (totals, closed source)
 
 ## Rules
 
@@ -21,11 +21,17 @@ Everything in this folder is read by more than one person. Do not edit it on you
 
 ## Decisions in force
 
-- **Confidence vocabulary.** Intake writes `full_data`, `partial_data`, `overview_only`. The calculator reads `full`, `partial`, `missing`. `integration/intake_to_calc.py` maps between them: `overview_only` becomes `missing`, the widest band.
+- **Confidence vocabulary.** Intake writes `full_data`, `partial_data`, `overview_only`. The calculator reads `full`, `partial`, `overview`, `missing`. `integration/intake_to_calc.py` maps between them. `overview_only` (totals only, the closed-source path) becomes `overview`, ±40%.
+- **Closed-source means consumption totals.** A company that only gives total consumption: litres of fuel per type per year, and annual kWh. Rupee budgets are not an input.
+- **Factor status.** `verified` = primary document checked. `sourced` = cited from a secondary source, primary not yet checked. `placeholder` = no source, counts as zero and is flagged.
 - **Downgrade on placeholders.** If any input in a scope used a placeholder or missing factor, the calculator lowers that scope's confidence one level (full → partial → missing). A placeholder contributes zero, so the total can understate.
 - **`data_path`.** The intake output adds `data_path` per scope (`open_source` or `closed_source`). Consumers may ignore it.
 - **`unverified_inputs`.** The calc output lists every input path that is missing or uses a placeholder factor, both per scope and at the top level. The report surfaces them as warnings.
 - **Zero total is not a grade.** Person 3 shows `N/A` when nothing could be calculated, never `A`.
+
+## Demo datasets
+
+`demo_data/individual/`, `demo_data/small_scale/`, `demo_data/large_scale/` hold one persona each: tracker-style CSVs for the open-source path, and `closed.json` (totals) for the closed-source path. The totals are computed from the same quantities. `integration/build_demo.py` runs both paths for each persona and writes the frontend data.
 
 ## Who hands what to whom
 

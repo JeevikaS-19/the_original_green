@@ -1,0 +1,20 @@
+{
+  "scope_1": {
+    "fuel_totals": [
+      {
+        "fuel_type": "petrol",
+        "litres_per_year": 7840
+      },
+      {
+        "fuel_type": "diesel",
+        "litres_per_year": 33000
+      }
+    ]
+  },
+  "scope_2": {
+    "energy_meter": {
+      "annual_kwh": 751000,
+      "region_state": "Karnataka"
+    }
+  }
+}

@@ -1,0 +1,4 @@
+vehicle_id,make,model,year,fuel_type,annual_km,fuel_efficiency_l_per_100km
+BUS_01,Bus,Diesel 40-seater,2017,diesel,85000,30
+BUS_02,Bus,Diesel 40-seater,2019,diesel,70000,29
+VAN_01,Van,Diesel minivan,2020,diesel,25000,11

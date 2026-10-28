@@ -1,0 +1,9 @@
+vehicle_id,make,model,year,fuel_type,annual_km,fuel_efficiency_l_per_100km
+CAR_01,Sedan,1.5 L petrol,2022,petrol,14000,7.0
+CAR_02,Sedan,1.5 L petrol,2022,petrol,14000,7.0
+CAR_03,Sedan,1.5 L petrol,2022,petrol,14000,7.0
+CAR_04,Sedan,1.5 L petrol,2022,petrol,14000,7.0
+CAR_05,Sedan,1.5 L petrol,2022,petrol,14000,7.0
+CAR_06,Sedan,1.5 L petrol,2022,petrol,14000,7.0
+CAR_07,Sedan,1.5 L petrol,2022,petrol,14000,7.0
+CAR_08,Sedan,1.5 L petrol,2022,petrol,14000,7.0

@@ -1,0 +1,6 @@
+{
+  "capacity_kva": 50,
+  "fuel_type": "diesel",
+  "hours_per_year": 400,
+  "fuel_consumption_per_hour": 12
+}
