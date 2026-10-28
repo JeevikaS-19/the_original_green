@@ -62,6 +62,7 @@ check("sidebar is navigation only (no org picker inside)", !$("#snav #org-select
 nav("connect");
 check("Connect is its own page", active().dataset.view === "connect" && w.location.hash.endsWith("/connect"));
 check("Connect lists 7 tracker cards", $$("#connect-list .tcard").length === 7);
+check("connect page offers manual entry", !!$('#connect-head a[href="individual.html?mode=live"]'));
 check("6 connected, 1 not", $$(".tcard.ok").length === 6 && $("#connect-list").textContent.includes("Not connected"), String($$(".tcard.ok").length));
 check("connected cards chart real rows", $$(".tcard.ok .mini-bars, .tcard.ok .mini-line").length >= 5 && $("#connect-list").textContent.includes("BUS_01"));
 check("meter card shows 12 monthly kWh", !!$(".tcard.ok .mini-line") && $("#connect-list").textContent.includes("2025-12"));

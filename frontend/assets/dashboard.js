@@ -647,7 +647,9 @@
     $("connect-list").innerHTML = html;
     $("connect-head").innerHTML = '<div class="dcard ch"><div><h2>' + connected + ' of ' + PLATFORMS.length + ' trackers connected</h2>' +
       '<p class="muted small">Charts show the rows each export contains. Status is kept in this browser.</p></div>' +
-      '<div class="ch-bar"><i style="width:' + (connected / PLATFORMS.length * 100).toFixed(0) + '%"></i></div></div>';
+      '<div class="ch-bar"><i style="width:' + (connected / PLATFORMS.length * 100).toFixed(0) + '%"></i></div></div>' +
+      '<div class="manual"><div><b>No connector for your data?</b><span class="muted small">Enter your activities by hand. It is saved in this browser and needs no tracker.</span></div>' +
+      '<a class="btn btn-small" href="individual.html?mode=live">Enter it by hand</a></div>';
     var n = document.querySelector('[data-n="connect"]');
     if (n) n.textContent = connected + "/" + PLATFORMS.length;
   }

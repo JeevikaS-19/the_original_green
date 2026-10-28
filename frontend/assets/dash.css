@@ -497,3 +497,8 @@
 .red-tbl th:nth-child(4), .red-tbl td:nth-child(4) { width: 14%; }
 .red-tbl th:nth-child(5), .red-tbl td:nth-child(5) { width: 29%; }
 .red-tbl th:last-child, .red-tbl td:last-child { width: 29%; }
+
+/* Manual entry, for people with no connector */
+.manual { display: flex; align-items: center; justify-content: space-between; gap: 16px; flex-wrap: wrap; margin-top: 16px; padding: 14px 16px; border-radius: 14px; background: var(--sage); border: 1px dashed var(--sage-line); }
+.manual div { display: grid; gap: 2px; }
+.manual b { font-size: 14px; }

@@ -4,7 +4,7 @@
   var KEY = "og-individual-activities-v1";
   var COMMUTE_DAYS = 250;
   var M = null;
-  var mode = "demo";
+  var mode = /[?&]mode=live\b/.test(location.search) ? "live" : "demo";
   var editing = null;
 
   var KINDS = {
