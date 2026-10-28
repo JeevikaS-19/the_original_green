@@ -608,6 +608,16 @@ td ul { margin: 0; padding-left: 18px; color: var(--muted); }
   margin-bottom: 16px;
 }
 
+.demo-badge-info {
+  background: var(--green-soft);
+  color: var(--green-dark);
+}
+.demo-badge ul {
+  font-weight: 400;
+  margin: 8px 0 0;
+  padding-left: 18px;
+}
+
 .empty {
   color: var(--muted);
   padding: 40px 0;

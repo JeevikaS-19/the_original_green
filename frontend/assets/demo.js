@@ -16,7 +16,7 @@
     closed: { key: "closed_source", label: "Closed-source data", sub: "Totals only · ±40%" }
   };
 
-  var PROFILE_IDS = ["individual", "small_scale", "large_scale"];
+  var PROFILE_IDS = ["individual", "small_scale", "large_scale", "large_scale_partial"];
   var SCOPE_SHORT = { scope_1: "Scope 1", scope_2: "Scope 2", scope_3: "Scope 3" };
   var CONFIDENCE_TEXT = { full_data: "Full data", partial_data: "Partial data", overview_only: "Overview only" };
 
@@ -398,11 +398,23 @@
       return;
     }
     var path = currentPath(profile);
+    if (!path) {
+      stage.innerHTML = '<p class="empty">' + esc(PATHS[state.path].label) + ' is not available for this profile. ' +
+        'Switch the data source to see the other view.</p>';
+      return;
+    }
     var renderer = RENDERERS[state.step];
-    var badge = path.illustrative && path.illustrative.length
-      ? '<div class="demo-badge" role="note">⚠️ Demo uses illustrative factors — real submissions use verified sources</div>'
-      : '';
-    stage.innerHTML = badge + renderer(profile, path, state.path) + stageNav();
+    var badges = '';
+    if (path.assumptions && path.assumptions.length) {
+      badges += '<div class="demo-badge demo-badge-info" role="note">ℹ️ Estimated data: ' +
+        path.assumptions.length + ' assumption(s) filled in from partial data. ' +
+        'Upload the detailed data to tighten the range.' +
+        '<ul>' + path.assumptions.map(function (item) { return '<li>' + esc(item) + '</li>'; }).join('') + '</ul></div>';
+    }
+    if (path.illustrative && path.illustrative.length) {
+      badges += '<div class="demo-badge" role="note">⚠️ Demo uses illustrative factors — real submissions use verified sources</div>';
+    }
+    stage.innerHTML = badges + renderer(profile, path, state.path) + stageNav();
   }
 
   function downloadReport() {

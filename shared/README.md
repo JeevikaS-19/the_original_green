@@ -28,6 +28,8 @@ Everything in this folder is read by more than one person. Do not edit it on you
 - **Downgrade on placeholders.** If any input in a scope used a placeholder or missing factor, the calculator lowers that scope's confidence one level (full → partial → missing). A placeholder contributes zero, so the total can understate.
 - **`data_path`.** The intake output adds `data_path` per scope (`open_source` or `closed_source`). Consumers may ignore it.
 - **`unverified_inputs`.** The calc output lists every input path that is missing or uses a placeholder factor, both per scope and at the top level. The report surfaces them as warnings.
+- **Assumptions.** When data is partial, Person 1 fills the gaps with labelled assumptions (`estimation.py`). The intake output adds `assumptions` (per scope, a list of sentences). Uploads always win. A scope with any assumption is at most `partial_data`. The calc output passes `assumptions` through, the report warns, and the frontend lists them.
+- **LLM proposals.** The LLM slot takes a client and validates its JSON. Proposals outside the bounds, overriding uploads, or missing an assumption are rejected, and rule-based defaults are used instead. No LLM client is configured in this repository.
 - **Zero total is not a grade.** Person 3 shows `N/A` when nothing could be calculated, never `A`.
 
 ## Demo datasets

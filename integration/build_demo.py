@@ -17,7 +17,8 @@ from pathlib import Path
 
 from intake_to_calc import run_calculator, check_calc_output  # also sets up the import paths
 
-from intake import run_intake, run_totals_intake  # person_1_intake
+from intake import run_estimated_intake, run_intake, run_totals_intake  # person_1_intake
+from parsers import parse_scope_3  # person_1_intake
 from person_3_reporting.reporting import GRADE_BENCHMARKS, generate_report, render_text
 
 HERE = Path(__file__).resolve().parent
@@ -93,6 +94,22 @@ PERSONAS = [
     },
 ]
 
+PARTIAL_PERSONA = {
+    "id": "large_scale_partial",
+    "folder": "large_scale_partial",
+    "tier_answer": "Large Enterprise",
+    "tier": "tier_3",
+    "org_type": "enterprise",
+    "label": "Large scale · partial data",
+    "sublabel": "Headcount, energy bill and cloud only",
+    "description": "The same technology company, but with only its headcount, annual energy bill and cloud usage. Everything else is estimated and labelled.",
+    "open_sources": [
+        ("Headcount and bill", "Form", "500 employees, ₹56 lakh annual energy bill, Karnataka", "scope_2"),
+        ("Cloud usage export", "CSV", "GPU and general-purpose instance hours", "scope_3"),
+    ],
+    "closed_sources": [],
+}
+
 SCOPE_LABELS = {
     "scope_1": "Scope 1 · Direct fuel",
     "scope_2": "Scope 2 · Purchased electricity",
@@ -142,6 +159,21 @@ def run_closed(persona):
         DEMO / persona["folder"] / "closed.json",
         output_file=OUTPUT / persona["id"] / "closed_source" / "intake_output.json",
     )
+
+
+def run_estimated(persona):
+    folder = DEMO / persona["folder"]
+    org = json.loads((folder / "org.json").read_text(encoding="utf-8"))
+    uploaded = {
+        "scope_1": {},
+        "scope_2": {},
+        "scope_3": parse_scope_3(cloud_csv=DEMO / "large_scale" / "cloud.csv"),
+    }
+    path, assumptions, notes = run_estimated_intake(
+        persona["tier_answer"], uploaded, org,
+        output_file=OUTPUT / persona["id"] / "open_source" / "intake_output.json",
+    )
+    return path, assumptions, notes
 
 
 def grade_bands(org_type):
@@ -244,11 +276,21 @@ def path_fixture(persona, path_key, intake_path, estimates):
         "actions": actions,
         "notes": notes,
         "illustrative": illustrative,
+        "assumptions": [item for items in intake.get("assumptions", {}).values() for item in items],
     }
 
 
 def build():
     fixtures = []
+    est_path, est_assumptions, est_notes = run_estimated(PARTIAL_PERSONA)
+    fixtures.append({
+        "id": PARTIAL_PERSONA["id"],
+        "tier": PARTIAL_PERSONA["tier"],
+        "label": PARTIAL_PERSONA["label"],
+        "sublabel": PARTIAL_PERSONA["sublabel"],
+        "description": PARTIAL_PERSONA["description"],
+        "paths": {"open_source": path_fixture(PARTIAL_PERSONA, "open_source", est_path, est_assumptions)},
+    })
     for persona in PERSONAS:
         open_path, open_estimates = run_open(persona)
         closed_path, closed_estimates = run_closed(persona)
