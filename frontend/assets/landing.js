@@ -3,7 +3,9 @@
 
   var reduceMotion = window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
   var canObserve = "IntersectionObserver" in window;
-  var FIXTURES = window.DEMO_FIXTURES || [];
+  var ALL_FIXTURES = window.DEMO_FIXTURES || [];
+  var FIXTURES = ALL_FIXTURES.filter(function (p) { return p.id.indexOf("case_") !== 0; });
+  var CASES = ALL_FIXTURES.filter(function (p) { return p.id.indexOf("case_") === 0; });
 
   function esc(value) {
     return String(value).replace(/[&<>"']/g, function (c) {
@@ -189,6 +191,44 @@
     } else {
       fillRanges();
     }
+  }
+
+  // ---- Real companies: calculated vs disclosed ----
+  var caseTable = document.getElementById("case-table");
+  var caseCards = document.getElementById("case-cards");
+  var caseNotes = document.getElementById("case-notes");
+  if (caseTable && CASES.length) {
+    caseCards.innerHTML = CASES.map(function (c) {
+      return '<article class="card"><span class="tag">' + esc(c.label.replace("Case: ", "")) + '</span>' +
+        '<h3 style="margin-top:12px">' + esc(c.label.replace("Case: ", "")) + '</h3>' +
+        '<p class="muted">' + esc(c.description) + '</p>' +
+        '<p class="case-src">Source: ' + esc(c.source) + '</p></article>';
+    }).join("");
+
+    var num = function (v) {
+      return v === null || v === undefined
+        ? '<span class="muted">Not calculated</span>'
+        : Math.round(v).toLocaleString("en-IN") + " t";
+    };
+    var scopeRows = CASES[0].comparison.map(function (row, i) {
+      return '<tr><th scope="row">' + esc(row.scope) + '</th>' +
+        CASES.map(function (c) {
+          var r = c.comparison[i];
+          return '<td class="num">' + num(r.calculated_t) + '</td><td class="num hl">' + num(r.disclosed_t) + '</td>';
+        }).join("") + '</tr>';
+    }).join("");
+    caseTable.innerHTML = '<thead><tr><th scope="col"></th>' +
+      CASES.map(function (c) {
+        return '<th scope="col" colspan="2">' + esc(c.label.replace("Case: ", "")) + '</th>';
+      }).join("") + '</tr><tr><th scope="col"></th>' +
+      CASES.map(function () { return '<th scope="col">Calculated</th><th scope="col">Disclosed</th>'; }).join("") +
+      '</tr></thead><tbody>' + scopeRows + '</tbody>';
+
+    caseNotes.innerHTML = CASES.map(function (c) {
+      return c.comparison.map(function (row) {
+        return '<li><strong>' + esc(c.label.replace("Case: ", "")) + ', ' + esc(row.scope) + ':</strong> ' + esc(row.note) + '</li>';
+      }).join("");
+    }).join("");
   }
 
   // ---- Pinned steps: the active step lights up, and the progress dots follow ----

@@ -110,6 +110,49 @@ PARTIAL_PERSONA = {
     "closed_sources": [],
 }
 
+CASE_STUDIES = [
+    {
+        "id": "case_tcs",
+        "folder": "tcs",
+        "tier_answer": "Large Enterprise",
+        "tier": "tier_3",
+        "org_type": "enterprise",
+        "label": "Case: TCS FY 2025-26",
+        "sublabel": "Public disclosure, summary-based",
+        "description": "Tata Consultancy Services, from its FY 2025-26 sustainability disclosures. Our calculated figures are set against the disclosed ones.",
+        "open_sources": [
+            ("Energy meter (derived)", "CSV", "Disclosed 489.9 GWh a year, spread evenly over 12 months", "scope_2"),
+            ("Waste log (derived)", "CSV", "Disclosed non-hazardous and e-waste tonnes", "scope_3"),
+        ],
+        "closed_sources": [
+            ("Electricity total (derived)", "kWh a year", "Disclosed 489.9 GWh a year", "scope_2"),
+        ],
+        "disclosed": {"scope_1": 22631.0, "scope_2_location": 318184.0, "scope_2_market": 53971.0, "scope_3": 573872.0},
+        "scope1_note": "Disclosed Scope 1 is mostly HFC refrigerant leaks (14,769 t). The fuel split is not disclosed, and the calculator has no refrigerant factor.",
+        "source": "Global Entity Directory.pdf (NotebookLLM summary). Verify against the original BRSR before publishing.",
+    },
+    {
+        "id": "case_infosys",
+        "folder": "infosys",
+        "tier_answer": "Large Enterprise",
+        "tier": "tier_3",
+        "org_type": "enterprise",
+        "label": "Case: Infosys FY 2025-26",
+        "sublabel": "Public disclosure, summary-based",
+        "description": "Infosys, from its FY 2025-26 sustainability disclosures. Our calculated figures are set against the disclosed ones.",
+        "open_sources": [
+            ("Energy meter (derived)", "CSV", "Disclosed 231.4 GWh a year, spread evenly over 12 months", "scope_2"),
+            ("Waste log (derived)", "CSV", "Disclosed non-hazardous and e-waste tonnes", "scope_3"),
+        ],
+        "closed_sources": [
+            ("Electricity total (derived)", "kWh a year", "Disclosed 231.4 GWh a year", "scope_2"),
+        ],
+        "disclosed": {"scope_1": 11483.0, "scope_2_location": 145604.0, "scope_2_market": 34351.0, "scope_3": 207374.0},
+        "scope1_note": "Scope 1 is not calculated: the fuel split is not disclosed, so no litre-based figure is possible.",
+        "source": "Global Entity Directory.pdf (NotebookLLM summary). Verify against the original BRSR before publishing.",
+    },
+]
+
 SCOPE_LABELS = {
     "scope_1": "Scope 1 · Direct fuel",
     "scope_2": "Scope 2 · Purchased electricity",
@@ -280,6 +323,72 @@ def path_fixture(persona, path_key, intake_path, estimates):
     }
 
 
+def comparison(case, paths):
+    """Calculated figures set against the disclosed ones, scope by scope. Tonnes of CO2e a year."""
+    calc = paths["calc"]
+    d = case["disclosed"]
+    # Scope 3 counts only if it uses no illustrative demo factors. Real-company comparisons must not.
+    uses_illustrative = any(item.startswith("scope_3") for item in calc.get("illustrative_inputs", []))
+    scope3_calc = None if uses_illustrative else round(calc["scopes"]["scope_3"]["total_co2e_tons"], 1)
+    rows = [
+        # No fuel input exists for these companies, so Scope 1 is not calculated (not zero).
+        {"scope": "Scope 1", "calculated_t": None,
+         "disclosed_t": round(d["scope_1"], 1),
+         "note": case["scope1_note"]},
+        {"scope": "Scope 2 (location-based)", "calculated_t": round(calc["scopes"]["scope_2"]["total_co2e_tons"], 1),
+         "disclosed_t": round(d["scope_2_location"], 1),
+         "note": "We apply one all-India grid factor to all electricity. The company uses location-specific factors, so the figures differ."},
+        {"scope": "Scope 2 (market-based)", "calculated_t": None,
+         "disclosed_t": round(d["scope_2_market"], 1),
+         "note": "Market-based needs supplier and renewable-contract data, which we do not have."},
+        {"scope": "Scope 3", "calculated_t": scope3_calc,
+         "disclosed_t": round(d["scope_3"], 1),
+         "note": "Not calculated: waste factors are illustrative and no other Scope 3 category has verified data. The disclosed total covers business travel, commuting and purchased goods."},
+    ]
+    return rows
+
+
+def build_case(case):
+    persona = case
+    open_path, open_estimates = run_case_open(case)
+    closed_path, closed_estimates = run_case_closed(case)
+    open_fixture = path_fixture(persona, "open_source", open_path, open_estimates)
+    closed_fixture = path_fixture(persona, "closed_source", closed_path, closed_estimates)
+    open_calc = json.loads((OUTPUT / case["id"] / "open_source" / "calc.json").read_text(encoding="utf-8"))
+    return {
+        "id": case["id"],
+        "tier": case["tier"],
+        "label": case["label"],
+        "sublabel": case["sublabel"],
+        "description": case["description"],
+        "source": case["source"],
+        "disclosed": case["disclosed"],
+        "comparison": comparison(case, {"calc": open_calc}),
+        "paths": {
+            "open_source": open_fixture,
+            "closed_source": closed_fixture,
+        },
+    }
+
+
+def run_case_open(case):
+    folder = DEMO / case["folder"]
+    return run_intake(
+        case["tier_answer"],
+        energy_meter_csv=optional(folder / "energy.csv"),
+        waste_csv=optional(folder / "waste.csv"),
+        output_file=OUTPUT / case["id"] / "open_source" / "intake_output.json",
+    )
+
+
+def run_case_closed(case):
+    return run_totals_intake(
+        case["tier_answer"],
+        DEMO / case["folder"] / "closed.json",
+        output_file=OUTPUT / case["id"] / "closed_source" / "intake_output.json",
+    )
+
+
 def build():
     fixtures = []
     for persona in PERSONAS:
@@ -305,6 +414,8 @@ def build():
         "description": PARTIAL_PERSONA["description"],
         "paths": {"open_source": path_fixture(PARTIAL_PERSONA, "open_source", est_path, est_assumptions)},
     })
+    for case in CASE_STUDIES:
+        fixtures.append(build_case(case))
     return fixtures
 
 

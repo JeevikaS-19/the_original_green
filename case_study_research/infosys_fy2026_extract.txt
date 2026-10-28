@@ -1,0 +1,36 @@
+Company Name: Infosys Limited
+Location: Electronics City, Hosur Road, Bengaluru, Karnataka, India (290 locations in 59 countries)
+Employees: not stated in the source summary
+Sector: Information technology services and consulting
+Reporting year: FY 2025-26 (Fiscal 2026)
+
+Scope 1: 11,483 tCO2e (disclosed)
+  - Categories: high-speed diesel for generators, fuel for company vehicles and lawnmowers, piped natural gas, refrigerants (HVAC, chillers), CO2 in fire extinguishers
+  - Non-renewable fuel (HSD, diesel, petrol, PNG): 50,761 GJ (disclosed)
+  - Renewable fuel (biogas): 3,472 GJ (disclosed)
+
+Scope 2: market-based 34,351 tCO2e; location-based 145,604 tCO2e (both disclosed)
+  - Total electricity: 832,960 GJ, approx. 231,377,778 kWh (disclosed as GJ; converted at 3.6 MJ per kWh)
+  - Renewable electricity: 636,639 GJ; non-renewable electricity: 196,321 GJ (disclosed)
+  - Renewable share: 81.8% of electricity in India operations (disclosed)
+
+Scope 3: 207,374 tCO2e (disclosed; categories include business travel, employee commuting, purchased goods and services, capital goods, work from home, waste, fuel and energy activities, upstream leased assets)
+  - Category figures for FY 2025-26 are not itemised in the source summary. The FY 2024-25 breakdown is in the source but is not used here.
+
+Waste generated (FY 2025-26, disclosed, metric tonnes):
+  - Plastic 139.19; e-waste 662.19; battery 141.60; construction and demolition 3,763.47
+  - Biomedical and sanitary 98.92; other hazardous 62.03; radioactive 1.07
+  - Other non-hazardous (food, garden, paper, scrap) 12,121.51
+  - Total 16,989.98; 99% diverted from landfill; 11 campuses TRUE Zero Waste certified; about 184,000 kg of compost
+
+Data centres (disclosed): PUE weighted average 1.56 (range 1.29 to 2.33); data centres about 7% of global operational power
+
+Not disclosed in the source summary (left blank, not modelled):
+  - Fleet vehicle count and fuel split
+  - Laptop, desktop and server counts
+  - Commute distances by mode (the annual commute survey exists, but figures are not in the summary)
+  - Cloud spend and instance usage
+  - GPU counts
+
+Source: "Global Entity Directory.pdf" (a NotebookLLM summary of the company's sustainability disclosures). Verify each figure against the original BRSR report before publishing.
+Date: FY 2025-26 (published 2026)

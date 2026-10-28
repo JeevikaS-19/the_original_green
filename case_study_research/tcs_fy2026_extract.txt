@@ -1,0 +1,43 @@
+Company Name: Tata Consultancy Services Limited (TCS)
+Location: Nariman Point, Mumbai, Maharashtra, India (operations in 53 to 56 countries)
+Employees: 580,000+ consultants (31 March 2026 figure from the source summary)
+Sector: Information Technology services and consulting
+Reporting year: FY 2025-26 (FY 2026)
+
+Scope 1: 22,631.0 tCO2e (disclosed)
+  - CO2: 7,809.0 t; HFCs (refrigerant and fugitive): 14,769.0 t; N2O: 46.8 t; CH4: 6.2 t
+  - Sources listed: company vehicles, diesel generators (back-up), cafeteria LPG/PNG, refrigerant leaks, space heating
+  - Non-renewable fuel consumption: 121,096,495 MJ (disclosed)
+  - Renewable fuel and other sources: 186,383 MJ (disclosed)
+
+Scope 2: market-based 53,971.0 tCO2e; location-based 318,184.0 tCO2e (both disclosed)
+  - Total electricity: 1,763,477,392 MJ, approx. 489,854,831 kWh (disclosed as MJ; converted at 3.6 MJ per kWh)
+  - Renewable electricity: 1,489,446,670 MJ; non-renewable electricity: 274,030,722 MJ
+  - Renewable share: 84.5% of electricity (disclosed)
+
+Scope 3: 573,872 tCO2e (disclosed)
+  - Employee commuting (Cat. 7): 302,962 t
+  - Fuel and energy-related activities (Cat. 3): 84,974 t
+  - Business travel (Cat. 6): 80,541 t
+  - Purchased goods and services (Cat. 1): 72,060 t
+  - Capital goods (Cat. 2): 23,147 t
+  - Upstream transport and distribution (Cat. 4): 9,092 t
+  - Waste generated in operations (Cat. 5): 1,096 t
+
+Waste generated (FY 2025-26, disclosed, metric tonnes):
+  - Plastic 195.0; e-waste 505.0; battery 246.0; construction and demolition 900.0
+  - Biomedical and sanitary 0.3; other hazardous 39.1; radioactive nil
+  - Other non-hazardous (food, garden, paper, scrap) 6,923.0
+  - Total 8,809.0; 76.4% recovered or recycled (6,729 MT); 9 campuses Zero Waste to Landfill
+
+Data centres (disclosed): main data centres run on 100% renewable energy, 7.3 GWh in FY 2026; weighted average PUE 1.58
+
+Not disclosed in the source summary (left blank, not modelled):
+  - Fleet vehicle count and fuel split
+  - Laptop, desktop and server counts
+  - Commute distances by mode
+  - Cloud spend and instance usage
+  - GPU counts
+
+Source: "Global Entity Directory.pdf" (a NotebookLLM summary of the company's sustainability disclosures). Verify each figure against the original BRSR report before publishing. The directory cites TCS_09052024004459_SEIntBRSRsigned.pdf for FY 2023-24.
+Date: FY 2025-26 (published 2026)

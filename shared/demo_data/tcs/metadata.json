@@ -1,0 +1,29 @@
+{
+  "company": "Tata Consultancy Services Limited (TCS)",
+  "reporting_year": "FY 2025-26",
+  "source": "Global Entity Directory.pdf (NotebookLLM summary). Verify against the original BRSR.",
+  "location": "Mumbai, Maharashtra",
+  "tier": "tier_3",
+  "disclosed": {
+    "scope_1_tco2e": 22631.0,
+    "scope_2_market_tco2e": 53971.0,
+    "scope_2_location_tco2e": 318184.0,
+    "scope_3_tco2e": 573872.0
+  },
+  "derived": {
+    "energy_kwh_annual": 489854831,
+    "energy_method": "Disclosed total electricity in MJ divided by 3.6 MJ per kWh. Monthly split is an even 1/12 of the annual total.",
+    "waste_method": "Disclosed non-hazardous and e-waste tonnes converted to kg per month (annual / 12). Other waste categories are not in the calculator's factors and are omitted."
+  },
+  "not_disclosed_and_not_modelled": [
+    "fleet vehicles",
+    "laptops, desktops, servers",
+    "commute distances",
+    "cloud usage",
+    "GPUs"
+  ],
+  "notes": [
+    "Scope 1 includes 14,769 t of HFC refrigerant emissions, which the calculator has no factor for.",
+    "Scope 2 is compared on a location basis: the calculator applies one grid factor to all electricity."
+  ]
+}

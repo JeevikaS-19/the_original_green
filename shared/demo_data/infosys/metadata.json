@@ -1,0 +1,29 @@
+{
+  "company": "Infosys Limited",
+  "reporting_year": "FY 2025-26",
+  "source": "Global Entity Directory.pdf (NotebookLLM summary). Verify against the original BRSR.",
+  "location": "Bengaluru, Karnataka",
+  "tier": "tier_3",
+  "disclosed": {
+    "scope_1_tco2e": 11483.0,
+    "scope_2_market_tco2e": 34351.0,
+    "scope_2_location_tco2e": 145604.0,
+    "scope_3_tco2e": 207374.0
+  },
+  "derived": {
+    "energy_kwh_annual": 231377778,
+    "energy_method": "Disclosed total electricity in GJ converted to kWh (1 GJ = 277.78 kWh). Monthly split is an even 1/12 of the annual total.",
+    "waste_method": "Disclosed non-hazardous and e-waste tonnes converted to kg per month (annual / 12)."
+  },
+  "not_disclosed_and_not_modelled": [
+    "fleet vehicles and fuel split",
+    "laptops, desktops, servers",
+    "commute distances",
+    "cloud usage",
+    "GPUs"
+  ],
+  "notes": [
+    "Scope 1 is not calculated: the fuel split is not disclosed, so no litre-based calculation is possible.",
+    "Scope 2 is compared on a location basis: the calculator applies one grid factor to all electricity."
+  ]
+}

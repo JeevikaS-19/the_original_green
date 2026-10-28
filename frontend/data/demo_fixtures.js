@@ -1449,5 +1449,677 @@ window.DEMO_FIXTURES = [
         ]
       }
     }
+  },
+  {
+    "id": "case_tcs",
+    "tier": "tier_3",
+    "label": "Case: TCS FY 2025-26",
+    "sublabel": "Public disclosure, summary-based",
+    "description": "Tata Consultancy Services, from its FY 2025-26 sustainability disclosures. Our calculated figures are set against the disclosed ones.",
+    "source": "Global Entity Directory.pdf (NotebookLLM summary). Verify against the original BRSR before publishing.",
+    "disclosed": {
+      "scope_1": 22631.0,
+      "scope_2_location": 318184.0,
+      "scope_2_market": 53971.0,
+      "scope_3": 573872.0
+    },
+    "comparison": [
+      {
+        "scope": "Scope 1",
+        "calculated_t": null,
+        "disclosed_t": 22631.0,
+        "note": "Disclosed Scope 1 is mostly HFC refrigerant leaks (14,769 t). The fuel split is not disclosed, and the calculator has no refrigerant factor."
+      },
+      {
+        "scope": "Scope 2 (location-based)",
+        "calculated_t": 370820.1,
+        "disclosed_t": 318184.0,
+        "note": "We apply one all-India grid factor to all electricity. The company uses location-specific factors, so the figures differ."
+      },
+      {
+        "scope": "Scope 2 (market-based)",
+        "calculated_t": null,
+        "disclosed_t": 53971.0,
+        "note": "Market-based needs supplier and renewable-contract data, which we do not have."
+      },
+      {
+        "scope": "Scope 3",
+        "calculated_t": null,
+        "disclosed_t": 573872.0,
+        "note": "Not calculated: waste factors are illustrative and no other Scope 3 category has verified data. The disclosed total covers business travel, commuting and purchased goods."
+      }
+    ],
+    "paths": {
+      "open_source": {
+        "label": "Open-source data",
+        "summary": "Detailed exports from the company's own trackers give a tight range.",
+        "sources": [
+          {
+            "tracker": "Energy meter (derived)",
+            "format": "CSV",
+            "detail": "Disclosed 489.9 GWh a year, spread evenly over 12 months",
+            "scope": "scope_2"
+          },
+          {
+            "tracker": "Waste log (derived)",
+            "format": "CSV",
+            "detail": "Disclosed non-hazardous and e-waste tonnes",
+            "scope": "scope_3"
+          }
+        ],
+        "intake": {
+          "data_path": {
+            "scope_2": "open_source",
+            "scope_3": "open_source"
+          },
+          "confidence_metadata": {
+            "scope_2": "full_data",
+            "scope_3": "partial_data"
+          },
+          "estimates": {
+            "scope_2": [],
+            "scope_3": [
+              "hardware not given",
+              "commute not given",
+              "cloud not given, Scope 3.1 not calculated"
+            ]
+          }
+        },
+        "scopes": [
+          {
+            "id": "scope_1",
+            "label": "Scope 1 · Direct fuel",
+            "tons": 0.0,
+            "low": 0.0,
+            "high": 0.0,
+            "confidence": "±25%",
+            "drivers": [],
+            "formula": "Litres of fuel × kg CO2e per litre (IPCC 2006 defaults, converted)"
+          },
+          {
+            "id": "scope_2",
+            "label": "Scope 2 · Purchased electricity",
+            "tons": 370820.11,
+            "low": 333738.1,
+            "high": 407902.12,
+            "confidence": "±10%",
+            "drivers": [
+              {
+                "name": "electricity",
+                "tons": 370820.1
+              }
+            ],
+            "formula": "kWh × CEA combined margin (0.757 kg CO2e/kWh)"
+          },
+          {
+            "id": "scope_3",
+            "label": "Scope 3 · Devices, commute, waste",
+            "tons": 4976.5,
+            "low": 2488.25,
+            "high": 7464.75,
+            "confidence": "±50%",
+            "drivers": [
+              {
+                "name": "3.1 cloud",
+                "tons": 0.0
+              },
+              {
+                "name": "Hardware (embodied)",
+                "tons": 0.0
+              },
+              {
+                "name": "Commute",
+                "tons": 0.0
+              },
+              {
+                "name": "Waste",
+                "tons": 4976.5
+              }
+            ],
+            "formula": "Devices, commute and waste × factor. Factors are placeholders, so these show zero."
+          }
+        ],
+        "total": {
+          "tons": 375796.61,
+          "low": 336226.35,
+          "high": 415366.87
+        },
+        "grade": "F",
+        "grade_bands": [
+          {
+            "grade": "A",
+            "from": 0,
+            "to": 500
+          },
+          {
+            "grade": "B",
+            "from": 500,
+            "to": 1500
+          },
+          {
+            "grade": "C",
+            "from": 1500,
+            "to": 3000
+          },
+          {
+            "grade": "D",
+            "from": 3000,
+            "to": 5000
+          },
+          {
+            "grade": "F",
+            "from": 5000,
+            "to": null
+          }
+        ],
+        "actions": [
+          {
+            "scope": "scope_2",
+            "action": "Renewable energy procurement",
+            "description": "Procure renewable electricity through a suitable contract or instrument.",
+            "tons": 15.0,
+            "cost_inr": 2000000,
+            "payback": "N/A (recurring cost)",
+            "roi": 0.75,
+            "placeholder": false
+          },
+          {
+            "scope": "scope_2",
+            "action": "Install rooftop solar",
+            "description": "Assess rooftop solar generation for on-site electricity demand.",
+            "tons": 10.0,
+            "cost_inr": 2000000,
+            "payback": "72 months",
+            "roi": 0.5,
+            "placeholder": false
+          }
+        ],
+        "notes": [
+          "Reduction savings and costs are planning assumptions from the knowledge base. Verify them before relying on them.",
+          "Scope 3 · Devices, commute, waste: 1 input(s) use placeholder factors and count as zero.",
+          "Demo uses illustrative factors for Scope 3 (2 inputs). Real submissions use verified sources."
+        ],
+        "illustrative": [
+          "scope_3.waste.solid waste.landfill.factor",
+          "scope_3.waste.e-waste.recycling.factor"
+        ],
+        "assumptions": []
+      },
+      "closed_source": {
+        "label": "Closed-source data",
+        "summary": "Only consumption totals are available (litres and kWh). The range is wide, and Scope 3 cannot be calculated from totals.",
+        "sources": [
+          {
+            "tracker": "Electricity total (derived)",
+            "format": "kWh a year",
+            "detail": "Disclosed 489.9 GWh a year",
+            "scope": "scope_2"
+          }
+        ],
+        "intake": {
+          "data_path": {
+            "scope_2": "closed_source"
+          },
+          "confidence_metadata": {
+            "scope_2": "overview_only"
+          },
+          "estimates": {
+            "scope_2": []
+          }
+        },
+        "scopes": [
+          {
+            "id": "scope_1",
+            "label": "Scope 1 · Direct fuel",
+            "tons": 0.0,
+            "low": 0.0,
+            "high": 0.0,
+            "confidence": "±25%",
+            "drivers": [],
+            "formula": "Litres of fuel × kg CO2e per litre (IPCC 2006 defaults, converted)"
+          },
+          {
+            "id": "scope_2",
+            "label": "Scope 2 · Purchased electricity",
+            "tons": 370820.11,
+            "low": 222492.06,
+            "high": 519148.15,
+            "confidence": "±40%",
+            "drivers": [
+              {
+                "name": "electricity",
+                "tons": 370820.1
+              }
+            ],
+            "formula": "kWh × CEA combined margin (0.757 kg CO2e/kWh)"
+          },
+          {
+            "id": "scope_3",
+            "label": "Scope 3 · Devices, commute, waste",
+            "tons": 0.0,
+            "low": 0.0,
+            "high": 0.0,
+            "confidence": "±50%",
+            "drivers": [
+              {
+                "name": "3.1 cloud",
+                "tons": 0.0
+              },
+              {
+                "name": "Hardware (embodied)",
+                "tons": 0.0
+              },
+              {
+                "name": "Commute",
+                "tons": 0.0
+              },
+              {
+                "name": "Waste",
+                "tons": 0.0
+              }
+            ],
+            "formula": "Devices, commute and waste × factor. Factors are placeholders, so these show zero."
+          }
+        ],
+        "total": {
+          "tons": 370820.11,
+          "low": 222492.06,
+          "high": 519148.15
+        },
+        "grade": "F",
+        "grade_bands": [
+          {
+            "grade": "A",
+            "from": 0,
+            "to": 500
+          },
+          {
+            "grade": "B",
+            "from": 500,
+            "to": 1500
+          },
+          {
+            "grade": "C",
+            "from": 1500,
+            "to": 3000
+          },
+          {
+            "grade": "D",
+            "from": 3000,
+            "to": 5000
+          },
+          {
+            "grade": "F",
+            "from": 5000,
+            "to": null
+          }
+        ],
+        "actions": [
+          {
+            "scope": "scope_2",
+            "action": "Renewable energy procurement",
+            "description": "Procure renewable electricity through a suitable contract or instrument.",
+            "tons": 15.0,
+            "cost_inr": 2000000,
+            "payback": "N/A (recurring cost)",
+            "roi": 0.75,
+            "placeholder": false
+          },
+          {
+            "scope": "scope_2",
+            "action": "Install rooftop solar",
+            "description": "Assess rooftop solar generation for on-site electricity demand.",
+            "tons": 10.0,
+            "cost_inr": 2000000,
+            "payback": "72 months",
+            "roi": 0.5,
+            "placeholder": false
+          }
+        ],
+        "notes": [
+          "Reduction savings and costs are planning assumptions from the knowledge base. Verify them before relying on them.",
+          "Scope 3 · Devices, commute, waste: 1 input(s) use placeholder factors and count as zero.",
+          "Totals only: Scope 3 is not available, and the ±40% range is a rough estimate."
+        ],
+        "illustrative": [],
+        "assumptions": []
+      }
+    }
+  },
+  {
+    "id": "case_infosys",
+    "tier": "tier_3",
+    "label": "Case: Infosys FY 2025-26",
+    "sublabel": "Public disclosure, summary-based",
+    "description": "Infosys, from its FY 2025-26 sustainability disclosures. Our calculated figures are set against the disclosed ones.",
+    "source": "Global Entity Directory.pdf (NotebookLLM summary). Verify against the original BRSR before publishing.",
+    "disclosed": {
+      "scope_1": 11483.0,
+      "scope_2_location": 145604.0,
+      "scope_2_market": 34351.0,
+      "scope_3": 207374.0
+    },
+    "comparison": [
+      {
+        "scope": "Scope 1",
+        "calculated_t": null,
+        "disclosed_t": 11483.0,
+        "note": "Scope 1 is not calculated: the fuel split is not disclosed, so no litre-based figure is possible."
+      },
+      {
+        "scope": "Scope 2 (location-based)",
+        "calculated_t": 175153.0,
+        "disclosed_t": 145604.0,
+        "note": "We apply one all-India grid factor to all electricity. The company uses location-specific factors, so the figures differ."
+      },
+      {
+        "scope": "Scope 2 (market-based)",
+        "calculated_t": null,
+        "disclosed_t": 34351.0,
+        "note": "Market-based needs supplier and renewable-contract data, which we do not have."
+      },
+      {
+        "scope": "Scope 3",
+        "calculated_t": null,
+        "disclosed_t": 207374.0,
+        "note": "Not calculated: waste factors are illustrative and no other Scope 3 category has verified data. The disclosed total covers business travel, commuting and purchased goods."
+      }
+    ],
+    "paths": {
+      "open_source": {
+        "label": "Open-source data",
+        "summary": "Detailed exports from the company's own trackers give a tight range.",
+        "sources": [
+          {
+            "tracker": "Energy meter (derived)",
+            "format": "CSV",
+            "detail": "Disclosed 231.4 GWh a year, spread evenly over 12 months",
+            "scope": "scope_2"
+          },
+          {
+            "tracker": "Waste log (derived)",
+            "format": "CSV",
+            "detail": "Disclosed non-hazardous and e-waste tonnes",
+            "scope": "scope_3"
+          }
+        ],
+        "intake": {
+          "data_path": {
+            "scope_2": "open_source",
+            "scope_3": "open_source"
+          },
+          "confidence_metadata": {
+            "scope_2": "full_data",
+            "scope_3": "partial_data"
+          },
+          "estimates": {
+            "scope_2": [],
+            "scope_3": [
+              "hardware not given",
+              "commute not given",
+              "cloud not given, Scope 3.1 not calculated"
+            ]
+          }
+        },
+        "scopes": [
+          {
+            "id": "scope_1",
+            "label": "Scope 1 · Direct fuel",
+            "tons": 0.0,
+            "low": 0.0,
+            "high": 0.0,
+            "confidence": "±25%",
+            "drivers": [],
+            "formula": "Litres of fuel × kg CO2e per litre (IPCC 2006 defaults, converted)"
+          },
+          {
+            "id": "scope_2",
+            "label": "Scope 2 · Purchased electricity",
+            "tons": 175152.98,
+            "low": 157637.68,
+            "high": 192668.28,
+            "confidence": "±10%",
+            "drivers": [
+              {
+                "name": "electricity",
+                "tons": 175153.0
+              }
+            ],
+            "formula": "kWh × CEA combined margin (0.757 kg CO2e/kWh)"
+          },
+          {
+            "id": "scope_3",
+            "label": "Scope 3 · Devices, commute, waste",
+            "tons": 8047.32,
+            "low": 4023.66,
+            "high": 12070.99,
+            "confidence": "±50%",
+            "drivers": [
+              {
+                "name": "3.1 cloud",
+                "tons": 0.0
+              },
+              {
+                "name": "Hardware (embodied)",
+                "tons": 0.0
+              },
+              {
+                "name": "Commute",
+                "tons": 0.0
+              },
+              {
+                "name": "Waste",
+                "tons": 8047.3
+              }
+            ],
+            "formula": "Devices, commute and waste × factor. Factors are placeholders, so these show zero."
+          }
+        ],
+        "total": {
+          "tons": 183200.3,
+          "low": 161661.34,
+          "high": 204739.26
+        },
+        "grade": "F",
+        "grade_bands": [
+          {
+            "grade": "A",
+            "from": 0,
+            "to": 500
+          },
+          {
+            "grade": "B",
+            "from": 500,
+            "to": 1500
+          },
+          {
+            "grade": "C",
+            "from": 1500,
+            "to": 3000
+          },
+          {
+            "grade": "D",
+            "from": 3000,
+            "to": 5000
+          },
+          {
+            "grade": "F",
+            "from": 5000,
+            "to": null
+          }
+        ],
+        "actions": [
+          {
+            "scope": "scope_2",
+            "action": "Renewable energy procurement",
+            "description": "Procure renewable electricity through a suitable contract or instrument.",
+            "tons": 15.0,
+            "cost_inr": 2000000,
+            "payback": "N/A (recurring cost)",
+            "roi": 0.75,
+            "placeholder": false
+          },
+          {
+            "scope": "scope_2",
+            "action": "Install rooftop solar",
+            "description": "Assess rooftop solar generation for on-site electricity demand.",
+            "tons": 10.0,
+            "cost_inr": 2000000,
+            "payback": "72 months",
+            "roi": 0.5,
+            "placeholder": false
+          }
+        ],
+        "notes": [
+          "Reduction savings and costs are planning assumptions from the knowledge base. Verify them before relying on them.",
+          "Scope 3 · Devices, commute, waste: 1 input(s) use placeholder factors and count as zero.",
+          "Demo uses illustrative factors for Scope 3 (2 inputs). Real submissions use verified sources."
+        ],
+        "illustrative": [
+          "scope_3.waste.solid waste.landfill.factor",
+          "scope_3.waste.e-waste.recycling.factor"
+        ],
+        "assumptions": []
+      },
+      "closed_source": {
+        "label": "Closed-source data",
+        "summary": "Only consumption totals are available (litres and kWh). The range is wide, and Scope 3 cannot be calculated from totals.",
+        "sources": [
+          {
+            "tracker": "Electricity total (derived)",
+            "format": "kWh a year",
+            "detail": "Disclosed 231.4 GWh a year",
+            "scope": "scope_2"
+          }
+        ],
+        "intake": {
+          "data_path": {
+            "scope_2": "closed_source"
+          },
+          "confidence_metadata": {
+            "scope_2": "overview_only"
+          },
+          "estimates": {
+            "scope_2": []
+          }
+        },
+        "scopes": [
+          {
+            "id": "scope_1",
+            "label": "Scope 1 · Direct fuel",
+            "tons": 0.0,
+            "low": 0.0,
+            "high": 0.0,
+            "confidence": "±25%",
+            "drivers": [],
+            "formula": "Litres of fuel × kg CO2e per litre (IPCC 2006 defaults, converted)"
+          },
+          {
+            "id": "scope_2",
+            "label": "Scope 2 · Purchased electricity",
+            "tons": 175152.98,
+            "low": 105091.79,
+            "high": 245214.17,
+            "confidence": "±40%",
+            "drivers": [
+              {
+                "name": "electricity",
+                "tons": 175153.0
+              }
+            ],
+            "formula": "kWh × CEA combined margin (0.757 kg CO2e/kWh)"
+          },
+          {
+            "id": "scope_3",
+            "label": "Scope 3 · Devices, commute, waste",
+            "tons": 0.0,
+            "low": 0.0,
+            "high": 0.0,
+            "confidence": "±50%",
+            "drivers": [
+              {
+                "name": "3.1 cloud",
+                "tons": 0.0
+              },
+              {
+                "name": "Hardware (embodied)",
+                "tons": 0.0
+              },
+              {
+                "name": "Commute",
+                "tons": 0.0
+              },
+              {
+                "name": "Waste",
+                "tons": 0.0
+              }
+            ],
+            "formula": "Devices, commute and waste × factor. Factors are placeholders, so these show zero."
+          }
+        ],
+        "total": {
+          "tons": 175152.98,
+          "low": 105091.79,
+          "high": 245214.17
+        },
+        "grade": "F",
+        "grade_bands": [
+          {
+            "grade": "A",
+            "from": 0,
+            "to": 500
+          },
+          {
+            "grade": "B",
+            "from": 500,
+            "to": 1500
+          },
+          {
+            "grade": "C",
+            "from": 1500,
+            "to": 3000
+          },
+          {
+            "grade": "D",
+            "from": 3000,
+            "to": 5000
+          },
+          {
+            "grade": "F",
+            "from": 5000,
+            "to": null
+          }
+        ],
+        "actions": [
+          {
+            "scope": "scope_2",
+            "action": "Renewable energy procurement",
+            "description": "Procure renewable electricity through a suitable contract or instrument.",
+            "tons": 15.0,
+            "cost_inr": 2000000,
+            "payback": "N/A (recurring cost)",
+            "roi": 0.75,
+            "placeholder": false
+          },
+          {
+            "scope": "scope_2",
+            "action": "Install rooftop solar",
+            "description": "Assess rooftop solar generation for on-site electricity demand.",
+            "tons": 10.0,
+            "cost_inr": 2000000,
+            "payback": "72 months",
+            "roi": 0.5,
+            "placeholder": false
+          }
+        ],
+        "notes": [
+          "Reduction savings and costs are planning assumptions from the knowledge base. Verify them before relying on them.",
+          "Scope 3 · Devices, commute, waste: 1 input(s) use placeholder factors and count as zero.",
+          "Totals only: Scope 3 is not available, and the ±40% range is a rough estimate."
+        ],
+        "illustrative": [],
+        "assumptions": []
+      }
+    }
   }
 ];
