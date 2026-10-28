@@ -1,0 +1,2 @@
+instance_type,region,usage_hours,cost
+p3.8xlarge,us-east-1,1000,15000

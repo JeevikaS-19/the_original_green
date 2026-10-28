@@ -1,0 +1,3 @@
+vehicle_id,make,model,year,fuel_type,annual_km
+BUS_001,Ashok Leyland,CNG Bus,2020,CNG,80000
+BUS_002,Tata,Diesel Coach,2018,diesel,100000

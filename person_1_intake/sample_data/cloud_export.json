@@ -1,0 +1,6 @@
+{
+  "Items": [
+    {"instanceType": "p3.8xlarge", "region": "us-east-1", "usageHours": 1000, "cost": 15000},
+    {"instanceType": "t3.medium", "region": "ap-south-1", "usageHours": 2400, "cost": 1200}
+  ]
+}
