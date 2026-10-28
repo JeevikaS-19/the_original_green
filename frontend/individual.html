@@ -1,0 +1,79 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Your footprint · The Original Green</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;650;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="assets/app.css">
+  <link rel="stylesheet" href="assets/individual.css">
+</head>
+<body>
+  <header class="ind-top">
+    <a class="logo" href="index.html">The Original Green</a>
+    <nav><a href="dashboard.html#small_scale/open/overview">Dashboard</a></nav>
+  </header>
+
+  <main class="ind wrap">
+    <section class="ind-intro">
+      <p class="kicker">Individual tracker</p>
+      <h1>Your footprint, from your own answers</h1>
+      <p class="muted">No tracker needed. Fill in what you know; anything left blank is estimated with a labelled default, and the range widens to show it.</p>
+    </section>
+
+    <form id="form" class="ind-grid" autocomplete="off">
+      <fieldset class="dcard">
+        <legend>Scope 1 · Your vehicle</legend>
+        <label>Fuel
+          <select name="fuel">
+            <option value="none">No car or bike</option>
+            <option value="petrol">Petrol car</option>
+            <option value="diesel">Diesel car</option>
+          </select>
+        </label>
+        <label>Distance driven a year (km)<input type="number" name="km" min="0" step="100" value="0"></label>
+        <label>Fuel use (litres per 100 km)<input type="number" name="eff" min="2" max="60" step="0.5" value="7"></label>
+        <p class="hint">Fuel use is an assumption until you enter your own figure.</p>
+      </fieldset>
+
+      <fieldset class="dcard">
+        <legend>Scope 2 · Electricity at home</legend>
+        <label>Monthly electricity (kWh)<input type="number" name="kwh" min="0" step="10" value="150"></label>
+        <label>Or monthly bill (₹), used if kWh is blank<input type="number" name="bill" min="0" step="100"></label>
+        <label><span>Share renewable: <output id="ren-out">0</output>%</span>
+          <input type="range" name="ren" min="0" max="100" step="5" value="0">
+        </label>
+        <p class="hint">A bill is converted at an illustrative ₹7.5 per kWh.</p>
+      </fieldset>
+
+      <fieldset class="dcard">
+        <legend>Scope 3 · Commute, devices, waste</legend>
+        <label>Commute, one way (km)<input type="number" name="commute_km" min="0" step="1" value="0"></label>
+        <label>Days a week at the office<input type="number" name="days" min="0" max="7" step="1" value="5"></label>
+        <label>Main way you travel
+          <select name="mode">
+            <option value="car">Car</option>
+            <option value="bus">Bus</option>
+            <option value="bike">Bike</option>
+            <option value="wfh">Work from home</option>
+          </select>
+        </label>
+        <label>Laptops you use<input type="number" name="laptops" min="0" step="1" value="1"></label>
+        <label>Solid waste a month (kg)<input type="number" name="solid" min="0" step="1" value="0"></label>
+        <label>E-waste a year (kg)<input type="number" name="ewaste" min="0" step="0.5" value="0"></label>
+      </fieldset>
+
+      <div class="ind-actions">
+        <button class="btn" type="submit">Calculate my footprint</button>
+        <button class="btn btn-ghost" type="button" id="reset">Clear</button>
+        <span class="saved muted small" id="saved-note"></span>
+      </div>
+    </form>
+
+    <section id="result" class="ind-result" aria-live="polite"></section>
+  </main>
+  <script src="assets/individual.js"></script>
+</body>
+</html>
