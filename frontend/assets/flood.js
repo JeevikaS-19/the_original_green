@@ -5,6 +5,12 @@
 
   var root = null, canvas = null, ctx = null, frame = 0;
   var level = 0, from = 0, to = 0, start = 0, dur = 1, running = false;
+  var clean = 0, draining = false;
+  var MUD = [[78, 90, 54], [138, 112, 98], [185, 196, 160]];
+  var BLUE = [[52, 118, 170], [96, 156, 200], [160, 200, 226]];
+  var SMOKE = [70, 70, 64], AIR = [238, 240, 242];
+  function mix(a, b, t) { return [0, 1, 2].map(function (i) { return Math.round(a[i] + (b[i] - a[i]) * t); }); }
+  function rgba(c, a) { return "rgba(" + c[0] + "," + c[1] + "," + c[2] + "," + a.toFixed(3) + ")"; }
   var particles = [], bubbles = [];
   var reduce = window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 
@@ -68,8 +74,9 @@
       p.x += p.vx + Math.sin((p.y + t * 40) / 60) * 0.2; p.y += p.vy; p.r += 0.35; p.a *= 0.996;
       if (p.a < 0.01 || p.y < -p.r) return false;
       var g = ctx.createRadialGradient(p.x, p.y, 0, p.x, p.y, p.r);
-      g.addColorStop(0, "rgba(70,70,64," + p.a.toFixed(3) + ")");
-      g.addColorStop(1, "rgba(70,70,64,0)");
+      var smoke = mix(SMOKE, AIR, clean), fade = 1 - clean * 0.85;
+      g.addColorStop(0, rgba(smoke, p.a * fade));
+      g.addColorStop(1, rgba(smoke, 0));
       ctx.fillStyle = g;
       ctx.beginPath(); ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2); ctx.fill();
       return true;
@@ -78,9 +85,9 @@
     if (level > 0) {
       // Translucent water: three layered waves, each a little different.
       var layers = [
-        { c: "rgba(78,90,54,0.42)", amp: 14, k: 0.011, w: 1.4, ph: 0 },
-        { c: "rgba(138,112,98,0.30)", amp: 10, k: 0.017, w: -1.0, ph: 2.1 },
-        { c: "rgba(185,196,160,0.26)", amp: 7, k: 0.024, w: 1.9, ph: 4.2 }
+        { c: rgba(mix(MUD[0], BLUE[0], clean), 0.42), amp: 14, k: 0.011, w: 1.4, ph: 0 },
+        { c: rgba(mix(MUD[1], BLUE[1], clean), 0.30), amp: 10, k: 0.017, w: -1.0, ph: 2.1 },
+        { c: rgba(mix(MUD[2], BLUE[2], clean), 0.26), amp: 7, k: 0.024, w: 1.9, ph: 4.2 }
       ];
       layers.forEach(function (L) {
         ctx.beginPath();
@@ -122,9 +129,10 @@
     if (start === null) start = now;
     var k = Math.min(1, (now - start) / dur);
     level = from + (to - from) * ease(k);
+    if (draining) clean = ease(k);
     if (ctx) draw(now);
     if (k < 1) frame = requestAnimationFrame(tick);
-    else { running = false; level = to; if (ctx) draw(now); }
+    else { running = false; level = to; if (draining) clean = 1; if (ctx) draw(now); }
   }
 
   // Animate the water from its current level to `target` over `ms`.
@@ -133,8 +141,11 @@
     root.classList.add("on");
     label(title, value, sub);
     target = Math.max(0, Math.min(1, target));
+    draining = target < level;
+    if (!draining) clean = 0;
     if (reduce || !ctx) {
       level = target; from = to = target;
+      if (draining) clean = 1;
       if (ctx) draw(performance.now());
       return;
     }
@@ -146,7 +157,7 @@
   }
 
   // Start from empty (no water) and flood to `target`.
-  function reset() { level = 0; from = to = 0; particles = []; bubbles = []; }
+  function reset() { level = 0; from = to = 0; clean = 0; draining = false; particles = []; bubbles = []; }
 
   function setLevel(v) { level = from = to = Math.max(0, Math.min(1, v)); }
   function isOn() { return !!root && root.classList.contains("on"); }
