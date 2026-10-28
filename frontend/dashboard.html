@@ -1,0 +1,100 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Dashboard · Carbon Aggregation</title>
+  <link rel="stylesheet" href="assets/dashboard.css">
+</head>
+<body>
+  <header class="topbar">
+    <div class="top-left">
+      <a class="logo" href="index.html">Carbon Aggregation</a>
+    </div>
+    <div class="scale-toggle" id="scale-toggle" role="tablist" aria-label="Scale"></div>
+    <div class="top-right">
+      <span class="pill" id="top-source">Demo data</span>
+    </div>
+  </header>
+
+  <div class="layout">
+    <aside class="sidebar" aria-label="Sidebar">
+      <section class="side-block">
+        <p class="side-title">Connected trackers</p>
+        <ul class="tracker-list" id="tracker-list"></ul>
+        <a class="side-link" href="tracker-demo/index.html">+ Connect a new tracker (demo)</a>
+      </section>
+
+      <section class="side-block">
+        <p class="side-title">Data sources</p>
+        <ul class="source-list" id="source-list"></ul>
+      </section>
+
+      <section class="side-block">
+        <p class="side-title">Quick stats</p>
+        <dl class="stats" id="quick-stats"></dl>
+      </section>
+    </aside>
+
+    <main class="main" id="main">
+      <!-- Summary -->
+      <section class="block" id="summary">
+        <div class="block-head">
+          <div>
+            <p class="kicker">Report summary</p>
+            <h1 id="profile-title">–</h1>
+            <p class="muted" id="profile-sub">–</p>
+          </div>
+          <a class="btn btn-ghost" href="#" id="download" download>Download report</a>
+        </div>
+        <div class="cards" id="summary-cards"></div>
+        <div class="explain" id="confidence-explain"></div>
+      </section>
+
+      <!-- Scope breakdown -->
+      <section class="block" id="scopes">
+        <p class="kicker">Scope breakdown</p>
+        <div class="tabs" role="tablist" id="scope-tabs"></div>
+        <div class="panel" id="scope-panel" role="tabpanel"></div>
+      </section>
+
+      <!-- Top actions -->
+      <section class="block" id="actions">
+        <p class="kicker">Top actions</p>
+        <h2>Ranked by tonnes saved per rupee.</h2>
+        <div class="action-cards" id="action-cards"></div>
+        <div class="scenario" id="scenario">
+          <div class="scenario-head">
+            <div>
+              <p class="kicker">Scenario analysis</p>
+              <h3>Move one action, see the total and the grade change.</h3>
+            </div>
+          </div>
+          <div class="scenario-body">
+            <p class="muted small">Tick the actions to stack them.</p>
+            <div id="scenario-slot"></div>
+            <div class="scenario-out" id="scenario-out"></div>
+            <div id="scenario-warn"></div>
+            <p class="muted small">Actions overlap, so savings are not added together. Each scenario is one action on its own.</p>
+          </div>
+        </div>
+      </section>
+
+      <!-- Traceability -->
+      <section class="block" id="traceability">
+        <p class="kicker">Data traceability</p>
+        <h2>Every number, and where it came from.</h2>
+        <div class="trace-grid" id="trace-grid"></div>
+      </section>
+    </main>
+  </div>
+
+  <dialog id="impact-dialog" aria-labelledby="impact-title">
+    <div class="dialog-inner" id="impact-body"></div>
+    <form method="dialog"><button class="btn btn-ghost" value="close">Close</button></form>
+  </dialog>
+
+  <script src="data/demo_fixtures.js"></script>
+  <script src="assets/dashboard.js"></script>
+</body>
+</html>
