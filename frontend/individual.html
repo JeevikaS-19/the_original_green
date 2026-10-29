@@ -16,13 +16,13 @@
     <nav><a href="dashboard.html#individual/open/overview">Dashboard</a></nav>
   </header>
 
-  <main class="ind wrap">
+  <main class="ind">
     <section class="ind-intro">
       <p class="kicker">Individual tracker</p>
       <h1>Your footprint, from your own activities</h1>
       <div class="mode" role="group" aria-label="Mode">
-        <button type="button" data-mode="demo" aria-pressed="true">Sample</button>
-        <button type="button" data-mode="live" aria-pressed="false">Your tracker</button>
+        <button type="button" data-mode="demo" aria-pressed="false">Sample</button>
+        <button type="button" data-mode="live" aria-pressed="true">Your tracker</button>
       </div>
       <p class="muted" id="mode-note"></p>
     </section>
@@ -39,7 +39,7 @@
             <label>Activity
               <select name="kind" id="kind"></select>
             </label>
-            <label>Amount<input type="number" name="qty" min="0" step="any" required></label>
+            <label><span id="amount-label">Amount</span><input type="number" name="qty" id="qty" min="0" step="any" placeholder="0" required></label>
             <label>Source
               <select name="source">
                 <option value="Own record">Own record</option>

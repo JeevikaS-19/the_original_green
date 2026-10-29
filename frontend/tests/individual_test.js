@@ -24,6 +24,8 @@ const submit = () => $("#add").dispatchEvent(new w.Event("submit", { cancelable:
 
 (async () => {
   await tick();
+  click($('[data-mode="demo"]'));
+  await tick();
   // Demo: the sample person, hand-calculated: petrol 10,000 km × 7 L/100 km × 2.29 = 1.60 t;
   // electricity 330 kWh × 12 × 0.757 = 3.00 t; commute 12 × 2 × 250 × 0.15 = 0.90 t; laptop 0.03 t. Total 5.53 t.
   check("demo shows the sample total", $("#result").textContent.includes("5.53 t"), $("#result").textContent.slice(0, 60));

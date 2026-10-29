@@ -80,3 +80,16 @@
 .ind-guide.sample .road li { opacity: .55; }
 .ind-guide h3 { margin-top: 10px; }
 .ind-guide .count { margin-bottom: 4px; }
+
+/* Full width: the tracker on the left, the roadmap on the right edge */
+.ind { width: 100%; max-width: none; padding: 32px 40px 80px; margin: 0; }
+.ind-body { grid-template-columns: minmax(0, 1fr) 360px; gap: 32px; }
+.ind-guide { top: 24px; }
+.tick { font-size: 12px; font-weight: 700; color: #fff; }
+.tick::after { content: none; }
+.tick::before { content: "✓"; opacity: 0; transition: opacity .3s; }
+.road li.done .tick::before { opacity: 1; }
+@media (max-width: 960px) { .ind { padding: 24px 16px 60px; } }
+
+.ind-top { padding: 18px 40px; }
+@media (max-width: 960px) { .ind-top { padding: 16px; } }

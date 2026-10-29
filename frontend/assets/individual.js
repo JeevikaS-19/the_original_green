@@ -4,7 +4,7 @@
   var KEY = "og-individual-activities-v1";
   var COMMUTE_DAYS = 250;
   var M = null;
-  var mode = /[?&]mode=live\b/.test(location.search) ? "live" : "demo";
+  var mode = /[?&]mode=demo\b/.test(location.search) ? "demo" : "live";
   var editing = null;
 
   var KINDS = {
@@ -148,7 +148,7 @@
     }
     $("submit").textContent = "Save changes";
     $("cancel").hidden = false;
-    $("add-hint").textContent = KINDS[kindSel.value].hint;
+    namesAmount();
     refresh();
   }
   function resetForm() {
@@ -156,7 +156,7 @@
     form.reset();
     $("submit").textContent = "Add activity";
     $("cancel").hidden = true;
-    $("add-hint").textContent = KINDS[kindSel.value].hint;
+    namesAmount();
     refresh();
   }
 
@@ -174,7 +174,12 @@
     resetForm();
   });
   $("cancel").addEventListener("click", resetForm);
-  kindSel.addEventListener("change", function () { $("add-hint").textContent = KINDS[kindSel.value].hint; });
+  function namesAmount() {
+    var k = KINDS[kindSel.value];
+    $("amount-label").textContent = "Amount, " + k.unit;
+    $("add-hint").textContent = k.hint;
+  }
+  kindSel.addEventListener("change", namesAmount);
 
   rows.addEventListener("click", function (e) {
     var b = e.target.closest("[data-edit],[data-del]");
@@ -197,7 +202,7 @@
   fetch("data/methodology.json").then(function (r) { return r.json(); }).then(function (m) {
     M = m;
     renderKinds();
-    $("add-hint").textContent = KINDS[kindSel.value].hint;
+    namesAmount();
     refresh();
   }).catch(function () {
     out.innerHTML = '<p class="muted">Could not load the methodology file, so results cannot be calculated.</p>';
