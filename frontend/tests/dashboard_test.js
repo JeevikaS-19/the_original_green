@@ -132,7 +132,7 @@ check("PDF opens the formal report page", opened.length === 1 && opened[0].start
 pick("individual");
 nav("reduction");
 click($("#ai-apply"));
-check("individual: AI Apply reports no change", $("#ai-out").textContent.includes("no change"), $("#ai-out").textContent.slice(0, 60));
+check("individual: AI Apply applies a plan", $("#ai-out").textContent.includes("Applied"), $("#ai-out").textContent.slice(0, 60));
 
 // Projects: a new project starts with no plan, and plans never leak between projects
 pick("small_scale");

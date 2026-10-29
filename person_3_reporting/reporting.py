@@ -346,6 +346,7 @@ def normalize_calc_results(raw: Any) -> dict[str, Any]:
         ),
         "waste_tons": fact_number(("waste_tons", "scope_3_waste_tons"), name_tons.get("waste")),
         "dg_set_present": dg_fact,
+        "org_type": org_type,
         "e_waste_kg_per_month": fact_number(
             ("e_waste_kg_per_month", "ewaste_kg_per_month"),
             None,

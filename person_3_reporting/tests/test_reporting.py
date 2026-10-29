@@ -96,7 +96,7 @@ def test_recommendation_roi_and_ordering():
         "E-waste recycling",
     ]
     assert [item["roi"] for item in suggestions] == [1.5, 1.0, 0.75, 0.667, 0.5]
-    assert len(skipped) == 0
+    assert skipped and all("not an individual profile" in item for item in skipped)
 
 
 def test_roi_values_for_all_actions():
@@ -109,6 +109,11 @@ def test_roi_values_for_all_actions():
         "commute_carpool": 1.0,
         "e_waste_recycling": 0.5,
         "composting": 2 / 3,
+        "individual_commute_transit": 0.5 / 0.12,
+        "individual_efficient_appliances": 0.3 / 0.15,
+        "individual_green_power": 1.5 / 0.03,
+        "individual_eco_driving": 0.1 / 0.04,
+        "individual_home_composting": 0.1 / 0.03,
     }
     for action in reduction_knowledge_base:
         roi = action["carbon_saved_tons_per_year"] / (action["cost_inr"] / 100_000)

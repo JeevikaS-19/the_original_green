@@ -299,7 +299,48 @@ window.DEMO_FIXTURES = [
             "to": null
           }
         ],
-        "actions": [],
+        "actions": [
+          {
+            "scope": "scope_2",
+            "action": "Renewable power plan from your supplier",
+            "description": "Choose a green power tariff for home electricity.",
+            "tons": 1.5,
+            "cost_inr": 3000,
+            "payback": "N/A (recurring cost)",
+            "roi": 50.0,
+            "placeholder": false
+          },
+          {
+            "scope": "scope_3",
+            "action": "Commute by bus, metro or shared ride",
+            "description": "Replace some car trips to work with bus, metro or a shared ride.",
+            "tons": 0.5,
+            "cost_inr": 12000,
+            "payback": "N/A (recurring cost)",
+            "roi": 4.167,
+            "placeholder": false
+          },
+          {
+            "scope": "scope_1",
+            "action": "Eco-driving and tyre pressure checks",
+            "description": "Smooth acceleration, steady speeds and correct tyre pressure cut fuel use.",
+            "tons": 0.1,
+            "cost_inr": 4000,
+            "payback": "6 months",
+            "roi": 2.5,
+            "placeholder": false
+          },
+          {
+            "scope": "scope_2",
+            "action": "Five-star appliances and LED lighting",
+            "description": "Replace the most-used appliances and bulbs with efficient models.",
+            "tons": 0.3,
+            "cost_inr": 15000,
+            "payback": "24 months",
+            "roi": 2.0,
+            "placeholder": false
+          }
+        ],
         "notes": [
           "Reduction savings and costs are planning assumptions from the knowledge base. Verify them before relying on them.",
           "Scope 3 · Devices, commute, waste: 1 input(s) use placeholder factors and count as zero.",
@@ -456,7 +497,38 @@ window.DEMO_FIXTURES = [
             "to": null
           }
         ],
-        "actions": [],
+        "actions": [
+          {
+            "scope": "scope_2",
+            "action": "Renewable power plan from your supplier",
+            "description": "Choose a green power tariff for home electricity.",
+            "tons": 1.5,
+            "cost_inr": 3000,
+            "payback": "N/A (recurring cost)",
+            "roi": 50.0,
+            "placeholder": false
+          },
+          {
+            "scope": "scope_1",
+            "action": "Eco-driving and tyre pressure checks",
+            "description": "Smooth acceleration, steady speeds and correct tyre pressure cut fuel use.",
+            "tons": 0.1,
+            "cost_inr": 4000,
+            "payback": "6 months",
+            "roi": 2.5,
+            "placeholder": false
+          },
+          {
+            "scope": "scope_2",
+            "action": "Five-star appliances and LED lighting",
+            "description": "Replace the most-used appliances and bulbs with efficient models.",
+            "tons": 0.3,
+            "cost_inr": 15000,
+            "payback": "24 months",
+            "roi": 2.0,
+            "placeholder": false
+          }
+        ],
         "notes": [
           "Reduction savings and costs are planning assumptions from the knowledge base. Verify them before relying on them.",
           "Scope 3 · Devices, commute, waste: 1 input(s) use placeholder factors and count as zero.",
@@ -2005,7 +2077,7 @@ window.DEMO_FIXTURES = [
               "Backup diesel generator assumed for an office of this size: 50 kVA, 500 hours a year at 15 L/h."
             ],
             "scope_2": [
-              "Calculated annual electricity consumption from the annual energy bill of INR 5,600,000 using an illustrative tariff of 7.5 INR per kWh, then divided by 12 months, resulting in approximately 62,222.22 kWh per month."
+              "Derived from the annual energy bill of 5,600,000 INR using an illustrative tariff of 7.5 INR per kWh divided across 12 months (5600000 / 7.5 / 12 = 62,222.22 kWh/month)."
             ],
             "scope_3": [
               "One laptop per employee (1), 20% desktops, 0.5 servers per 100 employees. No inventory was given.",
@@ -2519,7 +2591,7 @@ window.DEMO_FIXTURES = [
           "scope_3.waste.e-waste.recycling.factor"
         ],
         "assumptions": [
-          "Calculated annual electricity consumption from the annual energy bill of INR 5,600,000 using an illustrative tariff of 7.5 INR per kWh, then divided by 12 months, resulting in approximately 62,222.22 kWh per month.",
+          "Derived from the annual energy bill of 5,600,000 INR using an illustrative tariff of 7.5 INR per kWh divided across 12 months (5600000 / 7.5 / 12 = 62,222.22 kWh/month).",
           "About 20 vehicles from 500 employees (0.04 per employee), split 80% diesel and 20% petrol, 20,000 km each a year.",
           "Backup diesel generator assumed for an office of this size: 50 kVA, 500 hours a year at 15 L/h.",
           "One laptop per employee (1), 20% desktops, 0.5 servers per 100 employees. No inventory was given.",
@@ -2553,7 +2625,7 @@ window.DEMO_FIXTURES = [
       },
       "used": "llm",
       "prompt_chars": 4373,
-      "raw_response": "{\n  \"scope_2\": {\n    \"energy_meter\": {\n      \"value\": {\n        \"monthly_kwh\": 62222.22,\n        \"region_state\": \"Karnataka\"\n      },\n      \"assumption\": \"Calculated annual electricity consumption from the annual energy bill of INR 5,600,000 using an illustrative tariff of 7.5 INR per kWh, then divided by 12 months, resulting in approximately 62,222.22 kWh per month.\"\n    }\n  }\n}",
+      "raw_response": "{\n  \"scope_2\": {\n    \"energy_meter\": {\n      \"value\": {\n        \"monthly_kwh\": 62222.22,\n        \"region_state\": \"Karnataka\"\n      },\n      \"assumption\": \"Derived from the annual energy bill of 5,600,000 INR using an illustrative tariff of 7.5 INR per kWh divided across 12 months (5600000 / 7.5 / 12 = 62,222.22 kWh/month).\"\n    }\n  }\n}",
       "validation": "passed",
       "rules_filled": {
         "scope_1": [
@@ -2566,7 +2638,7 @@ window.DEMO_FIXTURES = [
           "waste"
         ]
       },
-      "seconds": 1.1,
+      "seconds": 1.6,
       "proposal": {
         "scope_2": {
           "energy_meter": {
@@ -2574,7 +2646,7 @@ window.DEMO_FIXTURES = [
               "monthly_kwh": 62222.22,
               "region_state": "Karnataka"
             },
-            "assumption": "Calculated annual electricity consumption from the annual energy bill of INR 5,600,000 using an illustrative tariff of 7.5 INR per kWh, then divided by 12 months, resulting in approximately 62,222.22 kWh per month."
+            "assumption": "Derived from the annual energy bill of 5,600,000 INR using an illustrative tariff of 7.5 INR per kWh divided across 12 months (5600000 / 7.5 / 12 = 62,222.22 kWh/month)."
           }
         },
         "scope_1": {
