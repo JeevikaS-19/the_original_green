@@ -560,8 +560,9 @@
         '%"></div><div class="mid" style="left:' + (total / hi * 100).toFixed(1) + '%"></div></div></div>' +
       '<div class="card"><div class="label">Grade</div><div class="value">' + esc(eff.grade) + '</div><div class="sub">' + (eff.grade === "N/A" ? "Headcount not disclosed" : "t CO₂e per " + (profile().id === "individual" ? "person" : "employee")) + '</div></div>' +
       '<div class="card"><div class="label">Confidence</div><div class="value">±' + half.toFixed(0) + '%</div><div class="sub">Sum of each scope\'s range</div></div>' +
-      '<div class="card"><div class="label">Measured data</div><div class="value">' + measured + '%</div><div class="sub">' +
-        (drop ? '↓ ' + drop.toFixed(1) + '% with your plan' : 'Share from trackers, not estimates') + '</div></div>';
+      '<div class="card"><div class="label">Measured data</div><div class="value">' + measured + '%</div><div class="sub">Share from trackers, not estimates</div></div>' +
+      '<div class="card"><div class="label">With your plan</div><div class="value">' + (drop ? '↓ ' + drop.toFixed(1) + '%' : '–') + '</div><div class="sub">' +
+        (drop ? "Cut from today's total, if the plan is applied" : 'No plan applied yet') + '</div></div>';
 
     $("scope-tiles").innerHTML = eff.scopes.map(function (s) {
       var share = total ? Math.round(s.tons / total * 100) : 0;

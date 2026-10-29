@@ -108,7 +108,8 @@ check("chart compares now with the AI plan, as bars", chartOf("reduction-line") 
 check("sidebar shows the with-plan total", $("#quick-stats").textContent.includes("With plan") && !$("#quick-stats").textContent.includes("With plan–"));
 check("filled-in estimates are listed on the reduction page", !!$("#missing-data"));
 nav("overview");
-check("overview trend shows the plan", $("#summary-cards").textContent.includes("↓") && chartOf("trend-chart").datasets === 2);
+check("overview shows the plan cut on its own card", $("#summary-cards").textContent.includes("With your plan") && $("#summary-cards").textContent.includes("↓") && chartOf("trend-chart").datasets === 2);
+check("measured card shows only the measured share", !$("#summary-cards").textContent.includes("with your plan"));
 
 // 5. Data breakdown
 nav("breakdown");
