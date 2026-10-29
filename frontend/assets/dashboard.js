@@ -937,7 +937,7 @@
     download(p.id + "-" + state.path + "-breakdown.csv", "text/csv", rows.join("\n") + "\n");
   }
   function downloadPdf() {
-    var url = "report.html?org=" + encodeURIComponent(state.scale) + "&path=" + encodeURIComponent(state.path) + "&print=1";
+    var url = "report.html?org=" + encodeURIComponent(state.scale) + "&path=" + encodeURIComponent(state.path) + "&back=" + encodeURIComponent(currentHash()) + "&print=1";
     window.open(url, "_blank");
   }
 

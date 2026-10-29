@@ -138,6 +138,11 @@
   document.getElementById("report").innerHTML = cover + s1 + s2 + s3 + s4 + s5 + s6 + s7 + s8 + sign;
   document.title = "Emissions report · " + profile.label;
 
+  var back = q.get("back") || "";
+  if (/^#[a-z_0-9]+\/(open|closed)\/[a-z_0-9]+$/.test(back)) {
+    var link = document.querySelector('.toolbar a[href="dashboard.html"]');
+    if (link) link.href = "dashboard.html" + back;
+  }
   document.getElementById("print").addEventListener("click", function () { window.print(); });
   if (q.get("print") === "1") setTimeout(function () { window.print(); }, 400);
 })();
