@@ -43,7 +43,8 @@ const submit = () => $("#add").dispatchEvent(new w.Event("submit", { cancelable:
 
   const editBtn = $$("[data-edit]").filter((b) => b.closest("tr").textContent.includes("Electricity"))[0];
   click(editBtn);
-  check("edit loads the activity into the form", $("#add").elements.qty.value === "330" && $("#submit").textContent.includes("Save"));
+  check("the roadmap ticks an activity once it is saved", !!$('#road-kinds li[data-kind="electricity"].done') && !!$('#road-steps li[data-step="added"].done'));
+check("edit loads the activity into the form", $("#add").elements.qty.value === "330" && $("#submit").textContent.includes("Save"));
   $("#add").elements.qty.value = "165"; submit();
   check("saving an edit updates the total to 3.10 t", $("#result").textContent.includes("3.10 t"), $("#result").textContent.slice(0, 60));
 

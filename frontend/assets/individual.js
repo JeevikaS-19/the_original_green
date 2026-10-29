@@ -116,8 +116,22 @@
       '<div class="ind-cta"><a class="btn" href="dashboard.html#individual/open/reduction">See reduction plan</a></div>';
   }
 
+  var progress = { chosen: false, amount: false };
+  function renderRoad() {
+    var list = current(), live = mode === "live", saved = live && list.length > 0;
+    var kinds = {};
+    if (live) list.forEach(function (a) { kinds[a.kind] = true; });
+    var set = function (el, on) { el.classList.toggle("done", !!on); el.classList.toggle("off", !live && !on); };
+    document.querySelectorAll("#road-steps li").forEach(function (li) {
+      var step = li.getAttribute("data-step");
+      var on = step === "chosen" ? (progress.chosen || saved) : step === "amount" ? (progress.amount || saved) : saved;
+      set(li, on);
+    });
+    document.querySelectorAll("#road-kinds li").forEach(function (li) { set(li, kinds[li.getAttribute("data-kind")]); });
+    document.querySelector(".ind-guide").classList.toggle("sample", !live);
+  }
   function refresh() {
-    renderRows(); renderResult();
+    renderRows(); renderResult(); renderRoad();
     var n = current().length;
     $("guide-count").textContent = mode === "demo" ? "This is a sample. Press Your tracker to start your own."
       : n ? "You have " + n + " activit" + (n === 1 ? "y" : "ies") + " saved. Add more, or check your footprint below."
@@ -146,6 +160,8 @@
     refresh();
   }
 
+  kindSel.addEventListener("change", function () { progress.chosen = true; refresh(); });
+  form.elements.qty.addEventListener("input", function () { progress.amount = Number(form.elements.qty.value) > 0; refresh(); });
   form.addEventListener("submit", function (e) {
     e.preventDefault();
     var qty = Number(form.elements.qty.value);

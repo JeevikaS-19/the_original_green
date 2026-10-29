@@ -55,36 +55,26 @@
         <section class="ind-result" id="result" aria-live="polite"></section>
       </div>
 
-      <aside class="ind-guide" aria-label="How to set up your tracker">
-        <h2>Set up in four steps</h2>
-        <ol class="steps">
-          <li><b>Choose an activity</b><span>Pick one from the list: car, electricity, commute, laptop, waste.</span></li>
-          <li><b>Enter the amount</b><span>The unit is shown next to the box. Use the number from your own record.</span></li>
-          <li><b>Press Add activity</b><span>It is saved in this browser. Edit or delete it any time.</span></li>
-          <li><b>Check your footprint</b><span>The total, grade and scope breakdown update straight away.</span></li>
-        </ol>
+      <aside class="ind-guide" aria-label="Your roadmap">
+        <h2>Your roadmap</h2>
         <p class="count" id="guide-count"></p>
-
-        <h3>What to enter</h3>
-        <table class="guide-tbl">
-          <thead><tr><th>Activity</th><th>Enter</th><th>Where to find it</th></tr></thead>
-          <tbody>
-            <tr><td>Car, petrol</td><td>km a year</td><td>Odometer, or your fuel log</td></tr>
-            <tr><td>Electricity at home</td><td>kWh a month</td><td>Your monthly electricity bill</td></tr>
-            <tr><td>Commute by car</td><td>km one way, a day</td><td>Home to work distance</td></tr>
-            <tr><td>Laptop in use</td><td>number of laptops</td><td>Count the devices you use</td></tr>
-            <tr><td>Solid waste</td><td>kg a month</td><td>Your bin or pickup record. Estimate if unsure</td></tr>
-            <tr><td>E-waste</td><td>kg a year</td><td>Devices you gave for recycling</td></tr>
-          </tbody>
-        </table>
-
-        <h3>What you see next</h3>
-        <ul class="next">
-          <li>Your total for the year, with the range it could fall in</li>
-          <li>A grade per person, with the bands it is based on</li>
-          <li>Each scope, and the formula behind it</li>
-          <li>A reduction plan, from the dashboard</li>
+        <h3>Set up</h3>
+        <ol class="road" id="road-steps">
+          <li data-step="chosen"><span class="tick" aria-hidden="true"></span><div><b>Choose an activity</b><small>From the list under the table.</small></div></li>
+          <li data-step="amount"><span class="tick" aria-hidden="true"></span><div><b>Enter the amount</b><small>Use the unit shown next to the box.</small></div></li>
+          <li data-step="added"><span class="tick" aria-hidden="true"></span><div><b>Press Add activity</b><small>It is saved in this browser.</small></div></li>
+          <li data-step="seen"><span class="tick" aria-hidden="true"></span><div><b>Check your footprint</b><small>Total, grade and the scope breakdown.</small></div></li>
+        </ol>
+        <h3>Your activities</h3>
+        <ul class="road" id="road-kinds">
+          <li data-kind="car_petrol"><span class="tick" aria-hidden="true"></span><div><b>Car, petrol</b><small>Enter km a year. Find it on the odometer or in your fuel log.</small></div></li>
+          <li data-kind="electricity"><span class="tick" aria-hidden="true"></span><div><b>Electricity at home</b><small>Enter kWh a month. Find it on your electricity bill.</small></div></li>
+          <li data-kind="commute_car"><span class="tick" aria-hidden="true"></span><div><b>Commute by car</b><small>Enter km one way, a day. Your home to work distance.</small></div></li>
+          <li data-kind="laptop"><span class="tick" aria-hidden="true"></span><div><b>Laptop in use</b><small>Enter how many laptops you use.</small></div></li>
+          <li data-kind="solid_waste"><span class="tick" aria-hidden="true"></span><div><b>Solid waste</b><small>Enter kg a month from your bin or pickup record. Estimate if unsure.</small></div></li>
+          <li data-kind="ewaste"><span class="tick" aria-hidden="true"></span><div><b>E-waste</b><small>Enter kg a year of devices given for recycling.</small></div></li>
         </ul>
+        <h3>Then</h3>
         <a class="btn btn-ghost btn-small" href="dashboard.html#individual/open/reduction">See the reduction plan</a>
       </aside>
     </div>
